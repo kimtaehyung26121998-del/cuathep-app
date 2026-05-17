@@ -25,8 +25,30 @@ export default function Home() {
   const [slKhoa, setSlKhoa] = useState(1);
   const [giaKhoa, setGiaKhoa] = useState("");
 
-  const [coPhao, setCoPhao] = useState(false);
-  const [giaPhao, setGiaPhao] = useState("");
+ const [loaiPhao, setLoaiPhao] = useState("");
+
+const [giaPhao, setGiaPhao] = useState("");
+
+const [loaiPhaoDinh, setLoaiPhaoDinh] =
+  useState("");
+
+const [rongPhaoDung, setRongPhaoDung] =
+  useState("");
+
+const [giaPhaoDung, setGiaPhaoDung] =
+  useState("");
+
+const [caoPhaoNgang, setCaoPhaoNgang] =
+  useState("");
+
+const [giaPhaoNgang, setGiaPhaoNgang] =
+  useState("");
+
+const [caoPhaoDinh, setCaoPhaoDinh] =
+  useState("");
+
+const [giaPhaoDinh, setGiaPhaoDinh] =
+  useState("");
 
   const [coBom, setCoBom] = useState(false);
   const taoHoaDonMoi = () => {
@@ -51,7 +73,20 @@ export default function Home() {
   setSlKhoa(1);
   setGiaKhoa("");
 
-  setCoPhao(false);
+  setLoaiPhao("");
+
+setGiaPhao("");
+
+setLoaiPhaoDinh("");
+
+setRongPhaoDung("");
+setGiaPhaoDung("");
+
+setCaoPhaoNgang("");
+setGiaPhaoNgang("");
+
+setCaoPhaoDinh("");
+setGiaPhaoDinh("");
   setGiaPhao("");
 
   setCoBom(false);
@@ -69,7 +104,7 @@ export default function Home() {
   const tongCua =
     slCua * Number(donGiaCua || 0);
 
-  const slPhao = useMemo(() => {
+  const slPhaoPhu = useMemo(() => {
 
   const r = Number(rong || 0);
   const c = Number(cao || 0);
@@ -85,10 +120,78 @@ export default function Home() {
 
 }, [rong, cao, loaiCua]);
 
-  const tongPhao =
-    coPhao
-      ? slPhao * Number(giaPhao || 0)
-      : 0;
+const tongPhaoPhu =
+  loaiPhao === "phao-phu"
+    ? slPhaoPhu * Number(giaPhao || 0)
+    : 0;
+
+const slPhaoDinhTieuChuan =
+  (Number(cao || 0) * 2) +
+  (Number(rong || 0) + 0.5) +
+  (Number(rong || 0) + 0.8);
+
+const tongPhaoDinhTieuChuan =
+  slPhaoDinhTieuChuan *
+  Number(giaPhao || 0);
+
+const coPhaoNgang =
+  Number(caoPhaoNgang || 0) > 0;
+
+const slPhaoDinhTuyChon =
+  coPhaoNgang
+    ? (
+        (Number(cao || 0) * 2) +
+        (
+          Number(rong || 0) +
+          Number(rongPhaoDung || 0)
+        ) +
+        (
+          Number(rong || 0) +
+          Number(rongPhaoDung || 0) +
+          0.3
+        )
+      )
+    : (
+        (Number(cao || 0) * 2) +
+        (
+          Number(rong || 0) +
+          Number(rongPhaoDung || 0) +
+          0.3
+        )
+      );
+
+const tongPhaoDinhTuyChon =
+  (
+    Number(cao || 0) *
+    2 *
+    Number(giaPhaoDung || 0)
+  ) +
+  (
+    coPhaoNgang
+      ? (
+          Number(rong || 0) +
+          Number(rongPhaoDung || 0)
+        ) *
+        Number(giaPhaoNgang || 0)
+      : 0
+  ) +
+  (
+    (
+      Number(rong || 0) +
+      Number(rongPhaoDung || 0) +
+      0.3
+    ) *
+    Number(giaPhaoDinh || 0)
+  );
+
+const tongPhao =
+  loaiPhao === "phao-phu"
+    ? tongPhaoPhu
+    : loaiPhaoDinh === "tieu-chuan"
+    ? tongPhaoDinhTieuChuan
+    : loaiPhaoDinh === "tuy-chon"
+    ? tongPhaoDinhTuyChon
+    : 0;
 
   const tongKhoa =
     coKhoa
@@ -504,47 +607,226 @@ export default function Home() {
 
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
 
-          <label className="flex gap-2">
+  <h2 className="font-bold text-lg">
+    Loại phào
+  </h2>
 
-            <input
-              type="checkbox"
-              
-              checked={coPhao}
-              onChange={() =>
-                setCoPhao(!coPhao)
-              }
-              
-            />
+  <div className="flex flex-col gap-3">
 
-            Có phào phụ
+    <label className="flex gap-2">
 
-          </label>
+      <input
+        type="radio"
+        checked={loaiPhao === "phao-phu"}
+        onChange={() =>
+          setLoaiPhao("phao-phu")
+        }
+      />
 
-          {coPhao && (
-            <div className="space-y-2">
+      Phào phụ
 
-              <p>
-                Số lượng:
-                {" "}
-                {formatSo(slPhao)} m
-              </p>
+    </label>
 
-              <input
-                type="number"
-                placeholder="Đơn giá phào"
-                value={giaPhao}
-                className="w-full p-3 border rounded-xl"
-                onChange={(e) =>
-                  setGiaPhao(e.target.value)
-                }
-              />
+    <label className="flex gap-2">
 
-            </div>
-          )}
+      <input
+        type="radio"
+        checked={loaiPhao === "phao-dinh"}
+        onChange={() =>
+          setLoaiPhao("phao-dinh")
+        }
+      />
+
+      Phào đình
+
+    </label>
+
+  </div>
+
+  {loaiPhao === "phao-phu" && (
+    <div className="space-y-2">
+
+      <p>
+        Số lượng:
+        {" "}
+        {formatSo(slPhaoPhu)} md
+      </p>
+
+      <input
+        type="number"
+        placeholder="Đơn giá phào"
+        value={giaPhao}
+        className="w-full p-3 border rounded-xl"
+        onChange={(e) =>
+          setGiaPhao(e.target.value)
+        }
+      />
+
+    </div>
+  )}
+
+  {loaiPhao === "phao-dinh" && (
+    <div className="space-y-4">
+
+      <label className="flex gap-2">
+
+        <input
+          type="radio"
+          checked={
+            loaiPhaoDinh === "tieu-chuan"
+          }
+          onChange={() =>
+            setLoaiPhaoDinh(
+              "tieu-chuan"
+            )
+          }
+        />
+
+        Phào đình tiêu chuẩn
+
+      </label>
+
+      <label className="flex gap-2">
+
+        <input
+          type="radio"
+          checked={
+            loaiPhaoDinh === "tuy-chon"
+          }
+          onChange={() =>
+            setLoaiPhaoDinh(
+              "tuy-chon"
+            )
+          }
+        />
+
+        Phào đình tùy chọn
+
+      </label>
+
+      {loaiPhaoDinh ===
+        "tieu-chuan" && (
+        <div className="space-y-2">
+
+          <p>
+            Phào đứng bản 25cm,
+            Phào đỉnh 45cm
+          </p>
+
+          <p>
+            Kích thước:
+            {" "}
+            {formatSo(
+              slPhaoDinhTieuChuan
+            )} md
+          </p>
+
+          <input
+            type="number"
+            placeholder="Đơn giá phào"
+            value={giaPhao}
+            className="w-full p-3 border rounded-xl"
+            onChange={(e) =>
+              setGiaPhao(e.target.value)
+            }
+          />
 
         </div>
+      )}
+
+      {loaiPhaoDinh ===
+        "tuy-chon" && (
+        <div className="space-y-3">
+
+          <input
+            type="number"
+            placeholder="Chiều rộng phào đứng"
+            value={rongPhaoDung}
+            className="w-full p-3 border rounded-xl"
+            onChange={(e) =>
+              setRongPhaoDung(
+                e.target.value
+              )
+            }
+          />
+
+          <input
+            type="number"
+            placeholder="Đơn giá phào đứng"
+            value={giaPhaoDung}
+            className="w-full p-3 border rounded-xl"
+            onChange={(e) =>
+              setGiaPhaoDung(
+                e.target.value
+              )
+            }
+          />
+
+          <input
+            type="number"
+            placeholder="Chiều cao phào ngang"
+            value={caoPhaoNgang}
+            className="w-full p-3 border rounded-xl"
+            onChange={(e) =>
+              setCaoPhaoNgang(
+                e.target.value
+              )
+            }
+          />
+
+          <input
+            type="number"
+            placeholder="Đơn giá phào ngang"
+            value={giaPhaoNgang}
+            className="w-full p-3 border rounded-xl"
+            onChange={(e) =>
+              setGiaPhaoNgang(
+                e.target.value
+              )
+            }
+          />
+
+          <input
+            type="number"
+            placeholder="Chiều cao phào đỉnh"
+            value={caoPhaoDinh}
+            className="w-full p-3 border rounded-xl"
+            onChange={(e) =>
+              setCaoPhaoDinh(
+                e.target.value
+              )
+            }
+          />
+
+          <input
+            type="number"
+            placeholder="Đơn giá phào đỉnh"
+            value={giaPhaoDinh}
+            className="w-full p-3 border rounded-xl"
+            onChange={(e) =>
+              setGiaPhaoDinh(
+                e.target.value
+              )
+            }
+          />
+
+          <p>
+            Kích thước:
+            {" "}
+            {formatSo(
+              slPhaoDinhTuyChon
+            )} md
+          </p>
+
+        </div>
+      )}
+
+    </div>
+  )}
+
+</div>
 
         <label className="flex gap-2">
 
