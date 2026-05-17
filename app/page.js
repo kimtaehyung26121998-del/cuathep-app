@@ -342,34 +342,96 @@ const tongPhao =
                 </tr>
               )}
 
-              {coPhao && (
-                <tr>
+              {loaiPhao === "phao-phu" && (
+  <tr>
 
-                  <td className="border p-2">
-                    Phào phụ
-                  </td>
+    <td className="border p-2">
+      Phào phụ
+    </td>
 
-                  <td
-                    className="border p-2"
-                    colSpan={5}
-                  ></td>
+    <td
+      className="border p-2"
+      colSpan={5}
+    ></td>
 
-                  <td className="border p-2">
-                    {formatSo(slPhao)}
-                  </td>
+    <td className="border p-2">
+      {formatSo(slPhaoPhu)}
+    </td>
 
-                  <td className="border p-2">
-                    {Number(
-                      giaPhao
-                    ).toLocaleString()}
-                  </td>
+    <td className="border p-2">
+      {Number(
+        giaPhao
+      ).toLocaleString()}
+    </td>
 
-                  <td className="border p-2 font-bold">
-                    {tongPhao.toLocaleString()}
-                  </td>
+    <td className="border p-2 font-bold">
+      {tongPhao.toLocaleString()}
+    </td>
 
-                </tr>
-              )}
+  </tr>
+)}
+
+{loaiPhao === "phao-dinh" &&
+  loaiPhaoDinh === "tieu-chuan" && (
+  <tr>
+
+    <td className="border p-2">
+      Phào đình tiêu chuẩn
+    </td>
+
+    <td
+      className="border p-2"
+      colSpan={5}
+    ></td>
+
+    <td className="border p-2">
+      {formatSo(
+        slPhaoDinhTieuChuan
+      )}
+    </td>
+
+    <td className="border p-2">
+      {Number(
+        giaPhao
+      ).toLocaleString()}
+    </td>
+
+    <td className="border p-2 font-bold">
+      {tongPhao.toLocaleString()}
+    </td>
+
+  </tr>
+)}
+
+{loaiPhao === "phao-dinh" &&
+  loaiPhaoDinh === "tuy-chon" && (
+  <tr>
+
+    <td className="border p-2">
+      Phào đình tùy chọn
+    </td>
+
+    <td
+      className="border p-2"
+      colSpan={5}
+    ></td>
+
+    <td className="border p-2">
+      {formatSo(
+        slPhaoDinhTuyChon
+      )}
+    </td>
+
+    <td className="border p-2">
+      ---
+    </td>
+
+    <td className="border p-2 font-bold">
+      {tongPhao.toLocaleString()}
+    </td>
+
+  </tr>
+)}
 
               {coBom && (
                 <tr>
