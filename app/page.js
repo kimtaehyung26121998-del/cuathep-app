@@ -1,233 +1,368 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState, useMemo, useRef } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+const formatTien = (value) => {
 
-export default function Home() {
+  const number =
+    value.replace(/\D/g, "");
 
-  const [xemHoaDon, setXemHoaDon] = useState(false);
-
-  const [loaiCua, setLoaiCua] = useState("");
-
-  const [rong, setRong] = useState("");
-  const [cao, setCao] = useState("");
-
-  const [khuon, setKhuon] = useState("");
-  const [maMau, setMaMau] = useState("");
-  const [huongMo, setHuongMo] = useState("");
-
-  const [donGiaCua, setDonGiaCua] = useState("");
-
-  const [coKhoa, setCoKhoa] = useState(true);
-
-  const [tenKhoa, setTenKhoa] = useState("");
-  
-
-  const [slKhoa, setSlKhoa] = useState(1);
-  const [giaKhoa, setGiaKhoa] = useState("");
-
- const [loaiPhao, setLoaiPhao] = useState("");
-
-const [giaPhao, setGiaPhao] = useState("");
-
-const [loaiPhaoDinh, setLoaiPhaoDinh] =
-  useState("");
-
-const [rongPhaoDung, setRongPhaoDung] =
-  useState("");
-
-const [giaPhaoDung, setGiaPhaoDung] =
-  useState("");
-
-const [caoPhaoNgang, setCaoPhaoNgang] =
-  useState("");
-
-const [giaPhaoNgang, setGiaPhaoNgang] =
-  useState("");
-
-const [caoPhaoDinh, setCaoPhaoDinh] =
-  useState("");
-
-const [giaPhaoDinh, setGiaPhaoDinh] =
-  useState("");
-
-  const [coBom, setCoBom] = useState(false);
-  const taoHoaDonMoi = () => {
-
-  setXemHoaDon(false);
-
-  setLoaiCua("");
-
-  setRong("");
-  setCao("");
-
-  setKhuon("");
-  setMaMau("");
-  setHuongMo("");
-
-  setDonGiaCua("");
-
-  setCoKhoa(true);
-
-  setTenKhoa("");
-
-  setSlKhoa(1);
-  setGiaKhoa("");
-
-  setLoaiPhao("");
-
-setGiaPhao("");
-
-setLoaiPhaoDinh("");
-
-setRongPhaoDung("");
-setGiaPhaoDung("");
-
-setCaoPhaoNgang("");
-setGiaPhaoNgang("");
-
-setCaoPhaoDinh("");
-setGiaPhaoDinh("");
-  setGiaPhao("");
-
-  setCoBom(false);
+  return Number(number)
+    .toLocaleString("en-US");
 
 };
 
-  const formatSo = (so) => {
-    return parseFloat(so.toFixed(2)).toString();
+export default function Home() {
+
+  const taoBoCuaMoi = () => ({
+    id: Date.now() + Math.random(),
+
+    loaiCua: "",
+
+    khuon: "",
+    rong: "",
+    cao: "",
+
+    maMau: "",
+    huongMo: "",
+    donGia: "",
+
+    coKhoa: false,
+    tenKhoa: "",
+    soLuongKhoa: 1,
+    donGiaKhoa: "",
+
+    loaiPhao: "",
+
+    donGiaPhao: "",
+
+    coBomForm: false,
+  });
+
+  const [danhSachCua, setDanhSachCua] =
+    useState([taoBoCuaMoi()]);
+
+  const [xemHoaDon, setXemHoaDon] =
+    useState(false);
+
+  const [nhanVien, setNhanVien] =
+    useState("");
+
+  const [tenKhach, setTenKhach] =
+    useState("");
+
+  const [diaChiKhach, setDiaChiKhach] =
+    useState("");
+
+  const hoaDonRef = useRef(null);
+
+  const danhSachNhanVien = {
+    "Nguyễn Tuấn Vũ": "0335 952 952",
+    "Nguyễn Văn Hướng": "0345 109 555",
+    "Nguyễn Ngọc Vinh": "0356 197 836",
+    "Lương Văn Nhạn": "0983 783 005",
+    "Nguyễn Ngọc Tân": "0962 807 555",
+    "Trần Trọng Tiến": "0971 333 758",
   };
 
-  const slCua = useMemo(() => {
-    return Number(rong || 0) * Number(cao || 0);
-  }, [rong, cao]);
+  const capNhatCua = (
+    id,
+    field,
+    value
+  ) => {
 
-  const tongCua =
-    slCua * Number(donGiaCua || 0);
-
-  const slPhaoPhu = useMemo(() => {
-
-  const r = Number(rong || 0);
-  const c = Number(cao || 0);
-
-  const laCuaSo =
-    loaiCua.toLowerCase().includes("sổ");
-
-  if (laCuaSo) {
-    return (r * 2) + (c * 2);
-  }
-
-  return r + (c * 2);
-
-}, [rong, cao, loaiCua]);
-
-const tongPhaoPhu =
-  loaiPhao === "phao-phu"
-    ? slPhaoPhu * Number(giaPhao || 0)
-    : 0;
-
-const slPhaoDinhTieuChuan =
-  (Number(cao || 0) * 2) +
-  (Number(rong || 0) + 0.5) +
-  (Number(rong || 0) + 0.8);
-
-const tongPhaoDinhTieuChuan =
-  slPhaoDinhTieuChuan *
-  Number(giaPhao || 0);
-
-
-const rongPhaoDungM =
-  Number(rongPhaoDung || 0) / 100;
-
-const caoPhaoNgangM =
-  Number(caoPhaoNgang || 0) / 100;
-
-const caoPhaoDinhM =
-  Number(caoPhaoDinh || 0) / 100;
-
-const coPhaoNgang =
-  caoPhaoNgangM > 0;
-
-const slPhaoDinhTuyChon =
-  coPhaoNgang
-    ? (
-        (Number(cao || 0) * 2) +
-        (
-          Number(rong || 0) +
-          rongPhaoDungM
-        ) +
-        (
-          Number(rong || 0) +
-          rongPhaoDungM +
-          0.3
-        )
+    setDanhSachCua((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              [field]: value,
+            }
+          : item
       )
-    : (
-        (Number(cao || 0) * 2) +
-        (
-          Number(rong || 0) +
-          rongPhaoDungM +
-          0.3
-        )
+    );
+
+  };
+
+  const themCua = () => {
+
+    setDanhSachCua([
+      ...danhSachCua,
+      taoBoCuaMoi(),
+    ]);
+
+  };
+
+  const xoaCua = (id) => {
+
+    if (danhSachCua.length === 1)
+      return;
+
+    setDanhSachCua(
+      danhSachCua.filter(
+        (item) =>
+          item.id !== id
+      )
+    );
+
+  };
+
+  const tinhSoLuongCua = (cua) => {
+
+    return (
+      Number(cua.rong || 0) *
+      Number(cua.cao || 0)
+    );
+
+  };
+
+  const tinhTienCua = (cua) => {
+
+    return (
+      tinhSoLuongCua(cua) *
+      Number(cua.donGia || 0)
+    );
+
+  };
+
+  const tinhPhaoPhu = (cua) => {
+
+    const laCuaSo =
+      cua.loaiCua
+        .toLowerCase()
+        .includes("sổ");
+
+    if (laCuaSo) {
+
+      return (
+        Number(cua.cao || 0) *
+          2 +
+        Number(cua.rong || 0) *
+          2
       );
 
-const tongPhaoDinhTuyChon =
-  (
-    Number(cao || 0) *
-    2 *
-    Number(giaPhaoDung || 0)
-  ) +
-  (
-    coPhaoNgang
-      ? (
-          Number(rong || 0) +
-          rongPhaoDungM
-        ) *
-        Number(giaPhaoNgang || 0)
-      : 0
-  ) +
-  (
-    (
-      Number(rong || 0) +
-      rongPhaoDungM +
-      0.3
-    ) *
-    Number(giaPhaoDinh || 0)
-  );
+    }
 
-const tongPhao =
-  loaiPhao === "phao-phu"
-    ? tongPhaoPhu
-    : loaiPhaoDinh === "tieu-chuan"
-    ? tongPhaoDinhTieuChuan
-    : loaiPhaoDinh === "tuy-chon"
-    ? tongPhaoDinhTuyChon
+    return (
+      Number(cua.rong || 0) +
+      Number(cua.cao || 0) * 2
+    );
+
+  };
+
+  const tinhTienPhao = (cua) => {
+
+    return (
+      tinhPhaoPhu(cua) *
+      Number(cua.donGiaPhao || 0)
+    );
+
+  };
+
+  const tongCong = useMemo(() => {
+
+    return danhSachCua.reduce(
+      (tong, cua) => {
+
+        const tienCua =
+          tinhTienCua(cua);
+
+        const tienKhoa =
+          cua.coKhoa
+            ? Number(
+                cua.soLuongKhoa
+              ) *
+              Number(
+                cua.donGiaKhoa || 0
+              )
+            : 0;
+
+        const tienPhao =
+
+  cua.loaiPhao ===
+  "Phào phụ"
+
+    ? tinhTienPhao(cua)
+
+    : cua.loaiPhao ===
+      "Phào đình"
+
+    ? (
+        Number(cua.cao || 0) *
+          2 *
+          Number(
+            cua.donGiaPhaoDung || 0
+          )
+      ) +
+
+      (
+        (
+          Number(cua.rong || 0) +
+          Number(
+            cua.rongPhaoDung || 0
+          ) / 100
+        ) *
+        Number(
+          cua.donGiaPhaoNgang || 0
+        )
+      ) +
+
+      (
+        (
+          Number(cua.rong || 0) +
+          Number(
+            cua.rongPhaoDung || 0
+          ) / 100 +
+          0.3
+        ) *
+        Number(
+          cua.donGiaPhaoDinh || 0
+        )
+      )
+
     : 0;
 
-  const tongKhoa =
-    coKhoa
-      ? Number(slKhoa || 0) *
-        Number(giaKhoa || 0)
-      : 0;
+        const tienBom =
+          cua.coBomForm
+            ? 250000
+            : 0;
 
-  const tongBom = coBom ? 250000 : 0;
+        return (
+          tong +
+          tienCua +
+          tienKhoa +
+          tienPhao +
+          tienBom
+        );
 
-  const tongCong =
-    tongCua +
-    tongKhoa +
-    tongPhao +
-    tongBom;
+      },
+      0
+    );
+
+  }, [danhSachCua]);
+
+  const taiPDF = async () => {
+
+    const input =
+      hoaDonRef.current;
+
+    const canvas =
+      await html2canvas(input, {
+        scale: 2,
+      });
+
+    const imgData =
+      canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    const pdfWidth = 210;
+
+    const pdfHeight =
+      (canvas.height * pdfWidth) /
+      canvas.width;
+
+    pdf.addImage(
+      imgData,
+      "PNG",
+      0,
+      0,
+      pdfWidth,
+      pdfHeight
+    );
+
+    pdf.save("hoa-don.pdf");
+
+  };
 
   if (xemHoaDon) {
+
     return (
-      <div className="p-4 bg-white min-h-screen">
+
+      <div
+        ref={hoaDonRef}
+        className="bg-white p-4"
+      >
 
         <div className="max-w-6xl mx-auto border">
 
-          <div className="p-5 border-b">
+          <div className="p-4 border-b">
 
-            <h1 className="text-3xl font-bold">
-              HÓA ĐƠN CỬA THÉP
+            <div className="flex gap-4">
+
+              <img
+                src="/logo.jpg"
+                className="w-24 h-24 object-contain"
+              />
+
+              <div>
+
+                <h1 className="text-4xl font-bold uppercase">
+
+                  Công Ty TNHH
+                  Công Nghệ
+                  An Phát Bắc Ninh
+
+                </h1>
+
+                <p className="mt-2">
+                  QL18, Khu phố Lựa,
+                  Phường Quế Võ,
+                  Tỉnh Bắc Ninh
+                </p>
+
+                <p>
+                  Hotline:
+                  {" "}
+                  {
+                    danhSachNhanVien[
+                      nhanVien
+                    ]
+                  }
+                </p>
+
+              </div>
+
+            </div>
+
+            <h1 className="text-center text-5xl font-bold mt-10">
+
+              HÓA ĐƠN BÁN HÀNG
+
             </h1>
+
+            <div className="grid grid-cols-2 mt-10 gap-4">
+
+              <p>
+                <strong>
+                  Khách hàng:
+                </strong>
+                {" "}
+                {tenKhach}
+              </p>
+
+              <p>
+                <strong>
+                  Nhân viên:
+                </strong>
+                {" "}
+                {nhanVien}
+              </p>
+
+              <p className="col-span-2">
+                <strong>
+                  Địa chỉ:
+                </strong>
+                {" "}
+                {diaChiKhach}
+              </p>
+
+            </div>
 
           </div>
 
@@ -235,7 +370,7 @@ const tongPhao =
 
             <thead>
 
-              <tr className="bg-gray-100">
+              <tr>
 
                 <th className="border p-2">
                   Tên sản phẩm
@@ -262,7 +397,7 @@ const tongPhao =
                 </th>
 
                 <th className="border p-2">
-                  Số lượng
+                  SL
                 </th>
 
                 <th className="border p-2">
@@ -279,664 +414,1176 @@ const tongPhao =
 
             <tbody>
 
-              <tr>
+          {danhSachCua.map((cua, index) => {
 
-                <td className="border p-2">
-                  {loaiCua}
-                </td>
+  const slPhaoPhu =
+    tinhPhaoPhu(cua);
+const rongPhaoDungM =
+  Number(
+    cua.rongPhaoDung || 0
+  ) / 100;
 
-                <td className="border p-2">
-                  {khuon}
-                </td>
+const caoPhaoNgangM =
+  Number(
+    cua.caoPhaoNgang || 0
+  ) / 100;
 
-                <td className="border p-2">
-                  {rong}
-                </td>
+const caoPhaoDinhM =
+  Number(
+    cua.caoPhaoDinh || 0
+  ) / 100;
 
-                <td className="border p-2">
-                  {cao}
-                </td>
 
-                <td className="border p-2">
-                  {maMau}
-                </td>
+const coPhaoNgang =
+  Number(
+    cua.caoPhaoNgang || 0
+  ) > 0;
 
-                <td className="border p-2">
-                  {huongMo}
-                </td>
+const slPhaoDinh =
 
-                <td className="border p-2">
-                  {formatSo(slCua)}
-                </td>
+  cua.kieuPhaoDinh ===
+  "tieuchuan"
 
-                <td className="border p-2">
-                  {Number(
-                    donGiaCua
-                  ).toLocaleString()}
-                </td>
+    ? (
 
-                <td className="border p-2 font-bold">
-                  {tongCua.toLocaleString()}
-                </td>
+        Number(cua.cao || 0) *
+          2 +
 
-              </tr>
+        (
+          Number(cua.rong || 0) +
+          0.5
+        ) +
 
-              {coKhoa && (
-                <tr>
+        (
+          Number(cua.rong || 0) +
+          0.8
+        )
 
-                  <td className="border p-2">
-                    {tenKhoa}
-                  </td>
+      )
 
-                  
+    : (
 
-                  <td
-                    className="border p-2"
-                    colSpan={5}
-                  ></td>
+        coPhaoNgang
 
-                  <td className="border p-2">
-                    {slKhoa}
-                  </td>
+          ? (
 
-                  <td className="border p-2">
-                    {Number(
-                      giaKhoa
-                    ).toLocaleString()}
-                  </td>
+              Number(cua.cao || 0) *
+                2 +
 
-                  <td className="border p-2 font-bold">
-                    {tongKhoa.toLocaleString()}
-                  </td>
+              (
+                Number(cua.rong || 0) +
+                rongPhaoDungM * 2
+              ) +
 
-                </tr>
-              )}
+              (
+                Number(cua.rong || 0) +
+                rongPhaoDungM * 2 +
+                0.3
+              )
 
-              {loaiPhao === "phao-phu" && (
-  <tr>
+            )
 
-    <td className="border p-2">
-      Phào phụ
-    </td>
+          : (
 
-    <td
-      className="border p-2"
-      colSpan={5}
-    ></td>
+              Number(cua.cao || 0) *
+                2 +
 
-    <td className="border p-2">
-      {formatSo(slPhaoPhu)}
-    </td>
+              (
+                Number(cua.rong || 0) +
+                rongPhaoDungM * 2 +
+                0.3
+              )
 
-    <td className="border p-2">
-      {Number(
-        giaPhao
-      ).toLocaleString()}
-    </td>
+            )
 
-    <td className="border p-2 font-bold">
-      {tongPhao.toLocaleString()}
-    </td>
+      );
 
-  </tr>
-)}
+const tienPhaoDinh =
 
-{loaiPhao === "phao-dinh" &&
-  loaiPhaoDinh === "tieu-chuan" && (
-  <tr>
+  cua.kieuPhaoDinh ===
+  "tieuchuan"
 
-    <td className="border p-2">
-      Phào đình tiêu chuẩn
-    </td>
+    ? (
 
-    <td
-      className="border p-2"
-      colSpan={5}
-    ></td>
+        slPhaoDinh *
 
-    <td className="border p-2">
-      {formatSo(
-        slPhaoDinhTieuChuan
+        Number(
+          cua.donGiaPhao || 0
+        )
+
+      )
+
+    : (
+
+        coPhaoNgang
+
+          ? (
+
+              (
+                Number(cua.cao || 0) *
+                2 *
+                Number(
+                  cua.donGiaPhaoDung || 0
+                )
+              ) +
+
+              (
+                (
+                  Number(cua.rong || 0) +
+                  rongPhaoDungM * 2
+                ) *
+
+                Number(
+                  cua.donGiaPhaoNgang || 0
+                )
+              ) +
+
+              (
+                (
+                  Number(cua.rong || 0) +
+                  rongPhaoDungM * 2 +
+                  0.3
+                ) *
+
+                Number(
+                  cua.donGiaPhaoDinh || 0
+                )
+              )
+
+            )
+
+          : (
+
+              (
+                Number(cua.cao || 0) *
+                2 *
+                Number(
+                  cua.donGiaPhaoDung || 0
+                )
+              ) +
+
+              (
+                (
+                  Number(cua.rong || 0) +
+                  rongPhaoDungM * 2 +
+                  0.3
+                ) *
+
+                Number(
+                  cua.donGiaPhaoDinh || 0
+                )
+              )
+
+            )
+
+      );
+
+
+
+  return (
+
+    <>
+
+      <tr>
+
+        <td className="border p-2 font-bold">
+
+          Bộ cửa {index + 1}
+          :
+          {" "}
+          {cua.loaiCua}
+
+        </td>
+
+        <td className="border p-2">
+          {cua.dayKhuon}
+        </td>
+
+        <td className="border p-2">
+          {cua.rong}
+        </td>
+
+        <td className="border p-2">
+          {cua.cao}
+        </td>
+
+        <td className="border p-2">
+          {cua.maMau}
+        </td>
+
+        <td className="border p-2">
+          {cua.huongMo}
+        </td>
+
+        <td className="border p-2">
+
+          {(
+            Number(cua.rong || 0) *
+            Number(cua.cao || 0)
+          ).toFixed(2)}
+
+        </td>
+
+        <td className="border p-2">
+
+          {Number(
+            cua.donGia || 0
+          ).toLocaleString()}
+
+        </td>
+
+        <td className="border p-2 font-bold">
+
+          {(
+            (
+              Number(cua.rong || 0) *
+              Number(cua.cao || 0)
+            ) *
+            Number(cua.donGia || 0)
+          ).toLocaleString()}
+
+        </td>
+
+      </tr>
+
+      {cua.coKhoa && (
+
+        <tr>
+
+          <td className="border p-2">
+
+            Khóa:
+            {" "}
+            {cua.tenKhoa}
+
+          </td>
+
+          <td
+            className="border p-2"
+            colSpan={5}
+          ></td>
+
+          <td className="border p-2">
+            {cua.soLuongKhoa}
+          </td>
+
+          <td className="border p-2">
+
+            {Number(
+              cua.donGiaKhoa || 0
+            ).toLocaleString()}
+
+          </td>
+
+          <td className="border p-2 font-bold">
+
+            {(
+              Number(
+                cua.soLuongKhoa || 0
+              ) *
+              Number(
+                cua.donGiaKhoa || 0
+              )
+            ).toLocaleString()}
+
+          </td>
+
+        </tr>
+
       )}
-    </td>
 
-    <td className="border p-2">
-      {Number(
-        giaPhao
-      ).toLocaleString()}
-    </td>
+      {cua.loaiPhao ===
+        "Phào phụ" && (
 
-    <td className="border p-2 font-bold">
-      {tongPhao.toLocaleString()}
-    </td>
+        <tr>
 
-  </tr>
-)}
+          <td className="border p-2">
+            Phào phụ
+          </td>
 
-{loaiPhao === "phao-dinh" &&
-  loaiPhaoDinh === "tuy-chon" && (
-  <tr>
+          <td
+            className="border p-2"
+            colSpan={5}
+          ></td>
 
-    <td className="border p-2">
-      Phào đình tùy chọn
-    </td>
+          <td className="border p-2">
 
-    <td
-      className="border p-2"
-      colSpan={5}
-    ></td>
+            {slPhaoPhu.toFixed(2)}
+            {" "}
+            md
 
-    <td className="border p-2">
-      {formatSo(
-        slPhaoDinhTuyChon
+          </td>
+
+          <td className="border p-2">
+
+            {Number(
+              cua.donGiaPhao || 0
+            ).toLocaleString()}
+
+          </td>
+
+          <td className="border p-2 font-bold">
+
+            {(
+              slPhaoPhu *
+              Number(
+                cua.donGiaPhao || 0
+              )
+            ).toLocaleString()}
+
+          </td>
+
+        </tr>
+
       )}
-    </td>
 
-    <td className="border p-2">
-      ---
-    </td>
+      {cua.loaiPhao ===
+        "Phào đình" && (
 
-    <td className="border p-2 font-bold">
-      {tongPhao.toLocaleString()}
-    </td>
+        <tr>
 
-  </tr>
-)}
+          <td className="border p-2">
+            Phào đình
+          </td>
 
-              {coBom && (
-                <tr>
+          <td
+            className="border p-2"
+            colSpan={5}
+          ></td>
 
-                  <td className="border p-2">
-                    Bơm Form
-                  </td>
+          <td className="border p-2">
 
-                  <td
-                    className="border p-2"
-                    colSpan={5}
-                  ></td>
+            {slPhaoDinh.toFixed(2)}
+            {" "}
+            md
 
-                  <td className="border p-2">
-                    1
-                  </td>
+          </td>
 
-                  <td className="border p-2">
-                    250,000
-                  </td>
+          <td className="border p-2">
 
-                  <td className="border p-2 font-bold">
-                    250,000
-                  </td>
+  {tienPhaoDinh.toLocaleString()}
 
-                </tr>
-              )}
+</td>
+
+<td className="border p-2 font-bold">
+
+  {tienPhaoDinh.toLocaleString()}
+
+</td>
+
+        </tr>
+
+      )}
+
+      {cua.coBomForm && (
+
+        <tr>
+
+          <td className="border p-2">
+            Bơm Form
+          </td>
+
+          <td
+            className="border p-2"
+            colSpan={6}
+          ></td>
+
+          <td className="border p-2">
+            250,000
+          </td>
+
+          <td className="border p-2 font-bold">
+            250,000
+          </td>
+
+        </tr>
+
+      )}
+
+    </>
+
+  );
+
+})}
 
             </tbody>
 
           </table>
 
-          <div className="p-5 text-right">
+          <div className="p-6 text-right">
 
-            <h2 className="text-3xl font-bold text-green-600">
+            <p className="text-xl">
+              Tổng cộng
+            </p>
 
-              Tổng cộng:
-              {" "}
+            <p className="text-5xl font-bold text-green-600">
+
               {tongCong.toLocaleString()} đ
 
-            </h2>
+            </p>
 
           </div>
 
-          <div className="p-5 flex gap-3">
+          <div className="p-6">
 
-  <button
-    onClick={() =>
-      setXemHoaDon(false)
-    }
-    className="bg-black text-white px-5 py-3 rounded-2xl"
-  >
-    Quay lại
-  </button>
+            <div className="text-right italic">
 
-  <button
-    onClick={taoHoaDonMoi}
-    className="bg-blue-600 text-white px-5 py-3 rounded-2xl"
-  >
-    Tạo hóa đơn mới
-  </button>
+              Ngày{" "}
+              {new Date().getDate()}
+              {" "}tháng{" "}
+              {new Date().getMonth() + 1}
+              {" "}năm{" "}
+              {new Date().getFullYear()}
 
-</div>
+            </div>
+
+            <div className="grid grid-cols-2 mt-20 text-center">
+
+              <div>
+
+                <p className="font-bold text-2xl uppercase">
+
+                  Người lên đơn
+
+                </p>
+
+                <div className="h-32"></div>
+
+                <p>{nhanVien}</p>
+
+              </div>
+
+              <div>
+
+                <p className="font-bold text-2xl uppercase">
+
+                  Người nhận hàng
+
+                </p>
+
+                <div className="h-32"></div>
+
+                <p>
+                  ______________
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="flex gap-4 mt-10">
+
+              <button
+                onClick={() =>
+                  setXemHoaDon(false)
+                }
+                className="px-5 py-3 rounded-xl bg-gray-200"
+              >
+
+                Quay lại
+
+              </button>
+
+              <button
+                onClick={taiPDF}
+                className="px-5 py-3 rounded-xl bg-yellow-600 text-white"
+              >
+
+                Tải PDF
+
+              </button>
+
+            </div>
+
+          </div>
 
         </div>
 
       </div>
+
     );
+
   }
 
   return (
+
     <div className="min-h-screen bg-gray-100 p-4">
 
-      <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-xl p-5 space-y-5">
+      <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-xl p-5 space-y-6">
 
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-3xl font-bold">
+
           Lên Đơn Cửa Thép
+
         </h1>
 
         <select
-  value={loaiCua}
-  className="w-full p-3 border rounded-xl"
-  onChange={(e) =>
-    setLoaiCua(e.target.value)
-  }
->
+          value={nhanVien}
+          onChange={(e) =>
+            setNhanVien(
+              e.target.value
+            )
+          }
+          className="w-full border p-3 rounded-2xl"
+        >
 
-          <option>Chọn loại cửa</option>
+          <option value="">
+            Chọn nhân viên
+          </option>
 
-          <option>Cửa đơn</option>
-          <option>Cửa 2 cánh</option>
-          <option>Cửa 3 cánh</option>
-          <option>Cửa 4 cánh</option>
+          {Object.keys(
+            danhSachNhanVien
+          ).map((nv) => (
 
-          <option>Cửa sổ 1 cánh</option>
-          <option>Cửa sổ 2 cánh</option>
-          <option>Cửa sổ 3 cánh</option>
-          <option>Cửa sổ 4 cánh</option>
+            <option key={nv}>
+              {nv}
+            </option>
+
+          ))}
 
         </select>
 
-        <div className="grid grid-cols-2 gap-3">
+        <input
+          placeholder="Tên khách hàng"
+          value={tenKhach}
+          onChange={(e) =>
+            setTenKhach(
+              e.target.value
+            )
+          }
+          className="w-full border p-3 rounded-2xl"
+        />
 
-          <input
-            placeholder="Độ dày khuôn"
-            value={khuon}
-            className="p-3 border rounded-xl"
-            onChange={(e) =>
-              setKhuon(e.target.value)
-            }
-          />
+        <input
+          placeholder="Địa chỉ khách hàng"
+          value={diaChiKhach}
+          onChange={(e) =>
+            setDiaChiKhach(
+              e.target.value
+            )
+          }
+          className="w-full border p-3 rounded-2xl"
+        />
 
-          <input
-            placeholder="Mã màu"
-            value={maMau}
-            className="p-3 border rounded-xl"
-            onChange={(e) =>
-              setMaMau(e.target.value)
-            }
-          />
+        {danhSachCua.map(
+          (cua, index) => (
 
-          <input
-            placeholder="Chiều rộng"
-            value={rong}
-            type="number"
-            className="p-3 border rounded-xl"
-            onChange={(e) =>
-              setRong(e.target.value)
-            }
-          />
+            <div
+              key={cua.id}
+              className="border rounded-3xl p-4 space-y-4"
+            >
 
-          <input
-            placeholder="Chiều cao"
-            value={cao}
-            type="number"
-            className="p-3 border rounded-xl"
-            onChange={(e) =>
-              setCao(e.target.value)
-            }
-          />
+              <div className="flex justify-between">
 
-          <input
-            placeholder="Hướng mở"
-            value={huongMo}
-            className="p-3 border rounded-xl"
-            onChange={(e) =>
-              setHuongMo(e.target.value)
-            }
-          />
+                <h2 className="text-xl font-bold">
 
-          <input
-            placeholder="Đơn giá cửa"
-            value={donGiaCua}
-            type="number"
-            className="p-3 border rounded-xl"
-            onChange={(e) =>
-              setDonGiaCua(e.target.value)
-            }
-          />
+                  Bộ cửa
+                  {" "}
+                  {index + 1}
 
-        </div>
+                </h2>
 
-        <div className="bg-gray-100 p-4 rounded-2xl">
+                <button
+                  onClick={() =>
+                    xoaCua(cua.id)
+                  }
+                  className="text-red-500"
+                >
 
-          <p>
-            Số lượng:
-            {" "}
-            {formatSo(slCua)} m²
-          </p>
+                  Xóa
 
-          <p>
-            Tổng cửa:
-            {" "}
-            {tongCua.toLocaleString()} đ
-          </p>
+                </button>
 
-        </div>
+              </div>
 
-        <div className="space-y-3">
-
-          <label className="flex gap-2">
-
-            <input
-              type="checkbox"
-              checked={coKhoa}
-              onChange={() =>
-                setCoKhoa(!coKhoa)
-              }
-            />
-
-            Có khóa
-
-          </label>
-
-          {coKhoa && (
-            <>
-
-              <input
-                placeholder="Tên khóa"
-                value={tenKhoa}
-                className="w-full p-3 border rounded-xl"
+              <select
+                value={cua.loaiCua}
                 onChange={(e) =>
-                  setTenKhoa(e.target.value)
+                  capNhatCua(
+                    cua.id,
+                    "loaiCua",
+                    e.target.value
+                  )
                 }
-              />
+                className="w-full border p-3 rounded-2xl"
+              >
 
-              
+                <option value="">
+                  Chọn loại cửa
+                </option>
 
-              <div className="grid grid-cols-2 gap-3">
+                <option>
+                  Cửa đơn
+                </option>
+
+                <option>
+                  Cửa 2 cánh
+                </option>
+
+                <option>
+                  Cửa 3 cánh
+                </option>
+
+                <option>
+                  Cửa 4 cánh
+                </option>
+
+                <option>
+                  Cửa sổ 1 cánh
+                </option>
+
+                <option>
+                  Cửa sổ 2 cánh
+                </option>
+
+                <option>
+                  Cửa sổ 3 cánh
+                </option>
+
+                <option>
+                  Cửa sổ 4 cánh
+                </option>
+
+              </select>
+
+              <div className="grid grid-cols-2 gap-4">
 
                 <input
-                  type="number"
-                  placeholder="Số lượng"
-                  className="p-3 border rounded-xl"
-                  value={slKhoa}
+                  placeholder="Độ dày khuôn"
+                  value={cua.khuon}
                   onChange={(e) =>
-                    setSlKhoa(e.target.value)
+                    capNhatCua(
+                      cua.id,
+                      "khuon",
+                      e.target.value
+                    )
                   }
+                  className="border p-3 rounded-2xl"
                 />
 
                 <input
-                  type="number"
-                  placeholder="Đơn giá"
-                  value={giaKhoa}
-                  className="p-3 border rounded-xl"
+                  placeholder="Mã màu"
+                  value={cua.maMau}
                   onChange={(e) =>
-                    setGiaKhoa(e.target.value)
+                    capNhatCua(
+                      cua.id,
+                      "maMau",
+                      e.target.value
+                    )
                   }
+                  className="border p-3 rounded-2xl"
+                />
+
+                <input
+                  placeholder="Chiều rộng"
+                  value={cua.rong}
+                  onChange={(e) =>
+                    capNhatCua(
+                      cua.id,
+                      "rong",
+                      e.target.value
+                    )
+                  }
+                  className="border p-3 rounded-2xl"
+                />
+
+                <input
+                  placeholder="Chiều cao"
+                  value={cua.cao}
+                  onChange={(e) =>
+                    capNhatCua(
+                      cua.id,
+                      "cao",
+                      e.target.value
+                    )
+                  }
+                  className="border p-3 rounded-2xl"
+                />
+
+                <input
+                  placeholder="Hướng mở"
+                  value={cua.huongMo}
+                  onChange={(e) =>
+                    capNhatCua(
+                      cua.id,
+                      "huongMo",
+                      e.target.value
+                    )
+                  }
+                  className="border p-3 rounded-2xl"
+                />
+
+                <input
+                  placeholder="Đơn giá"
+                  value={formatTien(cua.donGia)}
+                  onChange={(e) =>
+                    capNhatCua(
+                      cua.id,
+                      "donGia",
+                     e.target.value.replace(
+  /\D/g,
+  ""
+)
+                    )
+                  }
+                  className="border p-3 rounded-2xl"
                 />
 
               </div>
 
-            </>
-          )}
+              <div className="bg-gray-100 rounded-2xl p-4">
 
-        </div>
+                <p>
 
-        <div className="space-y-4">
+                  Số lượng:
+                  {" "}
+                  {tinhSoLuongCua(
+                    cua
+                  ).toFixed(2)} m²
 
-  <h2 className="font-bold text-lg">
-    Loại phào
-  </h2>
+                </p>
 
-  <div className="flex flex-col gap-3">
+                <p>
 
-    <label className="flex gap-2">
+                  Tổng cửa:
+                  {" "}
+                  {tinhTienCua(
+                    cua
+                  ).toLocaleString()} đ
 
-      <input
-        type="radio"
-        checked={loaiPhao === "phao-phu"}
-        onChange={() =>
-          setLoaiPhao("phao-phu")
-        }
-      />
+                </p>
 
-      Phào phụ
+              </div>
 
-    </label>
+              <label className="flex items-center gap-2">
 
-    <label className="flex gap-2">
+                <input
+                  type="checkbox"
+                  checked={cua.coKhoa}
+                  onChange={(e) =>
+                    capNhatCua(
+                      cua.id,
+                      "coKhoa",
+                      e.target.checked
+                    )
+                  }
+                />
 
-      <input
-        type="radio"
-        checked={loaiPhao === "phao-dinh"}
-        onChange={() =>
-          setLoaiPhao("phao-dinh")
-        }
-      />
+                Có khóa
 
-      Phào đình
+              </label>
 
-    </label>
+              {cua.coKhoa && (
+
+                <>
+
+                  <input
+                    placeholder="Tên khóa"
+                    value={cua.tenKhoa}
+                    onChange={(e) =>
+                      capNhatCua(
+                        cua.id,
+                        "tenKhoa",
+                        e.target.value
+                      )
+                    }
+                    className="w-full border p-3 rounded-2xl"
+                  />
+
+                  <div className="grid grid-cols-2 gap-4">
+
+                    <input
+                      placeholder="Số lượng"
+                      value={cua.soLuongKhoa}
+                      onChange={(e) =>
+                        capNhatCua(
+                          cua.id,
+                          "soLuongKhoa",
+                          e.target.value
+                        )
+                      }
+                      className="border p-3 rounded-2xl"
+                    />
+
+                    <input
+  placeholder="Đơn giá"
+  value={formatTien(
+    cua.donGiaKhoa
+  )}
+  onChange={(e) =>
+    capNhatCua(
+      cua.id,
+      "donGiaKhoa",
+      e.target.value.replace(
+        /\D/g,
+        ""
+      )
+    )
+  }
+  className="border p-3 rounded-2xl"
+/>
+
+                  </div>
+
+                </>
+
+              )}
+
+              <div>
+
+                <p className="font-bold mb-3">
+
+                  Loại phào
+
+                </p>
+
+                <div className="space-y-2">
+
+                  <label className="flex items-center gap-2">
+
+  <input
+    type="radio"
+    name={`phao-${cua.id}`}
+    checked={
+      cua.loaiPhao ===
+      "Phào phụ"
+    }
+    onChange={() =>
+      capNhatCua(
+        cua.id,
+        "loaiPhao",
+        "Phào phụ"
+      )
+    }
+  />
+
+  Phào phụ
+
+</label>
+
+<label className="flex items-center gap-2">
+
+  <input
+    type="radio"
+    name={`phao-${cua.id}`}
+    checked={
+      cua.loaiPhao ===
+      "Phào đình"
+    }
+    onChange={() =>
+      capNhatCua(
+        cua.id,
+        "loaiPhao",
+        "Phào đình"
+      )
+    }
+  />
+
+  Phào đình
+
+</label>
+
+                </div>
+
+              </div>
+{cua.loaiPhao ===
+  "Phào phụ" && (
+
+  <div className="space-y-3 border rounded-2xl p-4">
+
+    <p>
+
+      Số lượng:
+      {" "}
+      {tinhPhaoPhu(
+        cua
+      ).toFixed(2)}
+      {" "}
+      md
+
+    </p>
+
+    <input
+      placeholder="Đơn giá phào"
+      value={formatTien(
+        cua.donGiaPhao
+      )}
+      onChange={(e) =>
+        capNhatCua(
+          cua.id,
+          "donGiaPhao",
+          e.target.value.replace(
+            /\D/g,
+            ""
+          )
+        )
+      }
+      className="w-full border p-3 rounded-2xl"
+    />
 
   </div>
 
-  {loaiPhao === "phao-phu" && (
-    <div className="space-y-2">
+)}
 
-      <p>
-        Số lượng:
-        {" "}
-        {formatSo(slPhaoPhu)} md
-      </p>
+{cua.loaiPhao ===
+  "Phào đình" && (
+
+  <div className="space-y-4 border rounded-2xl p-4">
+
+    <label className="flex items-center gap-2">
 
       <input
-        type="number"
-        placeholder="Đơn giá phào"
-        value={giaPhao}
-        className="w-full p-3 border rounded-xl"
-        onChange={(e) =>
-          setGiaPhao(e.target.value)
+        type="radio"
+        name={`kieu-${cua.id}`}
+        checked={
+          cua.kieuPhaoDinh ===
+          "tieuchuan"
+        }
+        onChange={() =>
+          capNhatCua(
+            cua.id,
+            "kieuPhaoDinh",
+            "tieuchuan"
+          )
         }
       />
 
-    </div>
+      Phào đình tiêu chuẩn
+
+    </label>
+
+    <label className="flex items-center gap-2">
+
+      <input
+        type="radio"
+        name={`kieu-${cua.id}`}
+        checked={
+          cua.kieuPhaoDinh ===
+          "tuychon"
+        }
+        onChange={() =>
+          capNhatCua(
+            cua.id,
+            "kieuPhaoDinh",
+            "tuychon"
+          )
+        }
+      />
+
+      Phào đình tùy chọn
+
+    </label>
+
+    {cua.kieuPhaoDinh ===
+      "tieuchuan" && (
+
+      <div className="border rounded-2xl p-4 space-y-2">
+
+        <p>
+          Phào đứng bản 25cm
+        </p>
+
+        <p>
+          Phào đỉnh 45cm
+        </p>
+
+        <p>
+
+          Kích thước:
+          {" "}
+
+          {(
+            Number(cua.cao || 0) *
+              2 +
+            (
+              Number(cua.rong || 0) +
+              0.5
+            ) +
+            (
+              Number(cua.rong || 0) +
+              0.8
+            )
+          ).toFixed(2)}
+
+          {" "}
+          md
+
+        </p>
+        <input
+  placeholder="Đơn giá phào đình"
+  value={formatTien(
+    cua.donGiaPhao
   )}
+  onChange={(e) =>
+    capNhatCua(
+      cua.id,
+      "donGiaPhao",
+      e.target.value.replace(
+        /\D/g,
+        ""
+      )
+    )
+  }
+  className="w-full border p-3 rounded-2xl"
+/>
 
-  {loaiPhao === "phao-dinh" && (
-    <div className="space-y-4">
+      </div>
 
-      <label className="flex gap-2">
+    )}
+
+    {cua.kieuPhaoDinh ===
+      "tuychon" && (
+
+      <div className="grid grid-cols-2 gap-4">
 
         <input
-          type="radio"
-          checked={
-            loaiPhaoDinh === "tieu-chuan"
-          }
-          onChange={() =>
-            setLoaiPhaoDinh(
-              "tieu-chuan"
+          placeholder="Rộng phào đứng (cm)"
+          value={cua.rongPhaoDung || ""}
+          onChange={(e) =>
+            capNhatCua(
+              cua.id,
+              "rongPhaoDung",
+              e.target.value
             )
           }
+          className="border p-3 rounded-2xl"
         />
-
-        Phào đình tiêu chuẩn
-
-      </label>
-
-      <label className="flex gap-2">
-
-        <input
-          type="radio"
-          checked={
-            loaiPhaoDinh === "tuy-chon"
-          }
-          onChange={() =>
-            setLoaiPhaoDinh(
-              "tuy-chon"
-            )
-          }
-        />
-
-        Phào đình tùy chọn
-
-      </label>
-
-      {loaiPhaoDinh ===
-        "tieu-chuan" && (
-        <div className="space-y-2">
-
-          <p>
-            Phào đứng bản 25cm,
-            Phào đỉnh 45cm
-          </p>
-
-          <p>
-            Kích thước:
-            {" "}
-            {formatSo(
-              slPhaoDinhTieuChuan
-            )} md
-          </p>
-
-          <input
-            type="number"
-            placeholder="Đơn giá phào"
-            value={giaPhao}
-            className="w-full p-3 border rounded-xl"
-            onChange={(e) =>
-              setGiaPhao(e.target.value)
-            }
-          />
-
-        </div>
-      )}
-
-      {loaiPhaoDinh ===
-        "tuy-chon" && (
-        <div className="space-y-3">
-
-          <input
-            type="number"
-            placeholder="Chiều rộng phào đứng (cm)"
-            value={rongPhaoDung}
-            className="w-full p-3 border rounded-xl"
-            onChange={(e) =>
-              setRongPhaoDung(
-                e.target.value
-              )
-            }
-          />
-
-          <input
-            type="number"
-            placeholder="Đơn giá phào đứng"
-            value={giaPhaoDung}
-            className="w-full p-3 border rounded-xl"
-            onChange={(e) =>
-              setGiaPhaoDung(
-                e.target.value
-              )
-            }
-          />
-
-          <input
-            type="number"
-            placeholder="Chiều cao phào ngang (cm)"
-            value={caoPhaoNgang}
-            className="w-full p-3 border rounded-xl"
-            onChange={(e) =>
-              setCaoPhaoNgang(
-                e.target.value
-              )
-            }
-          />
-
-          <input
-            type="number"
-            placeholder="Đơn giá phào ngang"
-            value={giaPhaoNgang}
-            className="w-full p-3 border rounded-xl"
-            onChange={(e) =>
-              setGiaPhaoNgang(
-                e.target.value
-              )
-            }
-          />
-
-          <input
-            type="number"
-            placeholder="Chiều cao phào đỉnh (cm)"
-            value={caoPhaoDinh}
-            className="w-full p-3 border rounded-xl"
-            onChange={(e) =>
-              setCaoPhaoDinh(
-                e.target.value
-              )
-            }
-          />
-
-          <input
-            type="number"
-            placeholder="Đơn giá phào đỉnh"
-            value={giaPhaoDinh}
-            className="w-full p-3 border rounded-xl"
-            onChange={(e) =>
-              setGiaPhaoDinh(
-                e.target.value
-              )
-            }
-          />
-
-          <p>
-            Kích thước:
-            {" "}
-            {formatSo(
-              slPhaoDinhTuyChon
-            )} md
-          </p>
-
-        </div>
-      )}
-
-    </div>
+<input
+  placeholder="Đơn giá phào đứng"
+  value={formatTien(
+    cua.donGiaPhaoDung || ""
   )}
+  onChange={(e) =>
+    capNhatCua(
+      cua.id,
+      "donGiaPhaoDung",
+      e.target.value.replace(
+        /\D/g,
+        ""
+      )
+    )
+  }
+  className="border p-3 rounded-2xl"
+/>
+        <input
+          placeholder="Cao phào ngang (cm)"
+          value={cua.caoPhaoNgang || ""}
+          onChange={(e) =>
+            capNhatCua(
+              cua.id,
+              "caoPhaoNgang",
+              e.target.value
+            )
+          }
+          className="border p-3 rounded-2xl"
+        />
+<input
+  placeholder="Đơn giá phào ngang"
+  value={formatTien(
+    cua.donGiaPhaoNgang || ""
+  )}
+  onChange={(e) =>
+    capNhatCua(
+      cua.id,
+      "donGiaPhaoNgang",
+      e.target.value.replace(
+        /\D/g,
+        ""
+      )
+    )
+  }
+  className="border p-3 rounded-2xl"
+/>
+        <input
+          placeholder="Cao phào đỉnh (cm)"
+          value={cua.caoPhaoDinh || ""}
+          onChange={(e) =>
+            capNhatCua(
+              cua.id,
+              "caoPhaoDinh",
+              e.target.value
+            )
+          }
+          className="border p-3 rounded-2xl"
+        />
+        <input
+  placeholder="Đơn giá phào đỉnh"
+  value={formatTien(
+    cua.donGiaPhaoDinh || ""
+  )}
+  onChange={(e) =>
+    capNhatCua(
+      cua.id,
+      "donGiaPhaoDinh",
+      e.target.value.replace(
+        /\D/g,
+        ""
+      )
+    )
+  }
+  className="border p-3 rounded-2xl"
+/>
 
-</div>
+      </div>
+      
 
-        <label className="flex gap-2">
+    )}
 
-          <input
-            type="checkbox"
-            checked={coBom}
-            onChange={() =>
-              setCoBom(!coBom)
-            }
-          />
+  </div>
 
-          Có bơm Form (+250.000đ)
+)}
+            
 
-        </label>
+              <label className="flex items-center gap-2">
 
-        <div className="bg-black text-white p-5 rounded-3xl">
+                <input
+                  type="checkbox"
+                  checked={
+                    cua.coBomForm
+                  }
+                  onChange={(e) =>
+                    capNhatCua(
+                      cua.id,
+                      "coBomForm",
+                      e.target.checked
+                    )
+                  }
+                />
 
-          <h2 className="text-xl font-bold">
-            Tổng cộng
-          </h2>
+                Có bơm Form
+                (+250.000đ)
 
-          <p className="text-3xl font-bold mt-2">
-            {tongCong.toLocaleString()} đ
-          </p>
+              </label>
 
-        </div>
+            </div>
+
+          )
+        )}
+
+        <button
+          onClick={themCua}
+          className="w-full bg-blue-600 text-white p-4 rounded-2xl"
+        >
+
+          + Thêm cửa
+
+        </button>
 
         <button
           onClick={() =>
             setXemHoaDon(true)
           }
-          className="w-full bg-blue-600 text-white p-4 rounded-2xl text-lg font-bold"
+          className="w-full bg-black text-white p-4 rounded-2xl"
         >
-          Xem Hóa Đơn
+
+          Xem hóa đơn
+
         </button>
 
       </div>
 
     </div>
+
   );
+
 }
