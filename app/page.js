@@ -138,16 +138,30 @@ const coPhaoNgang =
   Number(caoPhaoNgang || 0) > 0;
 
 const slPhaoDinhTuyChon =
+  
+  const rongPhaoDungM =
+  Number(rongPhaoDung || 0) / 100;
+
+const caoPhaoNgangM =
+  Number(caoPhaoNgang || 0) / 100;
+
+const caoPhaoDinhM =
+  Number(caoPhaoDinh || 0) / 100;
+
+const coPhaoNgang =
+  caoPhaoNgangM > 0;
+
+const slPhaoDinhTuyChon =
   coPhaoNgang
     ? (
         (Number(cao || 0) * 2) +
         (
           Number(rong || 0) +
-          Number(rongPhaoDung || 0)
+          rongPhaoDungM
         ) +
         (
           Number(rong || 0) +
-          Number(rongPhaoDung || 0) +
+          rongPhaoDungM +
           0.3
         )
       )
@@ -155,7 +169,7 @@ const slPhaoDinhTuyChon =
         (Number(cao || 0) * 2) +
         (
           Number(rong || 0) +
-          Number(rongPhaoDung || 0) +
+          rongPhaoDungM +
           0.3
         )
       );
@@ -170,7 +184,7 @@ const tongPhaoDinhTuyChon =
     coPhaoNgang
       ? (
           Number(rong || 0) +
-          Number(rongPhaoDung || 0)
+          rongPhaoDungM
         ) *
         Number(giaPhaoNgang || 0)
       : 0
@@ -178,7 +192,7 @@ const tongPhaoDinhTuyChon =
   (
     (
       Number(rong || 0) +
-      Number(rongPhaoDung || 0) +
+      rongPhaoDungM +
       0.3
     ) *
     Number(giaPhaoDinh || 0)
@@ -804,7 +818,7 @@ const tongPhao =
 
           <input
             type="number"
-            placeholder="Chiều rộng phào đứng"
+            placeholder="Chiều rộng phào đứng (cm)"
             value={rongPhaoDung}
             className="w-full p-3 border rounded-xl"
             onChange={(e) =>
@@ -828,7 +842,7 @@ const tongPhao =
 
           <input
             type="number"
-            placeholder="Chiều cao phào ngang"
+            placeholder="Chiều cao phào ngang (cm)"
             value={caoPhaoNgang}
             className="w-full p-3 border rounded-xl"
             onChange={(e) =>
@@ -852,7 +866,7 @@ const tongPhao =
 
           <input
             type="number"
-            placeholder="Chiều cao phào đỉnh"
+            placeholder="Chiều cao phào đỉnh (cm)"
             value={caoPhaoDinh}
             className="w-full p-3 border rounded-xl"
             onChange={(e) =>
