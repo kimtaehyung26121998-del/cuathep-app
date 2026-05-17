@@ -134,8 +134,6 @@ const tongPhaoDinhTieuChuan =
   slPhaoDinhTieuChuan *
   Number(giaPhao || 0);
 
-const coPhaoNgang =
-  Number(caoPhaoNgang || 0) > 0;
 
 const rongPhaoDungM =
   Number(rongPhaoDung || 0) / 100;
