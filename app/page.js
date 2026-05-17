@@ -137,9 +137,7 @@ const tongPhaoDinhTieuChuan =
 const coPhaoNgang =
   Number(caoPhaoNgang || 0) > 0;
 
-const slPhaoDinhTuyChon =
-  
-  const rongPhaoDungM =
+const rongPhaoDungM =
   Number(rongPhaoDung || 0) / 100;
 
 const caoPhaoNgangM =
