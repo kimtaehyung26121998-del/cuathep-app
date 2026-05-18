@@ -586,7 +586,9 @@ style={{
   className="border"
   style={{
     padding: "12px 6px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -603,7 +605,9 @@ style={{
   className="border"
   style={{
     padding: "12px 6px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -616,7 +620,9 @@ style={{
   className="border"
   style={{
     padding: "12px 6px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -629,7 +635,9 @@ style={{
   className="border"
   style={{
     padding: "12px 6px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -642,7 +650,9 @@ style={{
   className="border"
   style={{
     padding: "12px 6px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -655,7 +665,9 @@ style={{
   className="border"
   style={{
     padding: "12px 6px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -668,7 +680,9 @@ style={{
   className="border"
   style={{
     padding: "12px 6px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -681,7 +695,9 @@ style={{
   className="border"
   style={{
     padding: "12px 6px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -894,7 +910,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -905,7 +923,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -916,7 +936,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -927,7 +949,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -938,7 +962,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -998,7 +1024,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1018,7 +1046,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1029,7 +1059,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1075,7 +1107,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1091,7 +1125,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1106,7 +1142,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1150,7 +1188,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1166,7 +1206,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1181,7 +1223,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1217,7 +1261,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1233,7 +1279,9 @@ const tienPhaoDinh =
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: isMobile
+  ? "11px"
+  : "15px",
     verticalAlign: "middle",
   }}
 >
@@ -1280,10 +1328,9 @@ const tienPhaoDinh =
               Tổng cộng
             </p>
 
-        <p
+        <p fontSize: "54px",
   className="tong-tien"
   style={{
-    color: "#16a34a",
     fontSize: "clamp(32px, 6vw, 52px)",
     fontWeight: "700",
     lineHeight: "1.1",
