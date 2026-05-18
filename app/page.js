@@ -1267,7 +1267,7 @@ const tienPhaoDinh =
     wordBreak: "break-word",
   }}
 >
-style={{ color: "#16a34a" }}>
+style={{ color: "#16a34a" }}
 
               {tongCong.toLocaleString()} đ
 
