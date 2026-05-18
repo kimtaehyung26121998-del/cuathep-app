@@ -418,21 +418,28 @@ while (heightLeft > 0) {
   ref={hoaDonRef}
   style={{
     fontFamily:
-  "Arial, sans-serif",
+      "Arial, sans-serif",
     backgroundColor: "#ffffff",
-    width: "210mm",
-    margin: "0 auto"
+    width: "100%",
+    maxWidth: "210mm",
+    margin: "0 auto",
+    overflowX: "hidden",
   }}
 >
 
         <div
   className="border"
   style={{
-    width: "210mm",
+    width: "100%",
+    maxWidth: "210mm",
     minHeight: "297mm",
     margin: "0 auto",
     backgroundColor: "#ffffff",
-    padding: "10mm"
+    padding:
+      window.innerWidth < 768
+        ? "12px"
+        : "10mm",
+    boxSizing: "border-box",
   }}
 >
 
@@ -484,7 +491,16 @@ style={{
 
             </div>
 
-            <h1 className="text-center text-5xl font-bold mt-10">
+            <h1
+  className="text-center font-bold mt-10"
+  style={{
+    fontSize:
+      window.innerWidth < 768
+        ? "34px"
+        : "64px",
+    lineHeight: "1.1",
+  }}
+>
 
               HÓA ĐƠN BÁN HÀNG
 
@@ -520,7 +536,13 @@ style={{
 
           </div>
 
-         <table className="w-full border-collapse table-fixed">
+        <div
+  style={{
+    overflowX: "auto",
+  }}
+>
+
+<table className="w-full border-collapse table-fixed">
          <colgroup>
   <col style={{ width: "28%" }} />
   <col style={{ width: "9%" }} />
@@ -1219,7 +1241,7 @@ const tienPhaoDinh =
             </tbody>
 
           </table>
-
+</div>
           <div
   className="p-6"
   style={{
@@ -1233,12 +1255,18 @@ const tienPhaoDinh =
               Tổng cộng
             </p>
 
-            <p style={{
-  color: "#16a34a",
-  fontSize: "52px",
-  fontWeight: "700",
-  lineHeight: "1.1",
-}}
+            <p
+  style={{
+    color: "#16a34a",
+    fontSize:
+      window.innerWidth < 768
+        ? "34px"
+        : "52px",
+    fontWeight: "700",
+    lineHeight: "1.1",
+    wordBreak: "break-word",
+  }}
+>
 style={{ color: "#16a34a" }}>
 
               {tongCong.toLocaleString()} đ
@@ -1295,7 +1323,13 @@ style={{ color: "#16a34a" }}>
             </div>
 
           <div
-  className="flex gap-4 mt-10 no-print"
+  className="no-print"
+  style={{
+    display: "flex",
+    gap: "12px",
+    marginTop: "40px",
+    flexWrap: "wrap",
+  }}
 >
 
               <button
