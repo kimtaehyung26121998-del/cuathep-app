@@ -1,6 +1,11 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import {
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+} from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 const formatTien = (value) => {
@@ -56,6 +61,31 @@ export default function Home() {
     useState("");
 
   const hoaDonRef = useRef(null);
+  const [isMobile, setIsMobile] =
+  useState(false);
+
+useEffect(() => {
+
+  const checkMobile = () => {
+    setIsMobile(
+      window.innerWidth < 768
+    );
+  };
+
+  checkMobile();
+
+  window.addEventListener(
+    "resize",
+    checkMobile
+  );
+
+  return () =>
+    window.removeEventListener(
+      "resize",
+      checkMobile
+    );
+
+}, []);
 
   const danhSachNhanVien = {
     "Nguyễn Tuấn Vũ": "0335 952 952",
@@ -371,27 +401,7 @@ while (heightLeft > 0) {
 
 }
 
-    while (heightLeft > 0) {
-
-      position =
-        heightLeft -
-        imgHeight;
-
-      pdf.addPage();
-
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        position,
-        imgWidth,
-        imgHeight
-      );
-
-      heightLeft -=
-        pageHeight;
-
-    }
+ 
 
     buttons.forEach((el) => {
   el.style.display = "flex";
@@ -410,22 +420,39 @@ while (heightLeft > 0) {
 
 };
 
-  if (xemHoaDon) {
+ if (xemHoaDon) {
 
-    return (
+  return (
+
+    <>
+
+      <style jsx global>{`
+        @media print {
+          .no-print {
+            display: none !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .tong-tien {
+            font-size: 34px !important;
+          }
+        }
+      `}</style>
 
       <div
-  ref={hoaDonRef}
-  style={{
-    fontFamily:
-      "Arial, sans-serif",
-    backgroundColor: "#ffffff",
-    width: "100%",
-    maxWidth: "210mm",
-    margin: "0 auto",
-    overflowX: "hidden",
-  }}
->
+        ref={hoaDonRef}
+        style={{
+          fontFamily:
+            "Arial, sans-serif",
+          backgroundColor:
+            "#ffffff",
+          width: "100%",
+          maxWidth: "210mm",
+          margin: "0 auto",
+          overflowX: "auto",
+        }}
+      >
 
         <div
   className="border"
@@ -435,10 +462,9 @@ while (heightLeft > 0) {
     minHeight: "297mm",
     margin: "0 auto",
     backgroundColor: "#ffffff",
-    padding:
-      window.innerWidth < 768
-        ? "12px"
-        : "10mm",
+   padding: window.innerWidth < 768
+  ? "12px"
+  : "10mm",
     boxSizing: "border-box",
   }}
 >
@@ -494,10 +520,7 @@ style={{
             <h1
   className="text-center font-bold mt-10"
   style={{
-    fontSize:
-      window.innerWidth < 768
-        ? "34px"
-        : "64px",
+    fontSize: "clamp(32px, 6vw, 52px)",
     lineHeight: "1.1",
   }}
 >
@@ -550,9 +573,9 @@ style={{
   <col style={{ width: "6%" }} />
   <col style={{ width: "6%" }} />
   <col style={{ width: "12%" }} />
-  <col style={{ width: "8%" }} />
-  <col style={{ width: "14%" }} />
-  <col style={{ width: "16 %" }} />
+  <col style={{ width: "7%" }} />
+  <col style={{ width: "16%" }} />
+  <col style={{ width: "17%" }} />
 </colgroup>
 
             <thead>
@@ -927,20 +950,22 @@ const tienPhaoDinh =
 
         </td>
 
-        <td
+       <td
   className="border"
   style={{
     padding: "8px",
-    fontSize: "15px",
+    fontSize: "14px",
+    textAlign: "right",
+    whiteSpace: "nowrap",
     verticalAlign: "middle",
   }}
 >
 
-          {Number(
-            cua.donGia || 0
-          ).toLocaleString()}
+  {Number(
+    cua.donGia || 0
+  ).toLocaleString()}
 
-        </td>
+</td>
 
        <td
   className="border"
@@ -1255,23 +1280,18 @@ const tienPhaoDinh =
               Tổng cộng
             </p>
 
-            <p
+           <p
+  className="tong-tien"
   style={{
     color: "#16a34a",
-    fontSize:
-      window.innerWidth < 768
-        ? "34px"
-        : "52px",
+    fontSize: "clamp(32px, 6vw, 52px)",
     fontWeight: "700",
     lineHeight: "1.1",
     wordBreak: "break-word",
   }}
 >
-style={{ color: "#16a34a" }}
-
-              {tongCong.toLocaleString()} đ
-
-            </p>
+  {tongCong.toLocaleString()} đ
+</p>
 
           </div>
 
@@ -1370,18 +1390,20 @@ style={{
 
 </button>
 
-              <button
-                onClick={taiPDF}
-                className="px-5 py-3 rounded-xl "
-                style={{ color: "#ffffff" }}
-                style={{ backgroundColor: "#ca8a04" }}
-              >
+            <button
+  onClick={taiPDF}
+  className="px-5 py-3 rounded-xl"
+  style={{
+    color: "#ffffff",
+    backgroundColor: "#ca8a04",
+  }}
+>
 
                 Tải PDF
 
               </button>
 
-            </div>
+                        </div>
 
           </div>
 
@@ -1389,17 +1411,13 @@ style={{
 
       </div>
 
+    </>
+
     );
 
   }
-<style jsx global>{`
-  @media print {
-    .no-print {
-      display: none !important;
-    }
-  }
-`}</style>
-  return (
+
+  return (  
 
     <div className="min-h-screen p-4"
 style={{ backgroundColor: "#f3f4f6" }}>
@@ -2127,6 +2145,7 @@ style={{
 
     </div>
 
-  );
+      
+    );
 
 }
