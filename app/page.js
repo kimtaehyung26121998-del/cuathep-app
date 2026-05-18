@@ -244,16 +244,23 @@ export default function Home() {
 
   const taiPDF = async () => {
 
+  try {
+
     const input =
       hoaDonRef.current;
+
+    if (!input) return;
 
     const canvas =
       await html2canvas(input, {
         scale: 2,
+        useCORS: true,
       });
 
     const imgData =
-      canvas.toDataURL("image/png");
+      canvas.toDataURL(
+        "image/png"
+      );
 
     const pdf = new jsPDF({
       orientation: "portrait",
@@ -263,22 +270,70 @@ export default function Home() {
 
     const pdfWidth = 210;
 
-    const pdfHeight =
-      (canvas.height * pdfWidth) /
+    const pageHeight = 297;
+
+    const imgWidth =
+      pdfWidth;
+
+    const imgHeight =
+      (canvas.height *
+        imgWidth) /
       canvas.width;
+
+    let heightLeft =
+      imgHeight;
+
+    let position = 0;
 
     pdf.addImage(
       imgData,
       "PNG",
       0,
-      0,
-      pdfWidth,
-      pdfHeight
+      position,
+      imgWidth,
+      imgHeight
     );
 
-    pdf.save("hoa-don.pdf");
+    heightLeft -=
+      pageHeight;
 
-  };
+    while (heightLeft > 0) {
+
+      position =
+        heightLeft -
+        imgHeight;
+
+      pdf.addPage();
+
+      pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        position,
+        imgWidth,
+        imgHeight
+      );
+
+      heightLeft -=
+        pageHeight;
+
+    }
+
+    pdf.save(
+      "hoa-don.pdf"
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert(
+      "Lỗi tạo PDF"
+    );
+
+  }
+
+};
 
   if (xemHoaDon) {
 
@@ -883,6 +938,26 @@ const tienPhaoDinh =
                 Quay lại
 
               </button>
+              <button
+  onClick={() => {
+
+    setDanhSachCua([
+      taoBoCuaMoi(),
+    ]);
+
+    setTenKhach("");
+    setDiaChiKhach("");
+    setNhanVien("");
+
+    setXemHoaDon(false);
+
+  }}
+  className="px-5 py-3 rounded-xl bg-red-500 text-white"
+>
+
+  Hóa đơn mới
+
+</button>
 
               <button
                 onClick={taiPDF}
