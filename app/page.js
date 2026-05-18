@@ -366,7 +366,7 @@ export default function Home() {
 
           </div>
 
-          <table className="w-full border-collapse">
+         <table className="w-full border-collapse table-fixed">
 
             <thead>
 
@@ -376,9 +376,9 @@ export default function Home() {
                   Tên sản phẩm
                 </th>
 
-                <th className="border p-2">
-                  Khuôn
-                </th>
+                <th className="border p-2 w-24">
+  Khuôn
+</th>
 
                 <th className="border p-2">
                   Rộng
@@ -595,9 +595,9 @@ const tienPhaoDinh =
 
         </td>
 
-        <td className="border p-2">
-          {cua.dayKhuon}
-        </td>
+        <td className="border p-2 text-center">
+  {cua.khuon || "-"}
+</td>
 
         <td className="border p-2">
           {cua.rong}
