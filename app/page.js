@@ -1114,20 +1114,26 @@ const tienPhaoDinh =
                 />
 
                 <input
-                  placeholder="Đơn giá"
-                  value={formatTien(cua.donGia)}
-                  onChange={(e) =>
-                    capNhatCua(
-                      cua.id,
-                      "donGia",
-                     e.target.value.replace(
-  /\D/g,
-  ""
-)
-                    )
-                  }
-                  className="border p-3 rounded-2xl"
-                />
+  placeholder="Đơn giá"
+  value={
+    cua.donGia
+      ? formatTien(
+          cua.donGia
+        )
+      : ""
+  }
+  onChange={(e) =>
+    capNhatCua(
+      cua.id,
+      "donGia",
+      e.target.value.replace(
+        /\D/g,
+        ""
+      )
+    )
+  }
+  className="border p-3 rounded-2xl"
+/>
 
               </div>
 
@@ -1207,9 +1213,13 @@ const tienPhaoDinh =
 
                     <input
   placeholder="Đơn giá"
-  value={formatTien(
+  value={
     cua.donGiaKhoa
-  )}
+      ? formatTien(
+          cua.donGiaKhoa
+        )
+      : ""
+  }
   onChange={(e) =>
     capNhatCua(
       cua.id,
@@ -1305,9 +1315,13 @@ const tienPhaoDinh =
 
     <input
       placeholder="Đơn giá phào"
-      value={formatTien(
+      value={
+  cua.donGiaPhao
+    ? formatTien(
         cua.donGiaPhao
-      )}
+      )
+    : ""
+}
       onChange={(e) =>
         capNhatCua(
           cua.id,
@@ -1411,9 +1425,13 @@ const tienPhaoDinh =
         </p>
         <input
   placeholder="Đơn giá phào đình"
-  value={formatTien(
-    cua.donGiaPhao
-  )}
+  value={
+  cua.donGiaPhao
+    ? formatTien(
+        cua.donGiaPhao
+      )
+    : ""
+}
   onChange={(e) =>
     capNhatCua(
       cua.id,
@@ -1450,9 +1468,13 @@ const tienPhaoDinh =
         />
 <input
   placeholder="Đơn giá phào đứng"
-  value={formatTien(
-    cua.donGiaPhaoDung || ""
-  )}
+  value={
+  cua.donGiaPhaoDung
+    ? formatTien(
+        cua.donGiaPhaoDung
+      )
+    : ""
+}
   onChange={(e) =>
     capNhatCua(
       cua.id,
@@ -1479,9 +1501,13 @@ const tienPhaoDinh =
         />
 <input
   placeholder="Đơn giá phào ngang"
-  value={formatTien(
-    cua.donGiaPhaoNgang || ""
-  )}
+  value={
+  cua.donGiaPhaoNgang
+    ? formatTien(
+        cua.donGiaPhaoNgang
+      )
+    : ""
+}
   onChange={(e) =>
     capNhatCua(
       cua.id,
@@ -1508,9 +1534,13 @@ const tienPhaoDinh =
         />
         <input
   placeholder="Đơn giá phào đỉnh"
-  value={formatTien(
-    cua.donGiaPhaoDinh || ""
-  )}
+  value={
+  cua.donGiaPhaoDinh
+    ? formatTien(
+        cua.donGiaPhaoDinh
+      )
+    : ""
+}
   onChange={(e) =>
     capNhatCua(
       cua.id,
