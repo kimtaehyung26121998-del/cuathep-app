@@ -248,14 +248,60 @@ export default function Home() {
 
     const input =
       hoaDonRef.current;
+      const buttons =
+  input.querySelectorAll(
+    ".no-print"
+  );
+
+buttons.forEach((el) => {
+  el.style.display = "none";
+});
+      await new Promise(
+  (resolve) =>
+    setTimeout(
+      resolve,
+      300
+    )
+);
 
     if (!input) return;
 
     const canvas =
-      await html2canvas(input, {
-        scale: 2,
-        useCORS: true,
-      });
+  await html2canvas(
+    input,
+    {
+      scale: 3,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor:
+        "#ffffff",
+
+      logging: true,
+
+      onclone: (doc) => {
+
+        const all =
+          doc.querySelectorAll("*");
+
+        all.forEach((el) => {
+
+          const style =
+  window.getComputedStyle(el);
+
+el.style.color =
+  style.color;
+
+el.style.backgroundColor =
+  style.backgroundColor;
+
+el.style.borderColor =
+  style.borderColor;
+
+        });
+
+      },
+    }
+  );
 
     const imgData =
       canvas.toDataURL(
@@ -270,32 +316,60 @@ export default function Home() {
 
     const pdfWidth = 210;
 
-    const pageHeight = 297;
+const pdfHeight = 297;
 
-    const imgWidth =
-      pdfWidth;
+const margin = 0;
 
-    const imgHeight =
-      (canvas.height *
-        imgWidth) /
-      canvas.width;
+const usableWidth = 210;
 
-    let heightLeft =
-      imgHeight;
+const usableHeight = 297;
 
-    let position = 0;
+const imgWidth =
+  usableWidth;
 
-    pdf.addImage(
-      imgData,
-      "PNG",
-      0,
-      position,
-      imgWidth,
-      imgHeight
-    );
+const imgHeight =
+  (canvas.height *
+    imgWidth) /
+  canvas.width;
 
-    heightLeft -=
-      pageHeight;
+let heightLeft =
+  imgHeight;
+
+let position =
+  margin;
+
+pdf.addImage(
+  imgData,
+  "PNG",
+  margin,
+  position,
+  imgWidth,
+  imgHeight
+);
+
+heightLeft -= usableHeight;
+
+while (heightLeft > 0) {
+
+  position =
+    margin -
+    (imgHeight -
+      heightLeft);
+
+  pdf.addPage();
+
+  pdf.addImage(
+    imgData,
+    "PNG",
+    margin,
+    position,
+    imgWidth,
+    imgHeight
+  );
+
+  heightLeft -= usableHeight;
+
+}
 
     while (heightLeft > 0) {
 
@@ -319,19 +393,20 @@ export default function Home() {
 
     }
 
+    buttons.forEach((el) => {
+  el.style.display = "flex";
+});
     pdf.save(
       "hoa-don.pdf"
     );
 
   } catch (error) {
 
-    console.log(error);
+  console.log(error);
 
-    alert(
-      "Lỗi tạo PDF"
-    );
+  alert(error.message);
 
-  }
+}
 
 };
 
@@ -340,20 +415,44 @@ export default function Home() {
     return (
 
       <div
-        ref={hoaDonRef}
-        className="bg-white p-4"
-      >
+  ref={hoaDonRef}
+  style={{
+    fontFamily:
+  "Arial, sans-serif",
+    backgroundColor: "#ffffff",
+    width: "210mm",
+    margin: "0 auto"
+  }}
+>
 
-        <div className="max-w-6xl mx-auto border">
+        <div
+  className="border"
+  style={{
+    width: "210mm",
+    minHeight: "297mm",
+    margin: "0 auto",
+    backgroundColor: "#ffffff",
+    padding: "10mm"
+  }}
+>
 
-          <div className="p-4 border-b">
+        <div  className="border-b"
+style={{
+  paddingBottom: "10mm"
+}} >
 
             <div className="flex gap-4">
 
-              <img
-                src="/logo.jpg"
-                className="w-24 h-24 object-contain"
-              />
+             <img
+  src="/logo.jpg?v=1"
+  crossOrigin="anonymous"
+  alt="logo"
+ style={{
+  width: "80px",
+  height: "80px",
+  objectFit: "contain"
+}}
+/>
 
               <div>
 
@@ -422,12 +521,32 @@ export default function Home() {
           </div>
 
          <table className="w-full border-collapse table-fixed">
+         <colgroup>
+  <col style={{ width: "28%" }} />
+  <col style={{ width: "9%" }} />
+  <col style={{ width: "8%" }} />
+  <col style={{ width: "6%" }} />
+  <col style={{ width: "6%" }} />
+  <col style={{ width: "12%" }} />
+  <col style={{ width: "8%" }} />
+  <col style={{ width: "14%" }} />
+  <col style={{ width: "16 %" }} />
+</colgroup>
 
             <thead>
 
               <tr>
 
-                <th className="border p-2">
+                <th
+  className="border"
+  style={{
+    padding: "12px 6px",
+    fontSize: "15px",
+    fontWeight: "700",
+    textAlign: "center",
+    lineHeight: "1.4",
+  }}
+>
                   Tên sản phẩm
                 </th>
 
@@ -435,31 +554,94 @@ export default function Home() {
   Khuôn
 </th>
 
-                <th className="border p-2">
+                <th
+  className="border"
+  style={{
+    padding: "12px 6px",
+    fontSize: "15px",
+    fontWeight: "700",
+    textAlign: "center",
+    lineHeight: "1.4",
+  }}
+>
                   Rộng
                 </th>
 
-                <th className="border p-2">
+                <th
+  className="border"
+  style={{
+    padding: "12px 6px",
+    fontSize: "15px",
+    fontWeight: "700",
+    textAlign: "center",
+    lineHeight: "1.4",
+  }}
+>
                   Cao
                 </th>
 
-                <th className="border p-2">
+                <th
+  className="border"
+  style={{
+    padding: "12px 6px",
+    fontSize: "15px",
+    fontWeight: "700",
+    textAlign: "center",
+    lineHeight: "1.4",
+  }}
+>
                   Màu
                 </th>
 
-                <th className="border p-2">
+                <th
+  className="border"
+  style={{
+    padding: "12px 6px",
+    fontSize: "15px",
+    fontWeight: "700",
+    textAlign: "center",
+    lineHeight: "1.4",
+  }}
+>
                   Hướng mở
                 </th>
 
-                <th className="border p-2">
+                <th
+  className="border"
+  style={{
+    padding: "12px 6px",
+    fontSize: "15px",
+    fontWeight: "700",
+    textAlign: "center",
+    lineHeight: "1.4",
+  }}
+>
                   SL
                 </th>
 
-                <th className="border p-2">
+                <th
+  className="border"
+  style={{
+    padding: "12px 6px",
+    fontSize: "15px",
+    fontWeight: "700",
+    textAlign: "center",
+    lineHeight: "1.4",
+  }}
+>
                   Đơn giá
                 </th>
 
-                <th className="border p-2">
+                <th
+  className="border"
+  style={{
+    padding: "12px 6px",
+    fontSize: "15px",
+    fontWeight: "700",
+    textAlign: "center",
+    lineHeight: "1.4",
+  }}
+>
                   Thành tiền
                 </th>
 
@@ -641,7 +823,16 @@ const tienPhaoDinh =
 
       <tr>
 
-        <td className="border p-2 font-bold">
+       <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontWeight: "700",
+    fontSize: "16px",
+    lineHeight: "1.5",
+    wordBreak: "break-word",
+  }}
+>
 
           Bộ cửa {index + 1}
           :
@@ -654,23 +845,58 @@ const tienPhaoDinh =
   {cua.khuon || "-"}
 </td>
 
-        <td className="border p-2">
+        <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
           {cua.rong}
         </td>
 
-        <td className="border p-2">
+        <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
           {cua.cao}
         </td>
 
-        <td className="border p-2">
+        <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
           {cua.maMau}
         </td>
 
-        <td className="border p-2">
+        <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
           {cua.huongMo}
         </td>
 
-        <td className="border p-2">
+        <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
 
           {(
             Number(cua.rong || 0) *
@@ -679,7 +905,14 @@ const tienPhaoDinh =
 
         </td>
 
-        <td className="border p-2">
+        <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
 
           {Number(
             cua.donGia || 0
@@ -687,7 +920,16 @@ const tienPhaoDinh =
 
         </td>
 
-        <td className="border p-2 font-bold">
+       <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontWeight: "700",
+    fontSize: "14px",
+    textAlign: "right",
+    whiteSpace: "nowrap",
+  }}
+>
 
           {(
             (
@@ -705,7 +947,14 @@ const tienPhaoDinh =
 
         <tr>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
 
             Khóa:
             {" "}
@@ -718,11 +967,25 @@ const tienPhaoDinh =
             colSpan={5}
           ></td>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
             {cua.soLuongKhoa}
           </td>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
 
             {Number(
               cua.donGiaKhoa || 0
@@ -730,7 +993,16 @@ const tienPhaoDinh =
 
           </td>
 
-          <td className="border p-2 font-bold">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontWeight: "700",
+    fontSize: "14px",
+    textAlign: "right",
+    whiteSpace: "nowrap",
+  }}
+>
 
             {(
               Number(
@@ -752,7 +1024,14 @@ const tienPhaoDinh =
 
         <tr>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
             Phào phụ
           </td>
 
@@ -761,7 +1040,14 @@ const tienPhaoDinh =
             colSpan={5}
           ></td>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
 
             {slPhaoPhu.toFixed(2)}
             {" "}
@@ -769,7 +1055,14 @@ const tienPhaoDinh =
 
           </td>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
 
             {Number(
               cua.donGiaPhao || 0
@@ -777,7 +1070,16 @@ const tienPhaoDinh =
 
           </td>
 
-          <td className="border p-2 font-bold">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontWeight: "700",
+    fontSize: "14px",
+    textAlign: "right",
+    whiteSpace: "nowrap",
+  }}
+>
 
             {(
               slPhaoPhu *
@@ -797,7 +1099,14 @@ const tienPhaoDinh =
 
         <tr>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
             Phào đình
           </td>
 
@@ -806,7 +1115,14 @@ const tienPhaoDinh =
             colSpan={5}
           ></td>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
 
             {slPhaoDinh.toFixed(2)}
             {" "}
@@ -814,13 +1130,29 @@ const tienPhaoDinh =
 
           </td>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
 
   {tienPhaoDinh.toLocaleString()}
 
 </td>
 
-<td className="border p-2 font-bold">
+<td
+  className="border"
+  style={{
+    padding: "8px",
+    fontWeight: "700",
+    fontSize: "14px",
+    textAlign: "right",
+    whiteSpace: "nowrap",
+  }}
+>
 
   {tienPhaoDinh.toLocaleString()}
 
@@ -834,7 +1166,14 @@ const tienPhaoDinh =
 
         <tr>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
             Bơm Form
           </td>
 
@@ -843,11 +1182,27 @@ const tienPhaoDinh =
             colSpan={6}
           ></td>
 
-          <td className="border p-2">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontSize: "15px",
+    verticalAlign: "middle",
+  }}
+>
             250,000
           </td>
 
-          <td className="border p-2 font-bold">
+          <td
+  className="border"
+  style={{
+    padding: "8px",
+    fontWeight: "700",
+    fontSize: "14px",
+    textAlign: "right",
+    whiteSpace: "nowrap",
+  }}
+>
             250,000
           </td>
 
@@ -865,13 +1220,26 @@ const tienPhaoDinh =
 
           </table>
 
-          <div className="p-6 text-right">
+          <div
+  className="p-6"
+  style={{
+    textAlign: "right",
+    pageBreakInside: "avoid",
+    breakInside: "avoid",
+  }}
+>
 
             <p className="text-xl">
               Tổng cộng
             </p>
 
-            <p className="text-5xl font-bold text-green-600">
+            <p style={{
+  color: "#16a34a",
+  fontSize: "52px",
+  fontWeight: "700",
+  lineHeight: "1.1",
+}}
+style={{ color: "#16a34a" }}>
 
               {tongCong.toLocaleString()} đ
 
@@ -926,13 +1294,18 @@ const tienPhaoDinh =
 
             </div>
 
-            <div className="flex gap-4 mt-10">
+          <div
+  className="flex gap-4 mt-10 no-print"
+>
 
               <button
                 onClick={() =>
                   setXemHoaDon(false)
                 }
-                className="px-5 py-3 rounded-xl bg-gray-200"
+                className="px-5 py-3 rounded-xl"
+style={{
+  backgroundColor: "#e5e7eb"
+}}
               >
 
                 Quay lại
@@ -952,7 +1325,11 @@ const tienPhaoDinh =
     setXemHoaDon(false);
 
   }}
-  className="px-5 py-3 rounded-xl bg-red-500 text-white"
+  className="px-5 py-3 rounded-xl "
+  style={{
+  color: "#ffffff",
+  backgroundColor: "#ef4444"
+}}
 >
 
   Hóa đơn mới
@@ -961,7 +1338,9 @@ const tienPhaoDinh =
 
               <button
                 onClick={taiPDF}
-                className="px-5 py-3 rounded-xl bg-yellow-600 text-white"
+                className="px-5 py-3 rounded-xl "
+                style={{ color: "#ffffff" }}
+                style={{ backgroundColor: "#ca8a04" }}
               >
 
                 Tải PDF
@@ -979,12 +1358,24 @@ const tienPhaoDinh =
     );
 
   }
-
+<style jsx global>{`
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+  }
+`}</style>
   return (
 
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen p-4"
+style={{ backgroundColor: "#f3f4f6" }}>
 
-      <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-xl p-5 space-y-6">
+      <div className="max-w-xl mx-auto rounded-3xl p-5 space-y-6"
+style={{
+  backgroundColor: "#ffffff",
+  boxShadow:
+    "0 2px 10px rgba(0,0,0,0.1)"
+}}>
 
         <h1 className="text-3xl font-bold">
 
@@ -1062,7 +1453,7 @@ const tienPhaoDinh =
                   onClick={() =>
                     xoaCua(cua.id)
                   }
-                  className="text-red-500"
+                  style={{ color: "#ef4444" }}
                 >
 
                   Xóa
@@ -1212,7 +1603,10 @@ const tienPhaoDinh =
 
               </div>
 
-              <div className="bg-gray-100 rounded-2xl p-4">
+              <div className="rounded-2xl p-4"
+style={{
+  backgroundColor: "#f3f4f6"
+}}>
 
                 <p>
 
@@ -1667,10 +2061,16 @@ const tienPhaoDinh =
 
         <button
           onClick={themCua}
-          className="w-full bg-blue-600 text-white p-4 rounded-2xl"
+          className="w-full p-4 rounded-2xl font-bold"
+          style={{
+  backgroundColor: "#2563eb",
+  color: "#ffffff",
+  boxShadow:
+    "0 4px 10px rgba(37,99,235,0.3)"
+}}
         >
 
-          + Thêm cửa
+          Thêm cửa
 
         </button>
 
@@ -1678,7 +2078,11 @@ const tienPhaoDinh =
           onClick={() =>
             setXemHoaDon(true)
           }
-          className="w-full bg-black text-white p-4 rounded-2xl"
+          className="w-full p-4 rounded-2xl font-bold"
+style={{
+  backgroundColor: "#2563eb",
+  color: "#ffffff"
+}}
         >
 
           Xem hóa đơn
