@@ -1280,7 +1280,7 @@ const tienPhaoDinh =
               Tổng cộng
             </p>
 
-           <p
+        <p
   className="tong-tien"
   style={{
     color: "#16a34a",
@@ -1290,7 +1290,9 @@ const tienPhaoDinh =
     wordBreak: "break-word",
   }}
 >
+
   {tongCong.toLocaleString()} đ
+
 </p>
 
           </div>
