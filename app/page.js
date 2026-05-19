@@ -520,7 +520,9 @@ style={{
             <h1
   className="text-center font-bold mt-10"
   style={{
-    fontSize: "clamp(32px, 6vw, 52px)",
+    fontSize: isMobile
+  ? "22px"
+  : "64px",
     lineHeight: "1.1",
   }}
 >
@@ -567,15 +569,15 @@ style={{
 
 <table className="w-full border-collapse table-fixed">
          <colgroup>
-  <col style={{ width: "28%" }} />
-  <col style={{ width: "9%" }} />
-  <col style={{ width: "8%" }} />
-  <col style={{ width: "6%" }} />
-  <col style={{ width: "6%" }} />
-  <col style={{ width: "12%" }} />
-  <col style={{ width: "7%" }} />
-  <col style={{ width: "16%" }} />
-  <col style={{ width: "17%" }} />
+ <col style={{ width: "32%" }} />
+<col style={{ width: "6%" }} />
+<col style={{ width: "6%" }} />
+<col style={{ width: "6%" }} />
+<col style={{ width: "6%" }} />
+<col style={{ width: "12%" }} />
+<col style={{ width: "6%" }} />
+<col style={{ width: "12%" }} />
+<col style={{ width: "14%" }} />
 </colgroup>
 
             <thead>
@@ -587,8 +589,9 @@ style={{
   style={{
     padding: "12px 6px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
+  overflowWrap: "break-word",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -597,20 +600,34 @@ style={{
                   Tên sản phẩm
                 </th>
 
-                <th className="border p-2 w-24">
+                <th className="border p-2 w-24"
+                style={{overflowWrap: "break-word"}}>
   Khuôn
 </th>
 
-                <th
+               <th
   className="border"
   style={{
-    padding: "12px 6px",
+    padding: isMobile
+      ? "3px 2px"
+      : "12px 8px",
+
     fontSize: isMobile
-  ? "11px"
+  ? "7px"
   : "15px",
+  overflowWrap: "break-word",
+
     fontWeight: "700",
+
     textAlign: "center",
-    lineHeight: "1.4",
+
+    verticalAlign: "middle",
+
+    wordBreak: "break-word",
+
+    whiteSpace: "normal",
+
+    lineHeight: "1.3",
   }}
 >
                   Rộng
@@ -619,13 +636,26 @@ style={{
                 <th
   className="border"
   style={{
-    padding: "12px 6px",
+    padding: isMobile
+      ? "3px 2px"
+      : "12px 8px",
+
     fontSize: isMobile
-  ? "11px"
+  ? "7px"
   : "15px",
+  overflowWrap: "break-word",
+
     fontWeight: "700",
+
     textAlign: "center",
-    lineHeight: "1.4",
+
+    verticalAlign: "middle",
+
+    wordBreak: "break-word",
+
+    whiteSpace: "normal",
+
+    lineHeight: "1.3",
   }}
 >
                   Cao
@@ -634,28 +664,53 @@ style={{
                 <th
   className="border"
   style={{
-    padding: "12px 6px",
-    fontSize: isMobile
-  ? "11px"
+    padding: isMobile
+      ? "3px 2px"
+      : "12px 8px",
+
+   fontSize: isMobile
+  ? "7px"
   : "15px",
+  overflowWrap: "break-word",
+
     fontWeight: "700",
+
     textAlign: "center",
-    lineHeight: "1.4",
+
+    verticalAlign: "middle",
+
+    wordBreak: "break-word",
+
+    whiteSpace: "normal",
+
+    lineHeight: "1.3",
   }}
 >
                   Màu
                 </th>
 
-                <th
+              <th
   className="border"
   style={{
-    padding: "12px 6px",
+    padding: isMobile
+      ? "3px 2px"
+      : "12px 8px",
+
     fontSize: isMobile
-  ? "11px"
-  : "15px",
+      ? "10px"
+      : "15px",
+overflowWrap: "break-word",
     fontWeight: "700",
+
     textAlign: "center",
-    lineHeight: "1.4",
+
+    verticalAlign: "middle",
+
+    wordBreak: "break-word",
+
+    whiteSpace: "normal",
+
+    lineHeight: "1.3",
   }}
 >
                   Hướng mở
@@ -666,8 +721,9 @@ style={{
   style={{
     padding: "12px 6px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
+  overflowWrap: "break-word",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -681,8 +737,9 @@ style={{
   style={{
     padding: "12px 6px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
+  overflowWrap: "break-word",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -696,8 +753,9 @@ style={{
   style={{
     padding: "12px 6px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
+  overflowWrap: "break-word",
     fontWeight: "700",
     textAlign: "center",
     lineHeight: "1.4",
@@ -886,7 +944,8 @@ const tienPhaoDinh =
 
        <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
+    overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
     fontSize: "16px",
@@ -908,10 +967,11 @@ const tienPhaoDinh =
 
         <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
+    overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -921,10 +981,11 @@ const tienPhaoDinh =
 
         <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
+    overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -934,10 +995,11 @@ const tienPhaoDinh =
 
         <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
+    overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -947,10 +1009,11 @@ const tienPhaoDinh =
 
         <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
+    overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -960,10 +1023,11 @@ const tienPhaoDinh =
 
         <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
+    overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -978,7 +1042,7 @@ const tienPhaoDinh =
 
        <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: "14px",
     textAlign: "right",
@@ -995,7 +1059,7 @@ const tienPhaoDinh =
 
        <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
     fontSize: "14px",
@@ -1022,10 +1086,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1044,10 +1108,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1057,10 +1121,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1074,7 +1138,7 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
     fontSize: "14px",
@@ -1105,10 +1169,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1123,10 +1187,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1140,10 +1204,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1157,7 +1221,7 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
     fontSize: "14px",
@@ -1186,10 +1250,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1204,10 +1268,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1221,10 +1285,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1236,7 +1300,7 @@ const tienPhaoDinh =
 
 <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
     fontSize: "14px",
@@ -1259,10 +1323,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1277,10 +1341,10 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
-  ? "11px"
+ ? "8px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1290,7 +1354,7 @@ const tienPhaoDinh =
 
           <td
   className="border"
-  style={{
+  style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
     fontSize: "14px",
@@ -1315,81 +1379,143 @@ const tienPhaoDinh =
 
           </table>
 </div>
+          
+
           <div
-  className="p-6"
   style={{
-    textAlign: "right",
+    marginTop: "20px",
+  }}
+>
+
+  {/* Tổng cộng */}
+
+  <div
+    className="p-6"
+    style={{
+      textAlign: "right",
+    }}
+  >
+
+    <p className="text-xl">
+      Tổng cộng
+    </p>
+
+    <p
+      className="tong-tien"
+      style={{
+       fontSize: isMobile
+  ? "16px"
+  : "34px",
+
+        color: "#16a34a",
+
+        fontWeight: "700",
+
+        lineHeight: "1.1",
+
+        wordBreak: "break-word",
+      }}
+    >
+
+      {tongCong.toLocaleString()} đ
+
+    </p>
+
+  </div>
+
+  {/* Ngày tháng */}
+
+  <div className="p-6">
+
+    <div className="text-right italic">
+
+      Ngày{" "}
+      {new Date().getDate()}
+      {" "}tháng{" "}
+      {new Date().getMonth() + 1}
+      {" "}năm{" "}
+      {new Date().getFullYear()}
+
+    </div>
+
+    {/* Chữ ký */}
+
+    <div
+  className="grid grid-cols-2 text-center"
+  style={{
+    marginTop: isMobile
+      ? "30px"
+      : "60px",
+
     pageBreakInside: "avoid",
+
     breakInside: "avoid",
+
+    breakBefore: "auto",
   }}
 >
 
-            <p className="text-xl">
-              Tổng cộng
-            </p>
+      <div>
 
-        <p fontSize: "54px",
-  className="tong-tien"
-  style={{
-    fontSize: "clamp(32px, 6vw, 52px)",
-    fontWeight: "700",
-    lineHeight: "1.1",
-    wordBreak: "break-word",
-  }}
->
+        <p
+          className="font-bold uppercase"
+          style={{
+           fontSize: isMobile
+  ? "10px"
+  : "16px",
+          }}
+        >
 
-  {tongCong.toLocaleString()} đ
+          Người lên đơn
 
-</p>
+        </p>
 
-          </div>
+        <div
+          style={{
+            height: isMobile
+  ? "40px"
+  : "80px",
+          }}
+        ></div>
 
-          <div className="p-6">
+        <p>{nhanVien}</p>
 
-            <div className="text-right italic">
+      </div>
 
-              Ngày{" "}
-              {new Date().getDate()}
-              {" "}tháng{" "}
-              {new Date().getMonth() + 1}
-              {" "}năm{" "}
-              {new Date().getFullYear()}
+      <div>
 
-            </div>
+        <p
+          className="font-bold uppercase"
+          style={{
+            fontSize: isMobile
+  ? "10px"
+  : "16px",
+          }}
+        >
 
-            <div className="grid grid-cols-2 mt-20 text-center">
+          Người nhận hàng
 
-              <div>
+        </p>
 
-                <p className="font-bold text-2xl uppercase">
+        <div
+          style={{
+            height: isMobile
+  ? "40px"
+  : "80px",
+          }}
+        ></div>
 
-                  Người lên đơn
+        <p>
+          ______________
+        </p>
 
-                </p>
+      </div>
 
-                <div className="h-32"></div>
+    </div>
 
-                <p>{nhanVien}</p>
+  </div>
 
-              </div>
-
-              <div>
-
-                <p className="font-bold text-2xl uppercase">
-
-                  Người nhận hàng
-
-                </p>
-
-                <div className="h-32"></div>
-
-                <p>
-                  ______________
-                </p>
-
-              </div>
-
-            </div>
+</div>
 
           <div
   className="no-print"
@@ -1458,7 +1584,7 @@ style={{
 
         </div>
 
-      </div>
+      
 
     </>
 
