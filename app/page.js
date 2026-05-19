@@ -17,6 +17,12 @@ const formatTien = (value) => {
     .toLocaleString("en-US");
 
 };
+const formatSoLuong = (value) => {
+  return Number(value)
+    .toFixed(2)
+    .replace(/\.00$/, "")
+    .replace(/(\.\d*[1-9])0$/, "$1");
+};
 
 export default function Home() {
 
@@ -218,38 +224,156 @@ useEffect(() => {
     : cua.loaiPhao ===
       "Phào đình"
 
-    ? (
-        Number(cua.cao || 0) *
-          2 *
-          Number(
-            cua.donGiaPhaoDung || 0
-          )
-      ) +
+    ? (() => {
 
-      (
-        (
-          Number(cua.rong || 0) +
+        const rongPhaoDungM =
           Number(
             cua.rongPhaoDung || 0
-          ) / 100
-        ) *
-        Number(
-          cua.donGiaPhaoNgang || 0
-        )
-      ) +
+          ) / 100;
 
-      (
-        (
-          Number(cua.rong || 0) +
+        const coPhaoNgang =
           Number(
-            cua.rongPhaoDung || 0
-          ) / 100 +
-          0.3
-        ) *
-        Number(
-          cua.donGiaPhaoDinh || 0
-        )
-      )
+            cua.caoPhaoNgang || 0
+          ) > 0;
+
+        const slPhaoDinh =
+
+          cua.kieuPhaoDinh ===
+          "tieuchuan"
+
+            ? (
+
+                Number(cua.cao || 0) *
+                  2 +
+
+                (
+                  Number(cua.rong || 0) +
+                  0.5
+                ) +
+
+                (
+                  Number(cua.rong || 0) +
+                  0.8
+                )
+
+              )
+
+            : (
+
+                coPhaoNgang
+
+                  ? (
+
+                      Number(cua.cao || 0) *
+                        2 +
+
+                      (
+                        Number(cua.rong || 0) +
+                        rongPhaoDungM * 2
+                      ) +
+
+                      (
+                        Number(cua.rong || 0) +
+                        rongPhaoDungM * 2 +
+                        0.3
+                      )
+
+                    )
+
+                  : (
+
+                      Number(cua.cao || 0) *
+                        2 +
+
+                      (
+                        Number(cua.rong || 0) +
+                        rongPhaoDungM * 2 +
+                        0.3
+                      )
+
+                    )
+
+              );
+
+        return cua.kieuPhaoDinh ===
+          "tieuchuan"
+
+          ? (
+
+              slPhaoDinh *
+
+              Number(
+                cua.donGiaPhao || 0
+              )
+
+            )
+
+          : (
+
+              coPhaoNgang
+
+                ? (
+
+                    (
+                      Number(cua.cao || 0) *
+                      2 *
+                      Number(
+                        cua.donGiaPhaoDung || 0
+                      )
+                    ) +
+
+                    (
+                      (
+                        Number(cua.rong || 0) +
+                        rongPhaoDungM * 2
+                      ) *
+
+                      Number(
+                        cua.donGiaPhaoNgang || 0
+                      )
+                    ) +
+
+                    (
+                      (
+                        Number(cua.rong || 0) +
+                        rongPhaoDungM * 2 +
+                        0.3
+                      ) *
+
+                      Number(
+                        cua.donGiaPhaoDinh || 0
+                      )
+                    )
+
+                  )
+
+                : (
+
+                    (
+                      Number(cua.cao || 0) *
+                      2 *
+                      Number(
+                        cua.donGiaPhaoDung || 0
+                      )
+                    ) +
+
+                    (
+                      (
+                        Number(cua.rong || 0) +
+                        rongPhaoDungM * 2 +
+                        0.3
+                      ) *
+
+                      Number(
+                        cua.donGiaPhaoDinh || 0
+                      )
+                    )
+
+                  )
+
+            );
+
+      })()
 
     : 0;
 
@@ -568,16 +692,16 @@ style={{
 >
 
 <table className="w-full border-collapse table-fixed">
-         <colgroup>
- <col style={{ width: "32%" }} />
-<col style={{ width: "6%" }} />
-<col style={{ width: "6%" }} />
-<col style={{ width: "6%" }} />
-<col style={{ width: "6%" }} />
-<col style={{ width: "12%" }} />
-<col style={{ width: "6%" }} />
-<col style={{ width: "12%" }} />
-<col style={{ width: "14%" }} />
+        <colgroup>
+  <col style={{ width: "32%" }} />
+  <col style={{ width: "6%" }} />
+  <col style={{ width: "6%" }} />
+  <col style={{ width: "6%" }} />
+  <col style={{ width: "6%" }} />
+  <col style={{ width: "12%" }} />
+  <col style={{ width: "8%" }} />
+  <col style={{ width: "14%" }} />
+  <col style={{ width: "16%" }} />
 </colgroup>
 
             <thead>
@@ -715,7 +839,7 @@ style={{
       : "12px 8px",
 
     fontSize: isMobile
-      ? "10px"
+      ? "5px"
       : "15px",
 overflowWrap: "break-word",
     fontWeight: "700",
@@ -739,8 +863,9 @@ overflowWrap: "break-word",
   style={{
     padding: "12px 6px",
     fontSize: isMobile
- ? "8px"
+ ? "6px"
   : "15px",
+  whiteSpace: "nowrap",
   overflowWrap: "break-word",
     fontWeight: "700",
     textAlign: "center",
@@ -755,10 +880,12 @@ overflowWrap: "break-word",
   style={{
     padding: "12px 6px",
     fontSize: isMobile
- ? "8px"
-  : "15px",
+ ? "6px"
+  : "14px",
+
+
   overflowWrap: "break-word",
-    fontWeight: "700",
+    fontWeight: "600",
     textAlign: "center",
     lineHeight: "1.4",
   }}
@@ -1051,10 +1178,10 @@ const tienPhaoDinh =
   }}
 >
 
-          {(
+          {formatSoLuong(
             Number(cua.rong || 0) *
             Number(cua.cao || 0)
-          ).toFixed(2)}
+          )}
 
         </td>
 
@@ -1214,7 +1341,7 @@ const tienPhaoDinh =
   }}
 >
 
-            {slPhaoPhu.toFixed(2)}
+            {formatSoLuong(slPhaoPhu)}
             {" "}
             md
 
@@ -1295,7 +1422,7 @@ const tienPhaoDinh =
   }}
 >
 
-            {slPhaoDinh.toFixed(2)}
+            {formatSoLuong(slPhaoDinh)}
             {" "}
             md
 
@@ -1857,9 +1984,9 @@ style={{
 
                   Số lượng:
                   {" "}
-                  {tinhSoLuongCua(
+                  {formatSoLuong(tinhSoLuongCua(
                     cua
-                  ).toFixed(2)} m²
+                  ))} m²
 
                 </p>
 
@@ -2019,9 +2146,9 @@ style={{
 
       Số lượng:
       {" "}
-      {tinhPhaoPhu(
+      {formatSoLuong(tinhPhaoPhu(
         cua
-      ).toFixed(2)}
+      ))}
       {" "}
       md
 
@@ -2120,7 +2247,7 @@ style={{
           Kích thước:
           {" "}
 
-          {(
+          {formatSoLuong((
             Number(cua.cao || 0) *
               2 +
             (
@@ -2131,7 +2258,7 @@ style={{
               Number(cua.rong || 0) +
               0.8
             )
-          ).toFixed(2)}
+          ))}
 
           {" "}
           md
