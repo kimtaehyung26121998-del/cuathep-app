@@ -1168,12 +1168,22 @@ const tienPhaoDinh =
 
         <td
   className="border"
-  style={{ overflowWrap: "break-word",
+  style={{
     overflowWrap: "break-word",
     padding: "8px",
+
     fontSize: isMobile
- ? "8px"
-  : "15px",
+      ? "5px"
+      : "14px",
+
+    textAlign: "right",
+
+    whiteSpace: "nowrap",
+
+    overflow: "hidden",
+
+    textOverflow: "ellipsis",
+
     verticalAlign: "middle",
   }}
 >
@@ -1189,7 +1199,7 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     padding: "8px",
-    fontSize: isMobile ? "8px" : "14px",
+    fontSize: isMobile ? "5px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
     verticalAlign: "middle",
@@ -1204,12 +1214,23 @@ const tienPhaoDinh =
 
        <td
   className="border"
-  style={{ overflowWrap: "break-word",
+  style={{
+    overflowWrap: "break-word",
     padding: "8px",
+
     fontWeight: "700",
-    fontSize: isMobile ? "9px" : "14px",
+
+    fontSize: isMobile
+      ? "6px"
+      : "14px",
+
     textAlign: "right",
+
     whiteSpace: "nowrap",
+
+    overflow: "hidden",
+
+    textOverflow: "ellipsis",
   }}
 >
 
@@ -1419,6 +1440,7 @@ const tienPhaoDinh =
  ? "8px"
   : "15px",
     verticalAlign: "middle",
+    whiteSpace: "nowrap",
   }}
 >
 
