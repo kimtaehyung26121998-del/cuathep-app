@@ -1063,7 +1063,7 @@ const tienPhaoDinh =
       : "8px",
 
     fontSize: isMobile
-      ? "4px"
+      ? "6px"
       : "14px",
 
     lineHeight: "1",
@@ -1080,7 +1080,7 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
     fontSize: isMobile
  ? "4px"
   : "8px",
@@ -1094,7 +1094,7 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
     fontSize: isMobile
  ? "4px"
   : "8px",
@@ -1165,7 +1165,7 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     padding: "5px",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "5px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
     verticalAlign: "middle",
