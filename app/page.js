@@ -65,6 +65,8 @@ export default function Home() {
 
   const [diaChiKhach, setDiaChiKhach] =
     useState("");
+    const [tienCoc, setTienCoc] =
+  useState("");
 
   const hoaDonRef = useRef(null);
   const [isMobile, setIsMobile] =
@@ -395,6 +397,11 @@ useEffect(() => {
     );
 
   }, [danhSachCua]);
+  const soTienDaCoc =
+  Number(tienCoc || 0);
+
+const conPhaiThanhToan =
+  tongCong - soTienDaCoc;
 
   const taiPDF = async () => {
 
@@ -462,77 +469,19 @@ el.style.borderColor =
         "image/png"
       );
 
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
+    const link =
+  document.createElement("a");
 
-    const pdfWidth = 210;
+link.download =
+  "hoa-don.png";
 
-const pdfHeight = 297;
-
-const margin = 0;
-
-const usableWidth = 210;
-
-const usableHeight = 297;
-
-const imgWidth =
-  usableWidth;
-
-const imgHeight =
-  (canvas.height *
-    imgWidth) /
-  canvas.width;
-
-let heightLeft =
-  imgHeight;
-
-let position =
-  margin;
-
-pdf.addImage(
-  imgData,
-  "PNG",
-  margin,
-  position,
-  imgWidth,
-  imgHeight
-);
-
-heightLeft -= usableHeight;
-
-while (heightLeft > 0) {
-
-  position =
-    margin -
-    (imgHeight -
-      heightLeft);
-
-  pdf.addPage();
-
-  pdf.addImage(
-    imgData,
-    "PNG",
-    margin,
-    position,
-    imgWidth,
-    imgHeight
+link.href =
+  canvas.toDataURL(
+    "image/png",
+    1.0
   );
 
-  heightLeft -= usableHeight;
-
-}
-
- 
-
-    buttons.forEach((el) => {
-  el.style.display = "flex";
-});
-    pdf.save(
-      "hoa-don.pdf"
-    );
+link.click();
 
   } catch (error) {
 
@@ -732,7 +681,7 @@ style={{
       : "12px 6px",
 
     fontSize: isMobile
-      ? "4px"
+      ? "5px"
       : "15px",
 
     fontWeight: "700",
@@ -755,7 +704,7 @@ style={{
       : "12px 8px",
 
     fontSize: isMobile
-  ? "4px"
+  ? "5px"
   : "15px",
   overflowWrap: "break-word",
 
@@ -783,7 +732,7 @@ style={{
       : "12px 8px",
 
     fontSize: isMobile
-  ? "4px"
+  ? "5px"
   : "15px",
   overflowWrap: "break-word",
 
@@ -811,7 +760,7 @@ style={{
       : "12px 8px",
 
    fontSize: isMobile
-  ? "4px"
+  ? "5px"
   : "15px",
   overflowWrap: "break-word",
 
@@ -1199,7 +1148,7 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     padding: "8px",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "5px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
     verticalAlign: "middle",
@@ -1307,7 +1256,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "5px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1356,7 +1305,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
- ? "4px"
+ ? "5px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1373,7 +1322,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
- ? "4px"
+ ? "5px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1390,7 +1339,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "5px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1470,7 +1419,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "5px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1524,7 +1473,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "5px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1585,6 +1534,41 @@ const tienPhaoDinh =
     >
 
       {tongCong.toLocaleString()} đ
+      <div
+  style={{
+    marginTop: "10px",
+  }}
+>
+
+  <p
+    style={{
+      fontSize: isMobile
+        ? "10px"
+        : "16px",
+    }}
+  >
+    Đã cọc:
+    {" "}
+    {soTienDaCoc.toLocaleString()} đ
+  </p>
+
+  <p
+    style={{
+      fontSize: isMobile
+        ? "12px"
+        : "20px",
+
+      color: "#dc2626",
+
+      fontWeight: "700",
+    }}
+  >
+    Còn phải thanh toán:
+    {" "}
+    {conPhaiThanhToan.toLocaleString()} đ
+  </p>
+
+</div>
 
     </p>
 
@@ -1717,6 +1701,7 @@ style={{
     setTenKhach("");
     setDiaChiKhach("");
     setNhanVien("");
+    setTienCoc("");
 
     setXemHoaDon(false);
 
@@ -1741,7 +1726,7 @@ style={{
   }}
 >
 
-                Tải PDF
+                Lưu ảnh
 
               </button>
 
@@ -1824,6 +1809,23 @@ style={{
           }
           className="w-full border p-3 rounded-2xl"
         />
+        <input
+  placeholder="Khách đã cọc"
+  value={
+    tienCoc
+      ? formatTien(tienCoc)
+      : ""
+  }
+  onChange={(e) =>
+    setTienCoc(
+      e.target.value.replace(
+        /\D/g,
+        ""
+      )
+    )
+  }
+  className="w-full border p-3 rounded-2xl"
+/>
 
         {danhSachCua.map(
           (cua, index) => (
@@ -2460,7 +2462,7 @@ style={{
   backgroundColor: "#2563eb",
   color: "#ffffff",
   boxShadow:
-    "0 4px 10px rgba(37,99,235,0.3)"
+    "0 5px 10px rgba(37,99,235,0.3)"
 }}
         >
 
