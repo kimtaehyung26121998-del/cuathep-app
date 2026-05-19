@@ -788,7 +788,7 @@ style={{
       : "12px 5px",
 
     fontSize: isMobile
-      ? "4px"
+      ? "5px"
       : "8px",
 overflowWrap: "break-word",
     fontWeight: "700",
