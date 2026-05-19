@@ -67,6 +67,10 @@ export default function Home() {
     useState("");
     const [tienCoc, setTienCoc] =
   useState("");
+  const [
+  cuocVanChuyen,
+  setCuocVanChuyen,
+] = useState("");
 
   const hoaDonRef = useRef(null);
   const [isMobile, setIsMobile] =
@@ -400,8 +404,16 @@ useEffect(() => {
   const soTienDaCoc =
   Number(tienCoc || 0);
 
+const tienVanChuyen =
+  Number(cuocVanChuyen || 0);
+
+const tongSauVanChuyen =
+  tongCong +
+  tienVanChuyen;
+
 const conPhaiThanhToan =
-  tongCong - soTienDaCoc;
+  tongSauVanChuyen -
+  soTienDaCoc;
 
   const taiPDF = async () => {
 
@@ -662,7 +674,7 @@ style={{
   style={{
     padding: "12px 6px",
     fontSize: isMobile
- ? "4px"
+ ? "6px"
   : "8px",
   overflowWrap: "break-word",
     fontWeight: "700",
@@ -681,7 +693,7 @@ style={{
       : "12px 6px",
 
     fontSize: isMobile
-      ? "4px"
+      ? "6px"
       : "8px",
 
     fontWeight: "700",
@@ -701,10 +713,10 @@ style={{
   style={{
     padding: isMobile
       ? "3px 2px"
-      : "12px 5px",
+      : "12px 6px",
 
     fontSize: isMobile
-  ? "4px"
+  ? "6px"
   : "8px",
   overflowWrap: "break-word",
 
@@ -729,10 +741,10 @@ style={{
   style={{
     padding: isMobile
       ? "3px 2px"
-      : "12px 5px",
+      : "12px 6px",
 
     fontSize: isMobile
-  ? "4px"
+  ? "6px"
   : "8px",
   overflowWrap: "break-word",
 
@@ -757,10 +769,10 @@ style={{
   style={{
     padding: isMobile
       ? "3px 2px"
-      : "12px 5px",
+      : "12px 6px",
 
    fontSize: isMobile
-  ? "4px"
+  ? "6px"
   : "8px",
   overflowWrap: "break-word",
 
@@ -785,10 +797,10 @@ style={{
   style={{
     padding: isMobile
       ? "3px 2px"
-      : "12px 5px",
+      : "12px 6px",
 
     fontSize: isMobile
-      ? "5px"
+      ? "6px"
       : "8px",
 overflowWrap: "break-word",
     fontWeight: "700",
@@ -847,7 +859,7 @@ overflowWrap: "break-word",
   style={{
     padding: "12px 6px",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
   overflowWrap: "break-word",
     fontWeight: "700",
@@ -1040,7 +1052,7 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
     fontWeight: "700",
     fontSize: "10px",
     lineHeight: "1.5",
@@ -1082,7 +1094,7 @@ const tienPhaoDinh =
     overflowWrap: "break-word",
     padding: "6px",
     fontSize: isMobile
- ? "4px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1096,7 +1108,7 @@ const tienPhaoDinh =
     overflowWrap: "break-word",
     padding: "6px",
     fontSize: isMobile
- ? "4px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1108,9 +1120,9 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
     fontSize: isMobile
- ? "4px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1122,9 +1134,9 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1136,10 +1148,10 @@ const tienPhaoDinh =
   className="border"
   style={{
     overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
 
     fontSize: isMobile
-      ? "5px"
+      ? "6px"
       : "14px",
 
     textAlign: "right",
@@ -1164,8 +1176,8 @@ const tienPhaoDinh =
        <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
-    fontSize: isMobile ? "5px" : "14px",
+    padding: "6px",
+    fontSize: isMobile ? "6px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
     verticalAlign: "middle",
@@ -1182,7 +1194,7 @@ const tienPhaoDinh =
   className="border"
   style={{
     overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
 
     fontWeight: "700",
 
@@ -1219,9 +1231,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
+    textAlign: "right",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1241,9 +1254,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    textAlign: "right",
+    padding: "6px",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1254,9 +1268,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
+    textAlign: "right",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1271,9 +1286,9 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
     fontWeight: "700",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "6px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1302,9 +1317,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
+    textAlign: "right",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1320,9 +1336,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    textAlign: "right",
+    padding: "6px",
     fontSize: isMobile
- ? "4px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1337,9 +1354,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    textAlign: "right",
+    padding: "6px",
     fontSize: isMobile
- ? "4px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1354,9 +1372,9 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
     fontWeight: "700",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "6px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1383,9 +1401,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    textAlign: "right",
+    padding: "6px",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1401,9 +1420,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    textAlign: "right",
+    padding: "6px",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
     whiteSpace: "nowrap",
@@ -1419,9 +1439,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    textAlign: "right",
+    padding: "6px",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1434,9 +1455,9 @@ const tienPhaoDinh =
 <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
     fontWeight: "700",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "6px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1457,9 +1478,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    textAlign: "right",
+    padding: "6px",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1475,9 +1497,10 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    textAlign: "right",
+    padding: "6px",
     fontSize: isMobile
- ? "5px"
+ ? "6px"
   : "8px",
     verticalAlign: "middle",
   }}
@@ -1488,9 +1511,9 @@ const tienPhaoDinh =
           <td
   className="border"
   style={{ overflowWrap: "break-word",
-    padding: "5px",
+    padding: "6px",
     fontWeight: "700",
-    fontSize: isMobile ? "4px" : "14px",
+    fontSize: isMobile ? "6px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1550,7 +1573,7 @@ const tienPhaoDinh =
       }}
     >
 
-      {tongCong.toLocaleString()} đ
+      {tongSauVanChuyen.toLocaleString()} đ
       <div
   style={{
     marginTop: "10px",
@@ -1564,6 +1587,17 @@ const tienPhaoDinh =
         : "16px",
     }}
   >
+    <p
+  style={{
+    fontSize: isMobile
+      ? "10px"
+      : "16px",
+  }}
+>
+  Cước vận chuyển:
+  {" "}
+  {tienVanChuyen.toLocaleString()} đ
+</p>
     Đã cọc:
     {" "}
     {soTienDaCoc.toLocaleString()} đ
@@ -1719,6 +1753,7 @@ style={{
     setDiaChiKhach("");
     setNhanVien("");
     setTienCoc("");
+    setCuocVanChuyen("");
 
     setXemHoaDon(false);
 
@@ -1835,6 +1870,25 @@ style={{
   }
   onChange={(e) =>
     setTienCoc(
+      e.target.value.replace(
+        /\D/g,
+        ""
+      )
+    )
+  }
+  className="w-full border p-3 rounded-2xl"
+/>
+<input
+  placeholder="Cước vận chuyển"
+  value={
+    cuocVanChuyen
+      ? formatTien(
+          cuocVanChuyen
+        )
+      : ""
+  }
+  onChange={(e) =>
+    setCuocVanChuyen(
       e.target.value.replace(
         /\D/g,
         ""
@@ -2479,7 +2533,7 @@ style={{
   backgroundColor: "#2563eb",
   color: "#ffffff",
   boxShadow:
-    "0 4px 10px rgba(37,99,235,0.3)"
+    "0 6px 10px rgba(37,99,235,0.3)"
 }}
         >
 
