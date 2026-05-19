@@ -732,7 +732,7 @@ style={{
       : "12px 6px",
 
     fontSize: isMobile
-      ? "6px"
+      ? "4px"
       : "15px",
 
     fontWeight: "700",
@@ -755,7 +755,7 @@ style={{
       : "12px 8px",
 
     fontSize: isMobile
-  ? "7px"
+  ? "4px"
   : "15px",
   overflowWrap: "break-word",
 
@@ -783,7 +783,7 @@ style={{
       : "12px 8px",
 
     fontSize: isMobile
-  ? "7px"
+  ? "4px"
   : "15px",
   overflowWrap: "break-word",
 
@@ -811,7 +811,7 @@ style={{
       : "12px 8px",
 
    fontSize: isMobile
-  ? "7px"
+  ? "4px"
   : "15px",
   overflowWrap: "break-word",
 
@@ -1199,7 +1199,7 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     padding: "8px",
-    fontSize: isMobile ? "5px" : "14px",
+    fontSize: isMobile ? "4px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
     verticalAlign: "middle",
@@ -1307,7 +1307,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: isMobile ? "9px" : "14px",
+    fontSize: isMobile ? "4px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1356,7 +1356,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
- ? "8px"
+ ? "4px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1373,7 +1373,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontSize: isMobile
- ? "8px"
+ ? "4px"
   : "15px",
     verticalAlign: "middle",
   }}
@@ -1390,7 +1390,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: isMobile ? "9px" : "14px",
+    fontSize: isMobile ? "4px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1470,7 +1470,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: isMobile ? "9px" : "14px",
+    fontSize: isMobile ? "4px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1524,7 +1524,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: isMobile ? "9px" : "14px",
+    fontSize: isMobile ? "4px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
