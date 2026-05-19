@@ -589,7 +589,7 @@ style={{
   style={{
     padding: "12px 6px",
     fontSize: isMobile
- ? "8px"
+ ? "5px"
   : "15px",
   overflowWrap: "break-word",
     fontWeight: "700",
@@ -600,8 +600,26 @@ style={{
                   Tên sản phẩm
                 </th>
 
-                <th className="border p-2 w-24"
-                style={{overflowWrap: "break-word"}}>
+                <th
+  className="border"
+  style={{
+    padding: isMobile
+      ? "3px 1px"
+      : "12px 6px",
+
+    fontSize: isMobile
+      ? "6px"
+      : "15px",
+
+    fontWeight: "700",
+
+    textAlign: "center",
+
+    wordBreak: "break-word",
+
+    lineHeight: "1.2",
+  }}
+>
   Khuôn
 </th>
 
@@ -1044,7 +1062,7 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     padding: "8px",
-    fontSize: "14px",
+    fontSize: isMobile ? "8px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
     verticalAlign: "middle",
@@ -1062,7 +1080,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: "14px",
+    fontSize: isMobile ? "9px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1141,7 +1159,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: "14px",
+    fontSize: isMobile ? "9px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1224,7 +1242,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: "14px",
+    fontSize: isMobile ? "9px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1303,7 +1321,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: "14px",
+    fontSize: isMobile ? "9px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1357,7 +1375,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "8px",
     fontWeight: "700",
-    fontSize: "14px",
+    fontSize: isMobile ? "9px" : "14px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
