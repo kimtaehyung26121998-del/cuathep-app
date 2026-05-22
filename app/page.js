@@ -56,6 +56,8 @@ export default function Home() {
 
   const [xemHoaDon, setXemHoaDon] =
     useState(false);
+    const [loaiDon, setLoaiDon] =
+  useState("");
 
   const [nhanVien, setNhanVien] =
     useState("");
@@ -406,10 +408,17 @@ useEffect(() => {
 
 const tienVanChuyen =
   Number(cuocVanChuyen || 0);
+  const tienVAT =
+  loaiDon === "daily"
+    ? tongCong * 0.05
+    : 0;
 
 const tongSauVanChuyen =
   tongCong +
+  tienVAT +
   tienVanChuyen;
+
+  
 
 const conPhaiThanhToan =
   tongSauVanChuyen -
@@ -1587,6 +1596,22 @@ const tienPhaoDinh =
         : "16px",
     }}
   >
+    
+    {loaiDon === "daily" && (
+
+  <p
+    style={{
+      fontSize: isMobile
+        ? "10px"
+        : "16px",
+    }}
+  >
+    VAT 5%:
+    {" "}
+    {tienVAT.toLocaleString()} đ
+  </p>
+
+)}
     <p
   style={{
     fontSize: isMobile
@@ -1754,7 +1779,7 @@ style={{
     setNhanVien("");
     setTienCoc("");
     setCuocVanChuyen("");
-
+setLoaiDon("");
     setXemHoaDon(false);
 
   }}
@@ -1796,7 +1821,78 @@ style={{
 
   }
 
-  return (  
+  return (
+
+<>
+  {!loaiDon ? (
+
+    <div
+      className="
+        min-h-screen
+        flex
+        flex-col
+        items-center
+        justify-center
+        gap-6
+        p-6
+      "
+      style={{
+        backgroundColor: "#f3f4f6",
+      }}
+    >
+
+      <h1
+        className="
+          text-3xl
+          font-bold
+        "
+      >
+        Chọn loại đơn
+      </h1>
+
+      <button
+        onClick={() =>
+          setLoaiDon("khachle")
+        }
+        className="
+          w-full
+          max-w-md
+          py-4
+          rounded-2xl
+          text-xl
+          font-bold
+        "
+        style={{
+          backgroundColor: "#2563eb",
+          color: "#ffffff",
+        }}
+      >
+        Lên đơn khách lẻ
+      </button>
+
+      <button
+        onClick={() =>
+          setLoaiDon("daily")
+        }
+        className="
+          w-full
+          max-w-md
+          py-4
+          rounded-2xl
+          text-xl
+          font-bold
+        "
+        style={{
+          backgroundColor: "#16a34a",
+          color: "#ffffff",
+        }}
+      >
+        Lên đơn đại lý
+      </button>
+
+    </div>
+
+  ) : ( 
 
     <div className="min-h-screen p-4"
 style={{ backgroundColor: "#f3f4f6" }}>
@@ -2561,6 +2657,10 @@ style={{
     </div>
 
       
-    );
+       )
 
+  }
+
+</>
+);
 }
