@@ -49,6 +49,13 @@ export default function Home() {
     donGiaPhao: "",
 
     coBomForm: false,
+    kinhOThoang: "",
+
+coKinhCanh: false,
+
+loaiKinhCanh: "nho",
+
+kinhCanh: "",
   });
 
   const [danhSachCua, setDanhSachCua] =
@@ -389,14 +396,30 @@ useEffect(() => {
           cua.coBomForm
             ? 250000
             : 0;
+            const tienKinhOThoang =
+  Number(cua.kinhOThoang || 0)
+  * 60000;
+
+const donGiaKinhCanh =
+  cua.loaiKinhCanh === "to"
+    ? 350000
+    : 250000;
+
+const tienKinhCanh =
+  cua.coKinhCanh
+    ? Number(cua.kinhCanh || 0)
+      * donGiaKinhCanh
+    : 0;
 
         return (
-          tong +
-          tienCua +
-          tienKhoa +
-          tienPhao +
-          tienBom
-        );
+  tong +
+  tienCua +
+  tienKhoa +
+  tienPhao +
+  tienBom +
+  tienKinhOThoang +
+  tienKinhCanh
+);
 
       },
       0
@@ -1533,6 +1556,131 @@ const tienPhaoDinh =
         </tr>
 
       )}
+      {Number(cua.kinhOThoang) > 0 && (
+
+<tr>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    Kính ô thoáng
+  </td>
+
+  <td
+    className="border"
+    colSpan={6}
+  ></td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+      textAlign: "right",
+    }}
+  >
+    60.000
+  </td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      fontSize: isMobile
+        ? "6px"
+        : "14px",
+      fontWeight: "700",
+      textAlign: "right",
+    }}
+  >
+    {(
+      Number(cua.kinhOThoang)
+      * 60000
+    ).toLocaleString()}
+  </td>
+
+</tr>
+
+)}
+
+{cua.coKinhCanh &&
+ Number(cua.kinhCanh) > 0 && (
+
+<tr>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    Kính cánh (
+  {
+    cua.loaiKinhCanh === "to"
+      ? "Ô to"
+      : "Ô nhỏ"
+  }
+)
+  </td>
+
+  <td
+    className="border"
+    colSpan={6}
+  ></td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+      textAlign: "right",
+    }}
+  >
+    {
+  cua.loaiKinhCanh === "to"
+    ? "350.000"
+    : "250.000"
+}
+  </td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      fontSize: isMobile
+        ? "6px"
+        : "14px",
+      fontWeight: "700",
+      textAlign: "right",
+    }}
+  >
+    {(
+  Number(cua.kinhCanh)
+  *
+  (
+    cua.loaiKinhCanh === "to"
+      ? 350000
+      : 250000
+  )
+).toLocaleString()}
+  </td>
+
+</tr>
+
+)}
 
     </>
 
@@ -2616,6 +2764,121 @@ style={{
                 (+250.000đ)
 
               </label>
+              {loaiDon === "daily" && (
+
+  <div className="space-y-3 mt-3">
+
+    <div>
+
+      <label>
+        Kính ô thoáng
+        (+60.000đ)
+      </label>
+
+      <input
+        type="number"
+        placeholder="Số lượng"
+        value={cua.kinhOThoang || ""}
+        onChange={(e) =>
+          capNhatCua(
+            cua.id,
+            "kinhOThoang",
+            e.target.value
+          )
+        }
+        className="
+          w-full
+          border
+          p-3
+          rounded-2xl
+        "
+      />
+
+    </div>
+
+    <div>
+
+  <label className="flex items-center gap-2">
+
+    <input
+      type="checkbox"
+      checked={cua.coKinhCanh}
+      onChange={(e) =>
+        capNhatCua(
+          cua.id,
+          "coKinhCanh",
+          e.target.checked
+        )
+      }
+    />
+
+    Kính cánh
+
+  </label>
+
+  {cua.coKinhCanh && (
+
+    <>
+
+      <select
+        value={cua.loaiKinhCanh}
+        onChange={(e) =>
+          capNhatCua(
+            cua.id,
+            "loaiKinhCanh",
+            e.target.value
+          )
+        }
+        className="
+          w-full
+          border
+          p-3
+          rounded-2xl
+          mt-2
+        "
+      >
+
+        <option value="to">
+          Ô kính to
+          (350.000đ)
+        </option>
+
+        <option value="nho">
+          Ô kính nhỏ
+          (250.000đ)
+        </option>
+
+      </select>
+
+      <input
+        type="number"
+        placeholder="Số lượng"
+        value={cua.kinhCanh || ""}
+        onChange={(e) =>
+          capNhatCua(
+            cua.id,
+            "kinhCanh",
+            e.target.value
+          )
+        }
+        className="
+          w-full
+          border
+          p-3
+          rounded-2xl
+          mt-2
+        "
+      />
+
+    </>
+
+  )}
+
+</div>
+
+  </div>
+
+)}
 
             </div>
 
