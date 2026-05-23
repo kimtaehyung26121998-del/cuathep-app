@@ -107,7 +107,49 @@ useEffect(() => {
     );
 
 }, []);
+useEffect(() => {
 
+  const saved =
+    sessionStorage.getItem(
+      "draft_invoice"
+    );
+
+  if (saved) {
+
+    const data =
+      JSON.parse(saved);
+
+    setDanhSachCua(
+      data.danhSachCua || []
+    );
+
+    setNhanVien(
+      data.nhanVien || ""
+    );
+
+    setTenKhach(
+      data.tenKhach || ""
+    );
+
+    setDiaChiKhach(
+      data.diaChiKhach || ""
+    );
+
+    setTienCoc(
+      data.tienCoc || ""
+    );
+
+    setCuocVanChuyen(
+      data.cuocVanChuyen || ""
+    );
+
+    setLoaiDon(
+      data.loaiDon || ""
+    );
+
+  }
+
+}, []);
   const danhSachNhanVien = {
     "Nguyễn Tuấn Vũ": "0335 952 952",
     "Nguyễn Văn Hướng": "0345 109 555",
@@ -526,6 +568,9 @@ link.href =
   );
 
 link.click();
+buttons.forEach((el) => {
+  el.style.display = "flex";
+});
 
 
   } catch (error) {
@@ -1931,9 +1976,24 @@ const tienPhaoDinh =
 >
 
               <button
-                onClick={() =>
-                  setXemHoaDon(false)
-                }
+                onClick={() => {
+
+  sessionStorage.setItem(
+    "draft_invoice",
+    JSON.stringify({
+      danhSachCua,
+      nhanVien,
+      tenKhach,
+      diaChiKhach,
+      tienCoc,
+      cuocVanChuyen,
+      loaiDon,
+    })
+  );
+
+  setXemHoaDon(false);
+
+}}
                 className="px-5 py-3 rounded-xl"
 style={{
   backgroundColor: "#e5e7eb"
