@@ -1956,7 +1956,7 @@ style={{
     setTienCoc("");
     setCuocVanChuyen("");
 setLoaiDon("");
-    
+    setXemHoaDon(false);
 
   }}
   className="px-5 py-3 rounded-xl "
