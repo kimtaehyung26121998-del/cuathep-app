@@ -527,6 +527,7 @@ link.href =
 
 link.click();
 
+
   } catch (error) {
 
   console.log(error);
@@ -1244,13 +1245,15 @@ const tienPhaoDinh =
   }}
 >
 
-          {(
-            (
-              Number(cua.rong || 0) *
-              Number(cua.cao || 0)
-            ) *
-            Number(cua.donGia || 0)
-          ).toLocaleString()}
+          {
+  Math.round(
+    (
+      Number(cua.rong || 0) *
+      Number(cua.cao || 0)
+    ) *
+    Number(cua.donGia || 0)
+  ).toLocaleString()
+}
 
         </td>
 
@@ -1395,9 +1398,14 @@ const tienPhaoDinh =
   }}
 >
 
-            {Number(
-              cua.donGiaPhao || 0
-            ).toLocaleString()}
+            {
+  Math.round(
+    slPhaoPhu *
+    Number(
+      cua.donGiaPhao || 0
+    )
+  ).toLocaleString()
+}
 
           </td>
 
@@ -1480,7 +1488,11 @@ const tienPhaoDinh =
   }}
 >
 
-  {tienPhaoDinh.toLocaleString()}
+  {
+  Math.round(
+    tienPhaoDinh
+  ).toLocaleString()
+}
 
 </td>
 
@@ -1495,7 +1507,11 @@ const tienPhaoDinh =
   }}
 >
 
-  {tienPhaoDinh.toLocaleString()}
+  {
+  Math.round(
+    tienPhaoDinh
+  ).toLocaleString()
+}
 
 </td>
 
@@ -1730,7 +1746,11 @@ const tienPhaoDinh =
       }}
     >
 
-      {tongSauVanChuyen.toLocaleString()} đ
+      {
+  Math.round(
+    tongSauVanChuyen
+  ).toLocaleString()
+} đ
       <div
   style={{
     marginTop: "10px",
@@ -1756,7 +1776,11 @@ const tienPhaoDinh =
   >
     VAT 5%:
     {" "}
-    {tienVAT.toLocaleString()} đ
+    {
+  Math.round(
+    tienVAT
+  ).toLocaleString()
+} đ
   </p>
 
 )}
@@ -1789,7 +1813,11 @@ const tienPhaoDinh =
   >
     Còn phải thanh toán:
     {" "}
-    {conPhaiThanhToan.toLocaleString()} đ
+    {
+  Math.round(
+    conPhaiThanhToan
+  ).toLocaleString()
+} đ
   </p>
 
 </div>
@@ -1951,7 +1979,7 @@ setLoaiDon("");
   }}
 >
 
-                Lưu ảnh
+                Lưu ảnh / Quay lại
 
               </button>
 
