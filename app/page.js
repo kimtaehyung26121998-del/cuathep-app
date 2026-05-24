@@ -49,7 +49,17 @@ export default function Home() {
     donGiaPhao: "",
 
     coBomForm: false,
-    kinhOThoang: "",
+    coOThoang: false,
+
+loaiOThoang: "",
+
+kinhOThoang: "",
+
+oThoangDac: "",
+
+oThoangNanChop: "",
+
+caoVom: "",
 
 coKinhCanh: false,
 
@@ -438,9 +448,50 @@ useEffect(() => {
           cua.coBomForm
             ? 250000
             : 0;
-            const tienKinhOThoang =
-  Number(cua.kinhOThoang || 0)
-  * 60000;
+           let tienOThoang = 0;
+
+if (cua.loaiOThoang === "kinh") {
+
+  tienOThoang =
+    Number(cua.kinhOThoang || 0)
+    * 60000;
+
+}
+
+if (cua.loaiOThoang === "dac") {
+
+  tienOThoang =
+    Number(cua.oThoangDac || 0)
+    * 350000;
+
+}
+
+if (cua.loaiOThoang === "nanchop") {
+
+  tienOThoang =
+    Number(cua.oThoangNanChop || 0)
+    * 250000;
+
+}
+
+if (cua.loaiOThoang === "vom") {
+
+  const dienTichVom =
+
+Number(cua.rong || 0)
+*
+Number(cua.caoVom || 0);
+
+  tienOThoang =
+
+    dienTichVom *
+
+    (
+      Number(cua.donGia || 0)
+      + 350000
+    );
+
+}
 
 const donGiaKinhCanh =
   cua.loaiKinhCanh === "to"
@@ -459,7 +510,7 @@ const tienKinhCanh =
   tienKhoa +
   tienPhao +
   tienBom +
-  tienKinhOThoang +
+  tienOThoang +
   tienKinhCanh
 );
 
@@ -1617,7 +1668,8 @@ const tienPhaoDinh =
         </tr>
 
       )}
-      {Number(cua.kinhOThoang) > 0 && (
+     {cua.loaiOThoang === "kinh" &&
+ Number(cua.kinhOThoang) > 0 && (
 
 <tr>
 
@@ -1630,22 +1682,35 @@ const tienPhaoDinh =
         : "8px",
     }}
   >
-    Kính ô thoáng
+    Ô thoáng kính
   </td>
 
   <td
     className="border"
-    colSpan={6}
+    colSpan={5}
   ></td>
 
   <td
     className="border"
     style={{
       padding: "6px",
+      textAlign: "right",
       fontSize: isMobile
         ? "6px"
         : "8px",
+    }}
+  >
+    {cua.kinhOThoang}
+  </td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
       textAlign: "right",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
     }}
   >
     60.000
@@ -1655,16 +1720,245 @@ const tienPhaoDinh =
     className="border"
     style={{
       padding: "6px",
+      textAlign: "right",
+      fontWeight: "700",
       fontSize: isMobile
         ? "6px"
         : "14px",
-      fontWeight: "700",
-      textAlign: "right",
     }}
   >
     {(
       Number(cua.kinhOThoang)
       * 60000
+    ).toLocaleString()}
+  </td>
+
+</tr>
+
+)}
+
+{cua.loaiOThoang === "dac" &&
+ Number(cua.oThoangDac) > 0 && (
+
+<tr>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    Ô thoáng đặc
+  </td>
+
+  <td
+    className="border"
+    colSpan={5}
+  ></td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    {cua.oThoangDac}
+  </td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    350.000
+  </td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontWeight: "700",
+      fontSize: isMobile
+        ? "6px"
+        : "14px",
+    }}
+  >
+    {(
+      Number(cua.oThoangDac)
+      * 350000
+    ).toLocaleString()}
+  </td>
+
+</tr>
+
+)}
+
+{cua.loaiOThoang === "nanchop" &&
+ Number(cua.oThoangNanChop) > 0 && (
+
+<tr>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    Ô thoáng nan chớp
+  </td>
+
+  <td
+    className="border"
+    colSpan={5}
+  ></td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    {cua.oThoangNanChop}
+  </td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    250.000
+  </td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontWeight: "700",
+      fontSize: isMobile
+        ? "6px"
+        : "14px",
+    }}
+  >
+    {(
+      Number(cua.oThoangNanChop)
+      * 250000
+    ).toLocaleString()}
+  </td>
+
+</tr>
+
+)}
+
+{cua.loaiOThoang === "vom" &&
+ Number(cua.caoVom) > 0 && (
+
+<tr>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    Ô thoáng vòm
+  </td>
+
+  <td
+    className="border"
+    colSpan={5}
+  ></td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    {(
+      Number(cua.rong || 0)
+*
+Number(cua.caoVom || 0)
+    ).toFixed(2)} m²
+  </td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+    {(
+      Number(cua.donGia || 0)
+      + 350000
+    ).toLocaleString()}
+  </td>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      textAlign: "right",
+      fontWeight: "700",
+      fontSize: isMobile
+        ? "6px"
+        : "14px",
+    }}
+  >
+    {Math.round(
+
+      (
+        (
+          Math.PI *
+          Number(cua.rong || 0) *
+          Number(cua.caoVom || 0)
+        ) / 4
+      )
+
+      *
+
+      (
+        Number(cua.donGia || 0)
+        + 350000
+      )
+
     ).toLocaleString()}
   </td>
 
@@ -1681,6 +1975,7 @@ const tienPhaoDinh =
     className="border"
     style={{
       padding: "6px",
+      textAlign: "right",
       fontSize: isMobile
         ? "6px"
         : "8px",
@@ -1763,113 +2058,212 @@ const tienPhaoDinh =
 
   {/* Tổng cộng */}
 
-  <div
-    className="p-6"
-    style={{
-      textAlign: "right",
-    }}
-  >
-
-    <p className="text-xl">
-      Tổng cộng
-    </p>
-
-    <p
-      className="tong-tien"
-      style={{
-       fontSize: isMobile
-  ? "16px"
-  : "34px",
-
-        color: "#16a34a",
-
-        fontWeight: "700",
-
-        lineHeight: "1.1",
-
-        wordBreak: "break-word",
-      }}
-    >
-
-      {
-  Math.round(
-    tongSauVanChuyen
-  ).toLocaleString()
-} đ
-      <div
+ <div
+  className="p-6"
   style={{
-    marginTop: "10px",
+    textAlign: "right",
   }}
 >
 
-  <p
+  <table
     style={{
-      fontSize: isMobile
-        ? "10px"
-        : "16px",
+      marginLeft: "auto",
+      width: isMobile
+        ? "100%"
+        : "420px",
+
+      borderCollapse:
+        "collapse",
+
+      marginTop: "20px",
     }}
   >
-    
-    {loaiDon === "daily" && (
 
-  <p
-    style={{
-      fontSize: isMobile
-        ? "10px"
-        : "16px",
-    }}
-  >
-    VAT 5%:
-    {" "}
-    {
-  Math.round(
-    tienVAT
-  ).toLocaleString()
-} đ
-  </p>
+    <tbody>
 
-)}
-    <p
-  style={{
-    fontSize: isMobile
-      ? "10px"
-      : "16px",
-  }}
->
-  Cước vận chuyển:
-  {" "}
-  {tienVanChuyen.toLocaleString()} đ
-</p>
-    Đã cọc:
-    {" "}
-    {soTienDaCoc.toLocaleString()} đ
-  </p>
+      <tr>
 
-  <p
-    style={{
-      fontSize: isMobile
-        ? "12px"
-        : "20px",
+        <td
+          style={{
+            padding: "8px",
+            fontWeight: "600",
+          }}
+        >
+          Tổng cửa
+        </td>
 
-      color: "#dc2626",
+        <td
+          style={{
+            padding: "8px",
+            textAlign: "right",
+          }}
+        >
+          {
+            Math.round(
+              tongCong
+            ).toLocaleString()
+          } đ
+        </td>
 
-      fontWeight: "700",
-    }}
-  >
-    Còn phải thanh toán:
-    {" "}
-    {
-  Math.round(
-    conPhaiThanhToan
-  ).toLocaleString()
-} đ
-  </p>
+      </tr>
+
+      {loaiDon === "daily" && (
+
+        <tr>
+
+          <td
+            style={{
+              padding: "8px",
+              fontWeight: "600",
+            }}
+          >
+            VAT 5%
+          </td>
+
+          <td
+            style={{
+              padding: "8px",
+              textAlign: "right",
+            }}
+          >
+            {
+              Math.round(
+                tienVAT
+              ).toLocaleString()
+            } đ
+          </td>
+
+        </tr>
+
+      )}
+
+      <tr>
+
+        <td
+          style={{
+            padding: "8px",
+            fontWeight: "600",
+          }}
+        >
+          Cước vận chuyển
+        </td>
+
+        <td
+          style={{
+            padding: "8px",
+            textAlign: "right",
+          }}
+        >
+          {
+            Math.round(
+              tienVanChuyen
+            ).toLocaleString()
+          } đ
+        </td>
+
+      </tr>
+
+      <tr>
+
+        <td
+          style={{
+            padding: "8px",
+            fontWeight: "700",
+            fontSize: isMobile
+              ? "16px"
+              : "20px",
+          }}
+        >
+          Tổng thanh toán
+        </td>
+
+        <td
+          style={{
+            padding: "8px",
+            textAlign: "right",
+
+            fontSize: isMobile
+              ? "28px"
+              : "42px",
+
+            color: "#16a34a",
+
+            fontWeight: "700",
+          }}
+        >
+          {
+            Math.round(
+              tongSauVanChuyen
+            ).toLocaleString()
+          } đ
+        </td>
+
+      </tr>
+
+      <tr>
+
+        <td
+          style={{
+            padding: "8px",
+            fontWeight: "600",
+          }}
+        >
+          Đã cọc
+        </td>
+
+        <td
+          style={{
+            padding: "8px",
+            textAlign: "right",
+          }}
+        >
+          {
+            soTienDaCoc.toLocaleString()
+          } đ
+        </td>
+
+      </tr>
+
+      <tr>
+
+        <td
+          style={{
+            padding: "8px",
+            fontWeight: "700",
+            color: "#dc2626",
+          }}
+        >
+          Còn phải thanh toán
+        </td>
+
+        <td
+          style={{
+            padding: "8px",
+            textAlign: "right",
+
+            color: "#dc2626",
+
+            fontWeight: "700",
+
+            fontSize: isMobile
+              ? "18px"
+              : "24px",
+          }}
+        >
+          {
+            Math.round(
+              conPhaiThanhToan
+            ).toLocaleString()
+          } đ
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
 
 </div>
-
-    </p>
-
-  </div>
 
   {/* Ngày tháng */}
 
@@ -2831,7 +3225,7 @@ style={{
 
 )}
             
-
+{loaiDon === "daily" && (
               <label className="flex items-center gap-2">
 
                 <input
@@ -2852,37 +3246,261 @@ style={{
                 (+250.000đ)
 
               </label>
+              )}
               {loaiDon === "daily" && (
 
   <div className="space-y-3 mt-3">
 
     <div>
 
-      <label>
-        Kính ô thoáng
-        (+60.000đ)
+  <label className="flex items-center gap-2">
+
+    <input
+      type="checkbox"
+      checked={cua.coOThoang}
+      onChange={(e) =>
+        capNhatCua(
+          cua.id,
+          "coOThoang",
+          e.target.checked
+        )
+      }
+    />
+
+    Chọn kiểu ô thoáng
+
+  </label>
+
+  {cua.coOThoang && (
+
+    <div className="space-y-3 mt-3">
+
+      {/* Ô thoáng kính */}
+
+      <label className="flex items-center gap-2">
+
+        <input
+          type="radio"
+          name={`othoang-${cua.id}`}
+          checked={
+            cua.loaiOThoang ===
+            "kinh"
+          }
+          onChange={() =>
+            capNhatCua(
+              cua.id,
+              "loaiOThoang",
+              "kinh"
+            )
+          }
+        />
+
+        Ô thoáng kính
+
       </label>
 
-      <input
-        type="number"
-        placeholder="Số lượng"
-        value={cua.kinhOThoang || ""}
-        onChange={(e) =>
-          capNhatCua(
-            cua.id,
-            "kinhOThoang",
-            e.target.value
-          )
-        }
-        className="
-          w-full
-          border
-          p-3
-          rounded-2xl
-        "
-      />
+      {/* Ô thoáng đặc */}
+
+      <label className="flex items-center gap-2">
+
+        <input
+          type="radio"
+          name={`othoang-${cua.id}`}
+          checked={
+            cua.loaiOThoang ===
+            "dac"
+          }
+          onChange={() =>
+            capNhatCua(
+              cua.id,
+              "loaiOThoang",
+              "dac"
+            )
+          }
+        />
+
+        Ô thoáng đặc
+
+      </label>
+
+      {/* Ô thoáng nan chớp */}
+
+      <label className="flex items-center gap-2">
+
+        <input
+          type="radio"
+          name={`othoang-${cua.id}`}
+          checked={
+            cua.loaiOThoang ===
+            "nanchop"
+          }
+          onChange={() =>
+            capNhatCua(
+              cua.id,
+              "loaiOThoang",
+              "nanchop"
+            )
+          }
+        />
+
+        Ô thoáng nan chớp
+
+      </label>
+
+      {/* Ô thoáng vòm */}
+
+      <label className="flex items-center gap-2">
+
+        <input
+          type="radio"
+          name={`othoang-${cua.id}`}
+          checked={
+            cua.loaiOThoang ===
+            "vom"
+          }
+          onChange={() =>
+            capNhatCua(
+              cua.id,
+              "loaiOThoang",
+              "vom"
+            )
+          }
+        />
+
+        Ô thoáng vòm
+
+      </label>
+
+      {/* INPUTS */}
+
+      {cua.loaiOThoang ===
+        "kinh" && (
+
+        <input
+          type="number"
+          placeholder="Số lượng ô kính"
+          value={cua.kinhOThoang || ""}
+          onChange={(e) =>
+            capNhatCua(
+              cua.id,
+              "kinhOThoang",
+              e.target.value
+            )
+          }
+          className="
+            w-full
+            border
+            p-3
+            rounded-2xl
+          "
+        />
+
+      )}
+
+      {cua.loaiOThoang ===
+        "dac" && (
+
+        <input
+          type="number"
+          placeholder="Số lượng ô thoáng đặc"
+          value={cua.oThoangDac || ""}
+          onChange={(e) =>
+            capNhatCua(
+              cua.id,
+              "oThoangDac",
+              e.target.value
+            )
+          }
+          className="
+            w-full
+            border
+            p-3
+            rounded-2xl
+          "
+        />
+
+      )}
+
+      {cua.loaiOThoang ===
+        "nanchop" && (
+
+        <input
+          type="number"
+          placeholder="Số lượng ô nan chớp"
+          value={cua.oThoangNanChop || ""}
+          onChange={(e) =>
+            capNhatCua(
+              cua.id,
+              "oThoangNanChop",
+              e.target.value
+            )
+          }
+          className="
+            w-full
+            border
+            p-3
+            rounded-2xl
+          "
+        />
+
+      )}
+
+      {cua.loaiOThoang ===
+        "vom" && (
+
+        <div className="space-y-2">
+
+          <input
+            type="number"
+            placeholder="Chiều cao vòm"
+            value={cua.caoVom || ""}
+            onChange={(e) =>
+              capNhatCua(
+                cua.id,
+                "caoVom",
+                e.target.value
+              )
+            }
+            className="
+              w-full
+              border
+              p-3
+              rounded-2xl
+            "
+          />
+
+          <div
+            className="
+              border
+              rounded-2xl
+              p-3
+            "
+          >
+
+            Diện tích ô vòm:
+            {" "}
+
+            {(
+              (
+                (
+  Math.PI *
+  Number(cua.rong || 0) *
+  Number(cua.caoVom || 0)
+) / 4
+              )
+            ).toFixed(2)} m²
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
+
+  )}
+
+</div>
 
     <div>
 
