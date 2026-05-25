@@ -66,6 +66,9 @@ coKinhCanh: false,
 loaiKinhCanh: "nho",
 
 kinhCanh: "",
+showNote: false,
+
+note: "",
   });
 
   const [danhSachCua, setDanhSachCua] =
@@ -1352,6 +1355,36 @@ const tienPhaoDinh =
 }
 
         </td>
+        {cua.note && (
+
+<tr>
+
+  <td
+    className="border"
+    style={{
+      padding: "6px",
+      color: "#dc2626",
+      fontStyle: "italic",
+      fontSize: isMobile
+        ? "6px"
+        : "8px",
+    }}
+  >
+
+    Ghi chú:
+    {" "}
+    {cua.note}
+
+  </td>
+
+  <td
+    className="border"
+    colSpan={8}
+  ></td>
+
+</tr>
+
+)}
 
       </tr>
 
@@ -2107,6 +2140,7 @@ Number(cua.caoVom || 0)
 
       </tr>
 
+
       {loaiDon === "daily" && (
 
         <tr>
@@ -2433,7 +2467,7 @@ setLoaiDon("");
   }}
 >
 
-                Lưu ảnh / Quay lại
+                Lưu ảnh 
 
               </button>
 
@@ -3224,6 +3258,7 @@ style={{
   </div>
 
 )}
+
             
 {loaiDon === "daily" && (
               <label className="flex items-center gap-2">
@@ -3582,14 +3617,64 @@ style={{
 
 </div>
 
+
   </div>
 
 )}
+<div>
+
+  <label className="flex items-center gap-2">
+
+    <input
+      type="checkbox"
+      checked={cua.showNote}
+      onChange={(e) =>
+        capNhatCua(
+          cua.id,
+          "showNote",
+          e.target.checked
+        )
+      }
+    />
+
+    Ghi chú riêng
+
+  </label>
+
+  {cua.showNote && (
+
+    <textarea
+      value={cua.note || ""}
+      onChange={(e) =>
+        capNhatCua(
+          cua.id,
+          "note",
+          e.target.value
+        )
+      }
+
+      placeholder="Nhập ghi chú..."
+
+      className="
+        w-full
+        border
+        p-3
+        rounded-2xl
+        mt-2
+      "
+
+      rows={3}
+    />
+
+  )}
+
+</div>
 
             </div>
 
           )
         )}
+        
 
         <button
           onClick={themCua}
