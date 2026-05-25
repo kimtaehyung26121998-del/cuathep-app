@@ -3637,7 +3637,7 @@ style={{
       }
     />
 
-    Ghi chú riêng
+    Ghi chú
 
   </label>
 
