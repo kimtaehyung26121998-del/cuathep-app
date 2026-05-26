@@ -609,11 +609,45 @@ el.style.borderColor =
         "image/png"
       );
 
-    const link =
+    const homNay =
+  new Date();
+
+const ngay =
+
+  `${homNay.getFullYear()}${
+    String(
+      homNay.getMonth() + 1
+    ).padStart(2, "0")
+  }${
+    String(
+      homNay.getDate()
+    ).padStart(2, "0")
+  }`;
+
+const key =
+  `save_count_${ngay}`;
+
+let soThuTu =
+
+  Number(
+    localStorage.getItem(key)
+  ) || 0;
+
+soThuTu++;
+
+localStorage.setItem(
+  key,
+  soThuTu
+);
+
+const tenFile =
+  `${ngay}-${soThuTu}.png`;
+
+const link =
   document.createElement("a");
 
 link.download =
-  "hoa-don.png";
+  tenFile;
 
 link.href =
   canvas.toDataURL(
