@@ -2640,7 +2640,10 @@ style={{
 />
 
         {danhSachCua.map(
-          (cua, index) => (
+          (cua, index) => {
+            const laChanSong = cua.loaiCua === "Chấn song";
+
+            return (
 
             <div
               key={cua.id}
@@ -2718,11 +2721,15 @@ style={{
                   Cửa sổ 4 cánh
                 </option>
 
+                <option value="Chấn song">
+                  Chấn song
+                </option>
+
               </select>
 
               <div className="grid grid-cols-2 gap-4">
 
-                <input
+                {!laChanSong && <input
                   placeholder="Độ dày khuôn"
                   value={cua.khuon}
                   onChange={(e) =>
@@ -2733,9 +2740,9 @@ style={{
                     )
                   }
                   className="border p-3 rounded-2xl"
-                />
+                />}
 
-                <input
+                {!laChanSong && <input
                   placeholder="Mã màu"
                   value={cua.maMau}
                   onChange={(e) =>
@@ -2746,7 +2753,7 @@ style={{
                     )
                   }
                   className="border p-3 rounded-2xl"
-                />
+                />}
 
                 <input
                   placeholder="Chiều rộng"
@@ -2774,7 +2781,7 @@ style={{
                   className="border p-3 rounded-2xl"
                 />
 
-                <input
+                {!laChanSong && <input
                   placeholder="Hướng mở"
                   value={cua.huongMo}
                   onChange={(e) =>
@@ -2785,7 +2792,7 @@ style={{
                     )
                   }
                   className="border p-3 rounded-2xl"
-                />
+                />}
 
                 <input
   placeholder="Đơn giá"
@@ -2811,6 +2818,8 @@ style={{
 
               </div>
 
+              {!laChanSong && (
+                <>
               <div className="rounded-2xl p-4"
 style={{
   backgroundColor: "#f3f4f6"
@@ -3622,7 +3631,7 @@ style={{
 
   </label>
 
-  {cua.showNote && (
+{cua.showNote && (
 
     <textarea
       value={cua.note || ""}
@@ -3650,10 +3659,13 @@ style={{
   )}
 
 </div>
+                </>
+              )}
 
             </div>
 
-          )
+            );
+          }
         )}
         
 
