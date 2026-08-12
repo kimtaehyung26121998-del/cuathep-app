@@ -23,6 +23,8 @@ const formatSoLuong = (value) => {
     .replace(/(\.\d*[1-9])0$/, "$1");
 };
 
+const kichThuocMet = (value) => Number(value || 0) / 1000;
+
 const taoBoCuaMoi = (id = null) => ({
   id: id ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
 
@@ -218,8 +220,8 @@ useEffect(() => {
 
   const tinhSoLuongCua = (cua) => {
     return (
-      Number(cua.rong || 0) *
-      Number(cua.cao || 0)
+      kichThuocMet(cua.rong) *
+      kichThuocMet(cua.cao)
     );
 
   };
@@ -243,17 +245,17 @@ useEffect(() => {
     if (laCuaSo) {
 
       return (
-        Number(cua.cao || 0) *
+        kichThuocMet(cua.cao) *
           2 +
-        Number(cua.rong || 0) *
+        kichThuocMet(cua.rong) *
           2
       );
 
     }
 
     return (
-      Number(cua.rong || 0) +
-      Number(cua.cao || 0) * 2
+      kichThuocMet(cua.rong) +
+      kichThuocMet(cua.cao) * 2
     );
 
   };
@@ -312,16 +314,16 @@ useEffect(() => {
 
             ? (
 
-                Number(cua.cao || 0) *
+                kichThuocMet(cua.cao) *
                   2 +
 
                 (
-                  Number(cua.rong || 0) +
+                  kichThuocMet(cua.rong) +
                   0.5
                 ) +
 
                 (
-                  Number(cua.rong || 0) +
+                  kichThuocMet(cua.rong) +
                   0.8
                 )
 
@@ -333,16 +335,16 @@ useEffect(() => {
 
                   ? (
 
-                      Number(cua.cao || 0) *
+                      kichThuocMet(cua.cao) *
                         2 +
 
                       (
-                        Number(cua.rong || 0) +
+                        kichThuocMet(cua.rong) +
                         rongPhaoDungM * 2
                       ) +
 
                       (
-                        Number(cua.rong || 0) +
+                        kichThuocMet(cua.rong) +
                         rongPhaoDungM * 2 +
                         0.3
                       )
@@ -351,11 +353,11 @@ useEffect(() => {
 
                   : (
 
-                      Number(cua.cao || 0) *
+                      kichThuocMet(cua.cao) *
                         2 +
 
                       (
-                        Number(cua.rong || 0) +
+                        kichThuocMet(cua.rong) +
                         rongPhaoDungM * 2 +
                         0.3
                       )
@@ -384,7 +386,7 @@ useEffect(() => {
                 ? (
 
                     (
-                      Number(cua.cao || 0) *
+                      kichThuocMet(cua.cao) *
                       2 *
                       Number(
                         cua.donGiaPhaoDung || 0
@@ -393,7 +395,7 @@ useEffect(() => {
 
                     (
                       (
-                        Number(cua.rong || 0) +
+                        kichThuocMet(cua.rong) +
                         rongPhaoDungM * 2
                       ) *
 
@@ -404,7 +406,7 @@ useEffect(() => {
 
                     (
                       (
-                        Number(cua.rong || 0) +
+                        kichThuocMet(cua.rong) +
                         rongPhaoDungM * 2 +
                         0.3
                       ) *
@@ -419,7 +421,7 @@ useEffect(() => {
                 : (
 
                     (
-                      Number(cua.cao || 0) *
+                      kichThuocMet(cua.cao) *
                       2 *
                       Number(
                         cua.donGiaPhaoDung || 0
@@ -428,7 +430,7 @@ useEffect(() => {
 
                     (
                       (
-                        Number(cua.rong || 0) +
+                        kichThuocMet(cua.rong) +
                         rongPhaoDungM * 2 +
                         0.3
                       ) *
@@ -480,7 +482,7 @@ if (cua.loaiOThoang === "vom") {
 
   const dienTichVom =
 
-Number(cua.rong || 0)
+kichThuocMet(cua.rong)
 *
 Number(cua.caoVom || 0);
 
@@ -790,13 +792,13 @@ style={{
 
 <table className="w-full border-collapse table-fixed">
         <colgroup>
-  <col style={{ width: "32%" }} />
-  <col style={{ width: "6%" }} />
-  <col style={{ width: "6%" }} />
-  <col style={{ width: "6%" }} />
-  <col style={{ width: "6%" }} />
-  <col style={{ width: "12%" }} />
+  <col style={{ width: "28%" }} />
+  <col style={{ width: "5%" }} />
   <col style={{ width: "8%" }} />
+  <col style={{ width: "8%" }} />
+  <col style={{ width: "5%" }} />
+  <col style={{ width: "10%" }} />
+  <col style={{ width: "6%" }} />
   <col style={{ width: "14%" }} />
   <col style={{ width: "16%" }} />
 </colgroup>
@@ -808,10 +810,10 @@ style={{
                 <th
   className="border"
   style={{
-    padding: "12px 6px",
+    padding: "6px 3px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
   overflowWrap: "break-word",
     fontWeight: "700",
     textAlign: "center",
@@ -829,8 +831,8 @@ style={{
       : "12px 6px",
 
     fontSize: isMobile
-      ? "6px"
-      : "8px",
+      ? "5px"
+      : "7px",
 
     fontWeight: "700",
 
@@ -852,8 +854,8 @@ style={{
       : "12px 6px",
 
     fontSize: isMobile
-  ? "9px"
-  : "8px",
+  ? "5px"
+  : "7px",
   overflowWrap: "break-word",
 
     fontWeight: "700",
@@ -864,7 +866,7 @@ style={{
 
     wordBreak: "break-word",
 
-    whiteSpace: "normal",
+    whiteSpace: "nowrap",
 
     lineHeight: "1.3",
   }}
@@ -880,8 +882,8 @@ style={{
       : "12px 6px",
 
     fontSize: isMobile
-  ? "9px"
-  : "8px",
+  ? "5px"
+  : "7px",
   overflowWrap: "break-word",
 
     fontWeight: "700",
@@ -892,7 +894,7 @@ style={{
 
     wordBreak: "break-word",
 
-    whiteSpace: "normal",
+    whiteSpace: "nowrap",
 
     lineHeight: "1.3",
   }}
@@ -908,8 +910,8 @@ style={{
       : "12px 6px",
 
    fontSize: isMobile
-  ? "6px"
-  : "8px",
+  ? "5px"
+  : "7px",
   overflowWrap: "break-word",
 
     fontWeight: "700",
@@ -920,7 +922,7 @@ style={{
 
     wordBreak: "break-word",
 
-    whiteSpace: "normal",
+    whiteSpace: "nowrap",
 
     lineHeight: "1.3",
   }}
@@ -936,8 +938,8 @@ style={{
       : "12px 6px",
 
     fontSize: isMobile
-      ? "6px"
-      : "8px",
+      ? "5px"
+      : "7px",
 overflowWrap: "break-word",
     fontWeight: "700",
 
@@ -947,7 +949,7 @@ overflowWrap: "break-word",
 
     wordBreak: "break-word",
 
-    whiteSpace: "normal",
+    whiteSpace: "nowrap",
 
     lineHeight: "1.3",
   }}
@@ -958,10 +960,10 @@ overflowWrap: "break-word",
                 <th
   className="border"
   style={{
-    padding: "12px 6px",
+    padding: "6px 3px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
   whiteSpace: "nowrap",
   overflowWrap: "break-word",
     fontWeight: "700",
@@ -975,10 +977,10 @@ overflowWrap: "break-word",
                 <th
   className="border"
   style={{
-    padding: "12px 6px",
+    padding: "6px 3px",
     fontSize: isMobile
- ? "6px"
-  : "14px",
+ ? "5px"
+  : "7px",
 
 
   overflowWrap: "break-word",
@@ -993,10 +995,10 @@ overflowWrap: "break-word",
                 <th
   className="border"
   style={{
-    padding: "12px 6px",
+    padding: "6px 3px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
   overflowWrap: "break-word",
     fontWeight: "700",
     textAlign: "center",
@@ -1044,16 +1046,16 @@ const slPhaoDinh =
 
     ? (
 
-        Number(cua.cao || 0) *
+        kichThuocMet(cua.cao) *
           2 +
 
         (
-          Number(cua.rong || 0) +
+          kichThuocMet(cua.rong) +
           0.5
         ) +
 
         (
-          Number(cua.rong || 0) +
+          kichThuocMet(cua.rong) +
           0.8
         )
 
@@ -1065,16 +1067,16 @@ const slPhaoDinh =
 
           ? (
 
-              Number(cua.cao || 0) *
+              kichThuocMet(cua.cao) *
                 2 +
 
               (
-                Number(cua.rong || 0) +
+                kichThuocMet(cua.rong) +
                 rongPhaoDungM * 2
               ) +
 
               (
-                Number(cua.rong || 0) +
+                kichThuocMet(cua.rong) +
                 rongPhaoDungM * 2 +
                 0.3
               )
@@ -1083,11 +1085,11 @@ const slPhaoDinh =
 
           : (
 
-              Number(cua.cao || 0) *
+              kichThuocMet(cua.cao) *
                 2 +
 
               (
-                Number(cua.rong || 0) +
+                kichThuocMet(cua.rong) +
                 rongPhaoDungM * 2 +
                 0.3
               )
@@ -1118,7 +1120,7 @@ const tienPhaoDinh =
           ? (
 
               (
-                Number(cua.cao || 0) *
+                kichThuocMet(cua.cao) *
                 2 *
                 Number(
                   cua.donGiaPhaoDung || 0
@@ -1127,7 +1129,7 @@ const tienPhaoDinh =
 
               (
                 (
-                  Number(cua.rong || 0) +
+                  kichThuocMet(cua.rong) +
                   rongPhaoDungM * 2
                 ) *
 
@@ -1138,7 +1140,7 @@ const tienPhaoDinh =
 
               (
                 (
-                  Number(cua.rong || 0) +
+                  kichThuocMet(cua.rong) +
                   rongPhaoDungM * 2 +
                   0.3
                 ) *
@@ -1153,7 +1155,7 @@ const tienPhaoDinh =
           : (
 
               (
-                Number(cua.cao || 0) *
+                kichThuocMet(cua.cao) *
                 2 *
                 Number(
                   cua.donGiaPhaoDung || 0
@@ -1162,7 +1164,7 @@ const tienPhaoDinh =
 
               (
                 (
-                  Number(cua.rong || 0) +
+                  kichThuocMet(cua.rong) +
                   rongPhaoDungM * 2 +
                   0.3
                 ) *
@@ -1208,11 +1210,11 @@ const tienPhaoDinh =
   style={{
     padding: isMobile
       ? "2px 1px"
-      : "8px",
+      : "7px",
 
     fontSize: isMobile
-      ? "6px"
-      : "14px",
+      ? "5px"
+      : "7px",
 
     lineHeight: "1",
 
@@ -1230,8 +1232,8 @@ const tienPhaoDinh =
     overflowWrap: "break-word",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1244,8 +1246,8 @@ const tienPhaoDinh =
     overflowWrap: "break-word",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1258,8 +1260,8 @@ const tienPhaoDinh =
     overflowWrap: "break-word",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1272,8 +1274,8 @@ const tienPhaoDinh =
     overflowWrap: "break-word",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1287,8 +1289,8 @@ const tienPhaoDinh =
     padding: "6px",
 
     fontSize: isMobile
-      ? "6px"
-      : "14px",
+      ? "5px"
+      : "7px",
 
     textAlign: "right",
 
@@ -1303,8 +1305,8 @@ const tienPhaoDinh =
 >
 
           {formatSoLuong(
-            Number(cua.rong || 0) *
-            Number(cua.cao || 0)
+            kichThuocMet(cua.rong) *
+            kichThuocMet(cua.cao)
           )}
 
         </td>
@@ -1313,7 +1315,7 @@ const tienPhaoDinh =
   className="border"
   style={{ overflowWrap: "break-word",
     padding: "6px",
-    fontSize: isMobile ? "6px" : "14px",
+    fontSize: isMobile ? "5px" : "7px",
     textAlign: "right",
     whiteSpace: "nowrap",
     verticalAlign: "middle",
@@ -1335,8 +1337,8 @@ const tienPhaoDinh =
     fontWeight: "700",
 
     fontSize: isMobile
-      ? "6px"
-      : "14px",
+      ? "5px"
+      : "7px",
 
     textAlign: "right",
 
@@ -1351,47 +1353,23 @@ const tienPhaoDinh =
           {
   Math.round(
     (
-      Number(cua.rong || 0) *
-      Number(cua.cao || 0)
+      kichThuocMet(cua.rong) *
+      kichThuocMet(cua.cao)
     ) *
     Number(cua.donGia || 0)
   ).toLocaleString()
 }
 
         </td>
-        {cua.note && (
-
-<tr>
-
-  <td
-    className="border"
-    style={{
-      padding: "6px",
-      color: "#dc2626",
-      fontStyle: "italic",
-      fontSize: isMobile
-        ? "6px"
-        : "8px",
-    }}
-  >
-
-    Ghi chú:
-    {" "}
-    {cua.note}
-
-  </td>
-
-  <td
-    className="border"
-    colSpan={8}
-  ></td>
-
-</tr>
-
-)}
 
       </tr>
-
+      {cua.note && (
+        <tr>
+          <td className="border" colSpan={9} style={{ padding: "4px 6px", color: "#dc2626", fontStyle: "italic", fontSize: isMobile ? "6px" : "7px", textAlign: "left", whiteSpace: "normal", overflowWrap: "anywhere" }}>
+            Ghi chú: {cua.note}
+          </td>
+        </tr>
+      )}
       {cua.coKhoa && (
 
         <tr>
@@ -1402,8 +1380,8 @@ const tienPhaoDinh =
     padding: "6px",
     textAlign: "right",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1425,8 +1403,8 @@ const tienPhaoDinh =
     textAlign: "right",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1439,8 +1417,8 @@ const tienPhaoDinh =
     padding: "6px",
     textAlign: "right",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1456,7 +1434,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "6px",
     fontWeight: "700",
-    fontSize: isMobile ? "6px" : "14px",
+    fontSize: isMobile ? "5px" : "7px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1488,8 +1466,8 @@ const tienPhaoDinh =
     padding: "6px",
     textAlign: "right",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1507,8 +1485,8 @@ const tienPhaoDinh =
     textAlign: "right",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1525,8 +1503,8 @@ const tienPhaoDinh =
     textAlign: "right",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1547,7 +1525,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "6px",
     fontWeight: "700",
-    fontSize: isMobile ? "6px" : "14px",
+    fontSize: isMobile ? "5px" : "7px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1577,8 +1555,8 @@ const tienPhaoDinh =
     textAlign: "right",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1596,8 +1574,8 @@ const tienPhaoDinh =
     textAlign: "right",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
     whiteSpace: "nowrap",
   }}
@@ -1615,8 +1593,8 @@ const tienPhaoDinh =
     textAlign: "right",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1634,7 +1612,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "6px",
     fontWeight: "700",
-    fontSize: isMobile ? "6px" : "14px",
+    fontSize: isMobile ? "5px" : "7px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1662,8 +1640,8 @@ const tienPhaoDinh =
     textAlign: "right",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1681,8 +1659,8 @@ const tienPhaoDinh =
     textAlign: "right",
     padding: "6px",
     fontSize: isMobile
- ? "6px"
-  : "8px",
+ ? "5px"
+  : "7px",
     verticalAlign: "middle",
   }}
 >
@@ -1694,7 +1672,7 @@ const tienPhaoDinh =
   style={{ overflowWrap: "break-word",
     padding: "6px",
     fontWeight: "700",
-    fontSize: isMobile ? "6px" : "14px",
+    fontSize: isMobile ? "5px" : "7px",
     textAlign: "right",
     whiteSpace: "nowrap",
   }}
@@ -1715,8 +1693,8 @@ const tienPhaoDinh =
     style={{
       padding: "6px",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     Ô thoáng kính
@@ -1733,8 +1711,8 @@ const tienPhaoDinh =
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     {cua.kinhOThoang}
@@ -1746,8 +1724,8 @@ const tienPhaoDinh =
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     60.000
@@ -1760,8 +1738,8 @@ const tienPhaoDinh =
       textAlign: "right",
       fontWeight: "700",
       fontSize: isMobile
-        ? "6px"
-        : "14px",
+        ? "5px"
+        : "7px",
     }}
   >
     {(
@@ -1784,8 +1762,8 @@ const tienPhaoDinh =
     style={{
       padding: "6px",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     Ô thoáng đặc
@@ -1802,8 +1780,8 @@ const tienPhaoDinh =
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     {cua.oThoangDac}
@@ -1815,8 +1793,8 @@ const tienPhaoDinh =
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     350.000
@@ -1829,8 +1807,8 @@ const tienPhaoDinh =
       textAlign: "right",
       fontWeight: "700",
       fontSize: isMobile
-        ? "6px"
-        : "14px",
+        ? "5px"
+        : "7px",
     }}
   >
     {(
@@ -1853,8 +1831,8 @@ const tienPhaoDinh =
     style={{
       padding: "6px",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     Ô thoáng nan chớp
@@ -1871,8 +1849,8 @@ const tienPhaoDinh =
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     {cua.oThoangNanChop}
@@ -1884,8 +1862,8 @@ const tienPhaoDinh =
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     250.000
@@ -1898,8 +1876,8 @@ const tienPhaoDinh =
       textAlign: "right",
       fontWeight: "700",
       fontSize: isMobile
-        ? "6px"
-        : "14px",
+        ? "5px"
+        : "7px",
     }}
   >
     {(
@@ -1923,8 +1901,8 @@ const tienPhaoDinh =
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     Ô thoáng vòm
@@ -1941,12 +1919,12 @@ const tienPhaoDinh =
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     {(
-      Number(cua.rong || 0)
+      kichThuocMet(cua.rong)
 *
 Number(cua.caoVom || 0)
     ).toFixed(2)} m²
@@ -1958,8 +1936,8 @@ Number(cua.caoVom || 0)
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     {(
@@ -1975,8 +1953,8 @@ Number(cua.caoVom || 0)
       textAlign: "right",
       fontWeight: "700",
       fontSize: isMobile
-        ? "6px"
-        : "14px",
+        ? "5px"
+        : "7px",
     }}
   >
     {Math.round(
@@ -1984,7 +1962,7 @@ Number(cua.caoVom || 0)
       (
         (
           Math.PI *
-          Number(cua.rong || 0) *
+          kichThuocMet(cua.rong) *
           Number(cua.caoVom || 0)
         ) / 4
       )
@@ -2014,8 +1992,8 @@ Number(cua.caoVom || 0)
       padding: "6px",
       textAlign: "right",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
     }}
   >
     Kính cánh (
@@ -2037,8 +2015,8 @@ Number(cua.caoVom || 0)
     style={{
       padding: "6px",
       fontSize: isMobile
-        ? "6px"
-        : "8px",
+        ? "5px"
+        : "7px",
       textAlign: "right",
     }}
   >
@@ -2054,8 +2032,8 @@ Number(cua.caoVom || 0)
     style={{
       padding: "6px",
       fontSize: isMobile
-        ? "6px"
-        : "14px",
+        ? "5px"
+        : "7px",
       fontWeight: "700",
       textAlign: "right",
     }}
@@ -2096,7 +2074,7 @@ Number(cua.caoVom || 0)
   {/* Tổng cộng */}
 
  <div
-  className="p-6"
+  className="p-3 md:p-4"
   style={{
     textAlign: "right",
   }}
@@ -2122,7 +2100,7 @@ Number(cua.caoVom || 0)
 
         <td
           style={{
-            padding: "8px",
+            padding: "4px 6px",
             fontWeight: "600",
           }}
         >
@@ -2131,7 +2109,7 @@ Number(cua.caoVom || 0)
 
         <td
           style={{
-            padding: "8px",
+            padding: "4px 6px",
             textAlign: "right",
           }}
         >
@@ -2151,7 +2129,7 @@ Number(cua.caoVom || 0)
 
           <td
             style={{
-              padding: "8px",
+               padding: "4px 6px",
               fontWeight: "600",
             }}
           >
@@ -2160,7 +2138,7 @@ Number(cua.caoVom || 0)
 
           <td
             style={{
-              padding: "8px",
+               padding: "4px 6px",
               textAlign: "right",
             }}
           >
@@ -2179,7 +2157,7 @@ Number(cua.caoVom || 0)
 
         <td
           style={{
-            padding: "8px",
+             padding: "4px 6px",
             fontWeight: "600",
           }}
         >
@@ -2188,7 +2166,7 @@ Number(cua.caoVom || 0)
 
         <td
           style={{
-            padding: "8px",
+             padding: "4px 6px",
             textAlign: "right",
           }}
         >
@@ -2205,11 +2183,11 @@ Number(cua.caoVom || 0)
 
         <td
           style={{
-            padding: "8px",
+            padding: "4px 6px",
             fontWeight: "700",
-            fontSize: isMobile
-              ? "16px"
-              : "20px",
+             fontSize: isMobile
+               ? "12px"
+               : "14px",
           }}
         >
           Tổng thanh toán
@@ -2217,12 +2195,12 @@ Number(cua.caoVom || 0)
 
         <td
           style={{
-            padding: "8px",
+            padding: "4px 6px",
             textAlign: "right",
 
-            fontSize: isMobile
-              ? "28px"
-              : "42px",
+             fontSize: isMobile
+               ? "15px"
+               : "18px",
 
             color: "#16a34a",
 
@@ -2242,7 +2220,7 @@ Number(cua.caoVom || 0)
 
         <td
           style={{
-            padding: "8px",
+             padding: "4px 6px",
             fontWeight: "600",
           }}
         >
@@ -2251,7 +2229,7 @@ Number(cua.caoVom || 0)
 
         <td
           style={{
-            padding: "8px",
+             padding: "4px 6px",
             textAlign: "right",
           }}
         >
@@ -2266,7 +2244,7 @@ Number(cua.caoVom || 0)
 
         <td
           style={{
-            padding: "8px",
+             padding: "4px 6px",
             fontWeight: "700",
             color: "#dc2626",
           }}
@@ -2283,9 +2261,9 @@ Number(cua.caoVom || 0)
 
             fontWeight: "700",
 
-            fontSize: isMobile
-              ? "18px"
-              : "24px",
+             fontSize: isMobile
+               ? "13px"
+               : "16px",
           }}
         >
           {
@@ -3172,14 +3150,14 @@ style={{
           {" "}
 
           {formatSoLuong((
-            Number(cua.cao || 0) *
+            kichThuocMet(cua.cao) *
               2 +
             (
-              Number(cua.rong || 0) +
+              kichThuocMet(cua.rong) +
               0.5
             ) +
             (
-              Number(cua.rong || 0) +
+              kichThuocMet(cua.rong) +
               0.8
             )
           ))}
@@ -3588,7 +3566,7 @@ style={{
               (
                 (
   Math.PI *
-  Number(cua.rong || 0) *
+  kichThuocMet(cua.rong) *
   Number(cua.caoVom || 0)
 ) / 4
               )
