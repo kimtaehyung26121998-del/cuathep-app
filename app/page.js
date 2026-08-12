@@ -185,6 +185,22 @@ useEffect(() => {
 
   };
 
+  const saoChepCua = (id) => {
+    setDanhSachCua((prev) => {
+      const cuaGoc = prev.find((item) => item.id === id);
+      if (!cuaGoc) return prev;
+
+      const banSao = {
+        ...cuaGoc,
+        id: undefined,
+      };
+      const cuaMoi = taoBoCuaMoi();
+      const banSaoMoi = { ...cuaMoi, ...banSao, id: cuaMoi.id };
+
+      return [...prev, banSaoMoi];
+    });
+  };
+
   const xoaCua = (id) => {
 
     if (danhSachCua.length === 1)
@@ -200,7 +216,6 @@ useEffect(() => {
   };
 
   const tinhSoLuongCua = (cua) => {
-
     return (
       Number(cua.rong || 0) *
       Number(cua.cao || 0)
@@ -2444,7 +2459,6 @@ setLoaiDon("");
   style={{
     color: "#ffffff",
     backgroundColor: dangLuuAnh ? "#a16207" : "#ca8a04",
-    opacity: dangLuuAnh ? 0.7 : 1,
   }}
 >
 
@@ -2496,6 +2510,7 @@ setLoaiDon("");
       </h1>
 
       <button
+        type="button"
         onClick={() =>
           setLoaiDon("khachle")
         }
@@ -2506,16 +2521,23 @@ setLoaiDon("");
           rounded-2xl
           text-xl
           font-bold
+          relative
+          z-10
+          cursor-pointer
+          select-none
         "
         style={{
           backgroundColor: "#2563eb",
           color: "#ffffff",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
         }}
       >
         Lên đơn khách lẻ
       </button>
 
       <button
+        type="button"
         onClick={() =>
           setLoaiDon("daily")
         }
@@ -2526,10 +2548,16 @@ setLoaiDon("");
           rounded-2xl
           text-xl
           font-bold
+          relative
+          z-10
+          cursor-pointer
+          select-none
         "
         style={{
           backgroundColor: "#16a34a",
           color: "#ffffff",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
         }}
       >
         Lên đơn đại lý
@@ -2650,7 +2678,7 @@ style={{
               className="border rounded-3xl p-4 space-y-4"
             >
 
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center gap-3">
 
                 <h2 className="text-xl font-bold">
 
@@ -2660,16 +2688,23 @@ style={{
 
                 </h2>
 
-                <button
-                  onClick={() =>
-                    xoaCua(cua.id)
-                  }
-                  style={{ color: "#ef4444" }}
-                >
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => saoChepCua(cua.id)}
+                    className="text-blue-600 font-semibold"
+                  >
+                    Sao chép
+                  </button>
 
-                  Xóa
-
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => xoaCua(cua.id)}
+                    style={{ color: "#ef4444" }}
+                  >
+                    Xóa
+                  </button>
+                </div>
 
               </div>
 
@@ -2818,7 +2853,17 @@ style={{
 
               </div>
 
-              {!laChanSong && (
+              {laChanSong ? (
+                <div className="rounded-2xl p-4 space-y-3" style={{ backgroundColor: "#f3f4f6" }}>
+                  <p>
+                    Số lượng: {formatSoLuong(tinhSoLuongCua(cua))} m²
+                  </p>
+
+                  <p>
+                    Tổng chấn song: {tinhTienCua(cua).toLocaleString()} đ
+                  </p>
+                </div>
+              ) : (
                 <>
               <div className="rounded-2xl p-4"
 style={{
