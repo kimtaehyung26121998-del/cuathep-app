@@ -2,12 +2,10 @@
 
 import {
   useState,
-  useMemo,
   useRef,
   useEffect,
 } from "react";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 const formatTien = (value) => {
 
   const number =
@@ -24,57 +22,51 @@ const formatSoLuong = (value) => {
     .replace(/(\.\d*[1-9])0$/, "$1");
 };
 
+const taoBoCuaMoi = (id = null) => ({
+  id: id ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+
+  loaiCua: "",
+
+  khuon: "",
+  rong: "",
+  cao: "",
+
+  maMau: "",
+  huongMo: "",
+  donGia: "",
+
+  coKhoa: false,
+  tenKhoa: "",
+  soLuongKhoa: 1,
+  donGiaKhoa: "",
+
+  loaiPhao: "",
+
+  donGiaPhao: "",
+
+  coBomForm: false,
+  coOThoang: false,
+
+  loaiOThoang: "",
+  kinhOThoang: "",
+  oThoangDac: "",
+  oThoangNanChop: "",
+  caoVom: "",
+
+  coKinhCanh: false,
+  loaiKinhCanh: "nho",
+  kinhCanh: "",
+  showNote: false,
+  note: "",
+});
+
 export default function Home() {
-
-  const taoBoCuaMoi = () => ({
-    id: Date.now() + Math.random(),
-
-    loaiCua: "",
-
-    khuon: "",
-    rong: "",
-    cao: "",
-
-    maMau: "",
-    huongMo: "",
-    donGia: "",
-
-    coKhoa: false,
-    tenKhoa: "",
-    soLuongKhoa: 1,
-    donGiaKhoa: "",
-
-    loaiPhao: "",
-
-    donGiaPhao: "",
-
-    coBomForm: false,
-    coOThoang: false,
-
-loaiOThoang: "",
-
-kinhOThoang: "",
-
-oThoangDac: "",
-
-oThoangNanChop: "",
-
-caoVom: "",
-
-coKinhCanh: false,
-
-loaiKinhCanh: "nho",
-
-kinhCanh: "",
-showNote: false,
-
-note: "",
-  });
-
   const [danhSachCua, setDanhSachCua] =
-    useState([taoBoCuaMoi()]);
+    useState([taoBoCuaMoi("initial")]);
 
   const [xemHoaDon, setXemHoaDon] =
+    useState(false);
+  const [dangLuuAnh, setDangLuuAnh] =
     useState(false);
     const [loaiDon, setLoaiDon] =
   useState("");
@@ -128,38 +120,31 @@ useEffect(() => {
     );
 
   if (saved) {
+    let data;
+    try {
+      data = JSON.parse(saved);
+    } catch {
+      sessionStorage.removeItem("draft_invoice");
+      return;
+    }
 
-    const data =
-      JSON.parse(saved);
+    const restoreDraft = () => {
+      setDanhSachCua(data.danhSachCua || []);
 
-    setDanhSachCua(
-      data.danhSachCua || []
-    );
+      setNhanVien(data.nhanVien || "");
 
-    setNhanVien(
-      data.nhanVien || ""
-    );
+      setTenKhach(data.tenKhach || "");
 
-    setTenKhach(
-      data.tenKhach || ""
-    );
+      setDiaChiKhach(data.diaChiKhach || "");
 
-    setDiaChiKhach(
-      data.diaChiKhach || ""
-    );
+      setTienCoc(data.tienCoc || "");
 
-    setTienCoc(
-      data.tienCoc || ""
-    );
+      setCuocVanChuyen(data.cuocVanChuyen || "");
 
-    setCuocVanChuyen(
-      data.cuocVanChuyen || ""
-    );
+      setLoaiDon(data.loaiDon || "");
+    };
 
-    setLoaiDon(
-      data.loaiDon || ""
-    );
-
+    setTimeout(restoreDraft, 0);
   }
 
 }, []);
@@ -266,9 +251,7 @@ useEffect(() => {
 
   };
 
-  const tongCong = useMemo(() => {
-
-    return danhSachCua.reduce(
+  const tongCong = danhSachCua.reduce(
       (tong, cua) => {
 
         const tienCua =
@@ -521,7 +504,6 @@ const tienKinhCanh =
       0
     );
 
-  }, [danhSachCua]);
   const soTienDaCoc =
   Number(tienCoc || 0);
 
@@ -545,129 +527,92 @@ const conPhaiThanhToan =
 
   const taiPDF = async () => {
 
-  try {
+    const input = hoaDonRef.current;
+    if (!input || dangLuuAnh) return;
 
-    const input =
-      hoaDonRef.current;
-      const buttons =
-  input.querySelectorAll(
-    ".no-print"
-  );
+    setDangLuuAnh(true);
+    const buttons = input.querySelectorAll(".no-print");
+    const oldDisplays = Array.from(buttons, (button) => button.style.display);
 
-buttons.forEach((el) => {
-  el.style.display = "none";
-});
-      await new Promise(
-  (resolve) =>
-    setTimeout(
-      resolve,
-      300
-    )
-);
+    try {
+      buttons.forEach((button) => {
+        button.style.display = "none";
+      });
 
-    if (!input) return;
+      await new Promise((resolve) => setTimeout(resolve, 150));
 
-    const canvas =
-  await html2canvas(
-    input,
-    {
-      scale: 3,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor:
-        "#ffffff",
+      const canvas = await html2canvas(input, {
+        scale: Math.min(window.devicePixelRatio * 2, 3),
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+        onclone: (doc) => {
+          doc.querySelectorAll("*").forEach((element) => {
+            const style = doc.defaultView.getComputedStyle(element);
+            element.style.color = style.color;
+            element.style.backgroundColor = style.backgroundColor;
+            element.style.borderColor = style.borderColor;
+          });
+        },
+      });
 
-      logging: true,
+      const blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((imageBlob) => {
+          if (imageBlob) resolve(imageBlob);
+          else reject(new Error("Không thể tạo ảnh hóa đơn."));
+        }, "image/png");
+      });
 
-      onclone: (doc) => {
+      const homNay = new Date();
+      const ngay = `${homNay.getFullYear()}${String(homNay.getMonth() + 1).padStart(2, "0")}${String(homNay.getDate()).padStart(2, "0")}`;
+      const key = `save_count_${ngay}`;
+      let soThuTu = Number(localStorage.getItem(key)) || 0;
+      soThuTu += 1;
+      localStorage.setItem(key, String(soThuTu));
 
-        const all =
-          doc.querySelectorAll("*");
+      const tenFile = `${ngay}-${soThuTu}.png`;
+      const file = new File([blob], tenFile, { type: "image/png" });
+      const coTheChiaSeFile =
+        typeof navigator.share === "function" &&
+        (!navigator.canShare || navigator.canShare({ files: [file] }));
 
-        all.forEach((el) => {
+      if (coTheChiaSeFile) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "Hóa đơn",
+          });
+          return;
+        } catch (error) {
+          if (error?.name === "AbortError") return;
+        }
+      }
 
-          const style =
-  window.getComputedStyle(el);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = tenFile;
+      link.rel = "noopener";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
 
-el.style.color =
-  style.color;
-
-el.style.backgroundColor =
-  style.backgroundColor;
-
-el.style.borderColor =
-  style.borderColor;
-
-        });
-
-      },
+      // Safari iPhone có thể bỏ qua thuộc tính download; mở ảnh để người dùng
+      // nhấn giữ và chọn “Lưu vào Ảnh” nếu trình duyệt không tải tự động.
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !navigator.share) {
+        window.open(url, "_blank", "noopener,noreferrer");
+      }
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch (error) {
+      console.error("Không thể lưu ảnh hóa đơn:", error);
+      alert("Không thể lưu ảnh hóa đơn. Vui lòng thử lại hoặc kiểm tra quyền tải xuống của trình duyệt.");
+    } finally {
+      buttons.forEach((button, index) => {
+        button.style.display = oldDisplays[index];
+      });
+      setDangLuuAnh(false);
     }
-  );
-
-    const imgData =
-      canvas.toDataURL(
-        "image/png"
-      );
-
-    const homNay =
-  new Date();
-
-const ngay =
-
-  `${homNay.getFullYear()}${
-    String(
-      homNay.getMonth() + 1
-    ).padStart(2, "0")
-  }${
-    String(
-      homNay.getDate()
-    ).padStart(2, "0")
-  }`;
-
-const key =
-  `save_count_${ngay}`;
-
-let soThuTu =
-
-  Number(
-    localStorage.getItem(key)
-  ) || 0;
-
-soThuTu++;
-
-localStorage.setItem(
-  key,
-  soThuTu
-);
-
-const tenFile =
-  `${ngay}-${soThuTu}.png`;
-
-const link =
-  document.createElement("a");
-
-link.download =
-  tenFile;
-
-link.href =
-  canvas.toDataURL(
-    "image/png",
-    1.0
-  );
-
-link.click();
-buttons.forEach((el) => {
-  el.style.display = "flex";
-});
-
-
-  } catch (error) {
-
-  console.log(error);
-
-  alert(error.message);
-
-}
 
 };
 
@@ -2494,14 +2439,16 @@ setLoaiDon("");
 
             <button
   onClick={taiPDF}
+  disabled={dangLuuAnh}
   className="px-5 py-3 rounded-xl"
   style={{
     color: "#ffffff",
-    backgroundColor: "#ca8a04",
+    backgroundColor: dangLuuAnh ? "#a16207" : "#ca8a04",
+    opacity: dangLuuAnh ? 0.7 : 1,
   }}
 >
 
-                Lưu ảnh 
+                {dangLuuAnh ? "Đang tạo ảnh..." : "Lưu ảnh"}
 
               </button>
 
