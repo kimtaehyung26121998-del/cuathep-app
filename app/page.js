@@ -1363,13 +1363,6 @@ const tienPhaoDinh =
         </td>
 
       </tr>
-      {cua.note && (
-        <tr>
-          <td className="border" colSpan={9} style={{ padding: "4px 6px", color: "#dc2626", fontStyle: "italic", fontSize: isMobile ? "6px" : "7px", textAlign: "left", whiteSpace: "normal", overflowWrap: "anywhere" }}>
-            Ghi chú: {cua.note}
-          </td>
-        </tr>
-      )}
       {cua.coKhoa && (
 
         <tr>
@@ -2053,6 +2046,13 @@ Number(cua.caoVom || 0)
 
 )}
 
+      {cua.note && (
+        <tr>
+          <td className="border" colSpan={9} style={{ padding: "4px 6px", color: "#dc2626", fontStyle: "italic", fontSize: isMobile ? "6px" : "7px", textAlign: "left", whiteSpace: "normal", overflowWrap: "anywhere" }}>
+            Ghi chú: {cua.note}
+          </td>
+        </tr>
+      )}
     </>
 
   );
