@@ -6,6 +6,7 @@ import {
   useEffect,
 } from "react";
 import html2canvas from "html2canvas";
+import PaintOrder from "./PaintOrder";
 const formatTien = (value) => {
 
   const number =
@@ -2576,10 +2577,21 @@ setLoaiDon("");
       >
         Lên đơn đại lý
       </button>
+      <button type="button" onClick={() => setLoaiDon("son-mykolor")} className="choice-button w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f8fafc", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
+        L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Mykolor
+      </button>
+      <button type="button" onClick={() => setLoaiDon("son-forich")} className="choice-button w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f97316", color: "#ffffff", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
+        L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Forich
+      </button>
+      <button type="button" onClick={() => setLoaiDon("son-sunpro")} className="choice-button w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#facc15", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
+        L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Sunpro
+      </button>
 
     </div>
 
-  ) : ( 
+  ) : loaiDon.startsWith("son-") ? (
+    <PaintOrder initialBrand={loaiDon.replace("son-", "")} onBack={() => setLoaiDon("")} />
+  ) : (
 
     <div className="min-h-screen p-4 app-shell"
 style={{ backgroundColor: "#f3f4f6" }}>

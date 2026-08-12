@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Báo giá cửa thép",
-  description: "Ứng dụng lập báo giá cửa thép",
+  title: "Len don An Phat",
+  description: "Ung dung len don cua thep va son",
 };
 
 export const viewport = {
