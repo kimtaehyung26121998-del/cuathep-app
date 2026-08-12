@@ -545,6 +545,16 @@ const conPhaiThanhToan =
     const input = hoaDonRef.current;
     if (!input || dangLuuAnh) return;
 
+    // Safari chỉ cho mở tab mới khi lệnh được gọi trực tiếp từ thao tác chạm.
+    // Mở tab giữ chỗ trước các await, rồi thay nội dung bằng ảnh sau khi render.
+    const laSafariIPhone =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      /Safari/.test(navigator.userAgent) &&
+      !/CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
+    const cuaSoAnhSafari = laSafariIPhone
+      ? window.open("about:blank", "_blank")
+      : null;
+
     setDangLuuAnh(true);
     const buttons = input.querySelectorAll(".no-print");
     const oldDisplays = Array.from(buttons, (button) => button.style.display);
@@ -587,6 +597,27 @@ const conPhaiThanhToan =
       localStorage.setItem(key, String(soThuTu));
 
       const tenFile = `${ngay}-${soThuTu}.png`;
+
+      if (laSafariIPhone) {
+        const url = URL.createObjectURL(blob);
+
+        if (cuaSoAnhSafari && !cuaSoAnhSafari.closed) {
+          cuaSoAnhSafari.document.title = `Hóa đơn ${tenFile}`;
+          cuaSoAnhSafari.location.href = url;
+          setTimeout(() => URL.revokeObjectURL(url), 60000);
+        } else {
+          // Nếu Safari chặn popup, thử mở lại bằng thao tác hiện tại.
+          const link = document.createElement("a");
+          link.href = url;
+          link.target = "_blank";
+          link.rel = "noopener";
+          link.click();
+          setTimeout(() => URL.revokeObjectURL(url), 60000);
+        }
+
+        return;
+      }
+
       const file = new File([blob], tenFile, { type: "image/png" });
       const coTheChiaSeFile =
         typeof navigator.share === "function" &&
@@ -613,11 +644,6 @@ const conPhaiThanhToan =
       link.click();
       link.remove();
 
-      // Safari iPhone có thể bỏ qua thuộc tính download; mở ảnh để người dùng
-      // nhấn giữ và chọn “Lưu vào Ảnh” nếu trình duyệt không tải tự động.
-      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !navigator.share) {
-        window.open(url, "_blank", "noopener,noreferrer");
-      }
       setTimeout(() => URL.revokeObjectURL(url), 60000);
     } catch (error) {
       console.error("Không thể lưu ảnh hóa đơn:", error);
