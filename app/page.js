@@ -664,7 +664,7 @@ const conPhaiThanhToan =
         ref={hoaDonRef}
         style={{
           fontFamily:
-            "Arial, sans-serif",
+            '"Be Vietnam Pro", Arial, sans-serif',
           backgroundColor:
             "#ffffff",
           width: "100%",
@@ -697,7 +697,7 @@ style={{
             <div className="flex gap-4">
 
              <img
-  src="/logo.jpg?v=1"
+  src="/logo-transparent.png?v=1"
   crossOrigin="anonymous"
   alt="logo"
  style={{
@@ -2495,6 +2495,7 @@ setLoaiDon("");
   {!loaiDon ? (
 
     <div
+      data-screen="order-type"
       className="
         min-h-screen
         flex
@@ -2509,8 +2510,12 @@ setLoaiDon("");
       }}
     >
 
+      <div className="landing-mark" aria-hidden="true"><img src="/logo-transparent.png?v=1" alt="An Phát" /></div>
+
+      <p className="eyebrow">AN PHÁT BẮC NINH · QUOTATION STUDIO</p>
+
       <h1
-        className="
+        className="landing-title
           text-3xl
           font-bold
         "
@@ -2523,7 +2528,7 @@ setLoaiDon("");
         onClick={() =>
           setLoaiDon("khachle")
         }
-        className="
+        className="choice-button choice-button--retail
           w-full
           max-w-md
           py-4
@@ -2550,7 +2555,7 @@ setLoaiDon("");
         onClick={() =>
           setLoaiDon("daily")
         }
-        className="
+        className="choice-button choice-button--dealer
           w-full
           max-w-md
           py-4
@@ -2576,21 +2581,29 @@ setLoaiDon("");
 
   ) : ( 
 
-    <div className="min-h-screen p-4"
+    <div className="min-h-screen p-4 app-shell"
 style={{ backgroundColor: "#f3f4f6" }}>
 
-      <div className="max-w-xl mx-auto rounded-3xl p-5 space-y-6"
+      <div className="max-w-xl mx-auto rounded-3xl p-5 space-y-6 form-card"
 style={{
   backgroundColor: "#ffffff",
   boxShadow:
     "0 2px 10px rgba(0,0,0,0.1)"
 }}>
 
-        <h1 className="text-3xl font-bold">
+        <div className="form-heading">
+          <div className="brand-chip"><img src="/logo-transparent.png?v=1" alt="An Phát" /></div>
+          <div>
+            <p className="eyebrow">BÁO GIÁ · 2026</p>
+            <h1 className="text-3xl font-bold">
 
           Lên Đơn Cửa Thép
 
-        </h1>
+            </h1>
+          </div>
+        </div>
+
+        <p className="form-intro">Tạo báo giá cửa thép chỉn chu trong vài phút.</p>
 
         <select
           value={nhanVien}
@@ -2684,7 +2697,7 @@ style={{
 
             <div
               key={cua.id}
-              className="border rounded-3xl p-4 space-y-4"
+              className="border rounded-3xl p-4 space-y-4 door-card"
             >
 
               <div className="flex justify-between items-center gap-3">

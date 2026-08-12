@@ -1,25 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f2ed;
+  --foreground: #17202b;
+  --ink: #17202b;
+  --muted: #69717b;
+  --navy: #101d2b;
+  --gold: #c99a4a;
+  --line: rgba(23, 32, 43, 0.13);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: Arial, Helvetica, sans-serif;
+  --font-sans: "Be Vietnam Pro", Arial, Helvetica, sans-serif;
   --font-mono: Consolas, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Be Vietnam Pro", Arial, Helvetica, sans-serif;
   width: 100%;
   min-width: 0;
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -40,10 +46,10 @@ input,
 select,
 textarea {
   font: inherit;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Be Vietnam Pro", Arial, Helvetica, sans-serif;
   font-weight: 400;
   line-height: 1.4;
-  color: #171717;
+  color: var(--ink);
   background-color: #ffffff;
   opacity: 1;
   filter: none;
@@ -51,6 +57,75 @@ textarea {
   text-shadow: none;
   -webkit-font-smoothing: auto;
   text-rendering: auto;
+}
+
+/* Editorial, premium quotation UI */
+[data-screen="order-type"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--navy) !important;
+  color: #fff;
+}
+
+[data-screen="order-type"]::before,
+[data-screen="order-type"]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 420px;
+  height: 420px;
+  border: 1px solid rgba(201, 154, 74, .26);
+  border-radius: 50%;
+}
+
+[data-screen="order-type"]::before { top: -190px; right: -150px; box-shadow: 0 0 0 32px rgba(201,154,74,.05), 0 0 0 64px rgba(201,154,74,.035); }
+[data-screen="order-type"]::after { bottom: -250px; left: -180px; }
+
+.landing-mark, .brand-chip {
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  background: linear-gradient(145deg, #1b3045, #0b1622);
+  border: 1px solid rgba(201, 154, 74, .65);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+}
+.landing-mark { width: 74px; height: 74px; padding: 8px; border-radius: 24px; font-size: 25px; margin-bottom: 2px; }
+.brand-chip { width: 52px; height: 52px; padding: 6px; border-radius: 16px; font-size: 18px; flex: 0 0 auto; }
+.landing-mark img, .brand-chip img { width: 100%; height: 100%; object-fit: contain; border-radius: inherit; }
+.eyebrow { margin: 0; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .22em; }
+.landing-title { color: #fff; letter-spacing: -.04em; text-align: center; }
+.choice-button { border: 1px solid rgba(255,255,255,.16); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.choice-button--retail { background: linear-gradient(135deg, #d5aa5d, #a87528) !important; color: #17202b !important; box-shadow: 0 16px 30px rgba(201,154,74,.24); }
+.choice-button--dealer { background: rgba(255,255,255,.08) !important; color: #fff !important; box-shadow: 0 16px 30px rgba(0,0,0,.18); }
+.choice-button:hover { transform: translateY(-3px); border-color: var(--gold); }
+
+.app-shell { background: radial-gradient(circle at 10% 0%, #fffdf7 0, transparent 35%), #f4f2ed !important; }
+.form-card { border: 1px solid rgba(255,255,255,.85); box-shadow: 0 25px 70px rgba(20, 29, 42, .12) !important; }
+.form-heading { display: flex; align-items: center; gap: 14px; }
+.form-heading h1 { margin-top: 3px; color: var(--navy); letter-spacing: -.04em; }
+.form-intro { color: var(--muted); margin: -12px 0 2px; font-size: 14px; }
+.door-card { background: linear-gradient(180deg, #fff, #fbfaf7); border-color: var(--line) !important; box-shadow: 0 12px 26px rgba(20,29,42,.06); }
+.door-card h2 { color: var(--navy); }
+
+.form-card input:not([type="checkbox"]):not([type="radio"]),
+.form-card select,
+.form-card textarea { border: 1px solid var(--line) !important; border-radius: 14px !important; background: #fffdf9 !important; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease; }
+.form-card input:not([type="checkbox"]):not([type="radio"]):focus,
+.form-card select:focus,
+.form-card textarea:focus { outline: none; border-color: var(--gold) !important; box-shadow: 0 0 0 4px rgba(201,154,74,.13); background: #fff !important; }
+.form-card input::placeholder, .form-card textarea::placeholder { color: #9aa0a7; }
+.form-card button { transition: transform .18s ease, box-shadow .18s ease, filter .18s ease; }
+.form-card button:hover { transform: translateY(-2px); filter: saturate(1.08); }
+.form-card > button { border: 0; color: #fff !important; background: linear-gradient(135deg, #172b3f, #0d1722) !important; box-shadow: 0 14px 24px rgba(16,29,43,.18); }
+.form-card > button:last-child { background: linear-gradient(135deg, #d5aa5d, #a87528) !important; color: #17202b !important; box-shadow: 0 14px 24px rgba(201,154,74,.24); }
+
+@media (max-width: 640px) {
+  .form-card { padding: 18px !important; border-radius: 24px !important; }
+  .landing-title { font-size: 30px !important; }
+  .form-heading h1 { font-size: 26px !important; }
 }
 
 input::placeholder,
