@@ -545,15 +545,9 @@ const conPhaiThanhToan =
     const input = hoaDonRef.current;
     if (!input || dangLuuAnh) return;
 
-    // Safari chỉ cho mở tab mới khi lệnh được gọi trực tiếp từ thao tác chạm.
-    // Mở tab giữ chỗ trước các await, rồi thay nội dung bằng ảnh sau khi render.
-    const laSafariIPhone =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-      /Safari/.test(navigator.userAgent) &&
-      !/CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
-    const cuaSoAnhSafari = laSafariIPhone
-      ? window.open("about:blank", "_blank")
-      : null;
+    // Mở tab giữ chỗ ngay trong thao tác bấm để Safari/Chrome mobile không
+    // chặn tab sau các bước await tạo ảnh.
+    const cuaSoAnh = window.open("about:blank", "_blank");
 
     setDangLuuAnh(true);
     const buttons = input.querySelectorAll(".no-print");
@@ -598,23 +592,12 @@ const conPhaiThanhToan =
 
       const tenFile = `${ngay}-${soThuTu}.png`;
 
-      if (laSafariIPhone) {
+      if (cuaSoAnh && !cuaSoAnh.closed) {
         const url = URL.createObjectURL(blob);
 
-        if (cuaSoAnhSafari && !cuaSoAnhSafari.closed) {
-          cuaSoAnhSafari.document.title = `Hóa đơn ${tenFile}`;
-          cuaSoAnhSafari.location.href = url;
-          setTimeout(() => URL.revokeObjectURL(url), 60000);
-        } else {
-          // Nếu Safari chặn popup, thử mở lại bằng thao tác hiện tại.
-          const link = document.createElement("a");
-          link.href = url;
-          link.target = "_blank";
-          link.rel = "noopener";
-          link.click();
-          setTimeout(() => URL.revokeObjectURL(url), 60000);
-        }
-
+        cuaSoAnh.document.title = `Hóa đơn ${tenFile}`;
+        cuaSoAnh.location.href = url;
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
         return;
       }
 
