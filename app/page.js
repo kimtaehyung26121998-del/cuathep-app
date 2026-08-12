@@ -827,7 +827,7 @@ style={{
       : "12px 6px",
 
     fontSize: isMobile
-  ? "6px"
+  ? "9px"
   : "8px",
   overflowWrap: "break-word",
 
@@ -855,7 +855,7 @@ style={{
       : "12px 6px",
 
     fontSize: isMobile
-  ? "6px"
+  ? "9px"
   : "8px",
   overflowWrap: "break-word",
 
