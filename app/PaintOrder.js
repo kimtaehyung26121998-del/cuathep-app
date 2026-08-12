@@ -1057,6 +1057,9 @@ const [customerDeposit, setCustomerDeposit] =
   const [brand, setBrand] = useState(initialBrand);
 
   const [orderItems, setOrderItems] = useState([]);
+  const [invoiceImage, setInvoiceImage] = useState("");
+  const [invoiceFileName, setInvoiceFileName] = useState("");
+  const [isCreatingImage, setIsCreatingImage] = useState(false);
 
  const currentProducts =
   brand === "forich"
@@ -1418,9 +1421,10 @@ const saveInvoiceImage = async () => {
 
   if (!invoiceRef.current) return;
 
+  const imageWindow = null;
+
   // Mở tab ngay trong thao tác click để trình duyệt không chặn sau khi
   // html2canvas hoàn tất bất đồng bộ.
-  const imageWindow = window.open("about:blank", "_blank");
 
   try {
     if (document.fonts?.ready) await document.fonts.ready;
@@ -1431,9 +1435,6 @@ const saveInvoiceImage = async () => {
       backgroundColor: "#ffffff",
       skipFonts: false,
     });
-    const blob = await (await fetch(dataUrl)).blob();
-    const blobUrl = URL.createObjectURL(blob);
-
 const today = new Date();
 
 const yyyy =
@@ -1464,6 +1465,11 @@ localStorage.setItem(
 
 const fileName =
   `${dateKey}-${savedCount}.png`;
+
+    setInvoiceImage(dataUrl);
+    setInvoiceFileName(fileName);
+    setIsCreatingImage(false);
+    return;
 
     const file = new File([blob], fileName, { type: "image/png" });
     const canShareFile =
@@ -1510,11 +1516,36 @@ const fileName =
   } catch (error) {
 
     console.error("Save invoice image failed:", error);
+    setIsCreatingImage(false);
 
     alert("Không thể lưu ảnh");
 
   }
 
+};
+const downloadInvoiceImage = () => {
+  if (!invoiceImage) return;
+  const link = document.createElement("a");
+  link.href = invoiceImage;
+  link.download = invoiceFileName || "hoa-don.png";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
+
+const shareInvoiceImage = async () => {
+  if (!invoiceImage) return;
+  try {
+    const blob = await (await fetch(invoiceImage)).blob();
+    const file = new File([blob], invoiceFileName || "hoa-don.png", { type: "image/png" });
+    if (!navigator.share || (navigator.canShare && !navigator.canShare({ files: [file] }))) {
+      alert("Thiết bị không hỗ trợ chia sẻ trực tiếp. Hãy nhấn giữ ảnh để lưu.");
+      return;
+    }
+    await navigator.share({ files: [file], title: "Hóa đơn" });
+  } catch (error) {
+    if (error?.name !== "AbortError") console.error("Share invoice image failed:", error);
+  }
 };
 if (brand === "select") {
 
@@ -1943,6 +1974,7 @@ updateItem(
 
     <button
       onClick={saveInvoiceImage}
+      disabled={isCreatingImage}
       className={`
   text-white px-4 py-2 rounded-2xl text-sm
   ${
@@ -1956,6 +1988,18 @@ updateItem(
     </button>
 
   </div>
+
+  {invoiceImage && (
+    <div className="mb-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+      <p className="mb-2 text-sm font-semibold text-slate-700">Ảnh đã tạo - chọn cách lưu:</p>
+      <img src={invoiceImage} alt="Xem trước hóa đơn" className="max-h-64 w-full rounded-xl bg-white object-contain" />
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button type="button" onClick={downloadInvoiceImage} className="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white">Tải ảnh xuống</button>
+        <button type="button" onClick={shareInvoiceImage} className="rounded-xl bg-blue-600 px-4 py-2 text-sm text-white">Chia sẻ / Lưu ảnh</button>
+        <button type="button" onClick={() => setInvoiceImage("")} className="rounded-xl bg-slate-200 px-4 py-2 text-sm text-slate-700">Đóng xem trước</button>
+      </div>
+    </div>
+  )}
 
  <div
   ref={invoiceRef}
