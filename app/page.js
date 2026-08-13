@@ -2460,6 +2460,17 @@ setLoaiDon("");
 </button>
 
             <button
+  onClick={luuDonCua}
+  className="px-5 py-3 rounded-xl"
+  style={{
+    color: "#ffffff",
+    backgroundColor: "#b7791f",
+  }}
+>
+              Lưu đơn vào kho nhân viên
+            </button>
+
+            <button
   onClick={taiPDF}
   disabled={dangLuuAnh}
   className="px-5 py-3 rounded-xl"
@@ -3841,10 +3852,6 @@ style={{
 
           Xem hóa đơn
 
-        </button>
-
-        <button type="button" onClick={luuDonCua} className="w-full p-4 rounded-2xl font-bold" style={{ backgroundColor: "#b7791f", color: "#ffffff" }}>
-          Lưu đơn vào kho nhân viên
         </button>
 
       </div>
