@@ -2512,9 +2512,6 @@ setLoaiDon("");
                     }}
                   />
                   <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "12px" }}>
-                    <button type="button" onClick={taiAnhHoaDon} className="px-4 py-2 rounded-xl text-white" style={{ backgroundColor: "#111827" }}>
-                      Tải ảnh xuống
-                    </button>
                     <button type="button" onClick={chiaSeAnhHoaDon} className="px-4 py-2 rounded-xl text-white" style={{ backgroundColor: "#2563eb" }}>
                       Chia sẻ / Lưu ảnh
                     </button>

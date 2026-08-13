@@ -2070,7 +2070,6 @@ updateItem(
       <p className="mb-2 text-sm font-semibold text-slate-700">Ảnh đã tạo - chọn cách lưu:</p>
       <img src={invoiceImage} alt="Xem trước hóa đơn" className="max-h-64 w-full rounded-xl bg-white object-contain" />
       <div className="mt-3 flex flex-wrap gap-2">
-        <button type="button" onClick={downloadInvoiceImage} className="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white">Tải ảnh xuống</button>
         <button type="button" onClick={shareInvoiceImage} className="rounded-xl bg-blue-600 px-4 py-2 text-sm text-white">Chia sẻ / Lưu ảnh</button>
         <button type="button" onClick={() => setInvoiceImage("")} className="rounded-xl bg-slate-200 px-4 py-2 text-sm text-slate-700">Đóng xem trước</button>
       </div>
