@@ -5,7 +5,7 @@ import {
   useRef,
   useEffect,
 } from "react";
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import PaintOrder from "./PaintOrder";
 const formatTien = (value) => {
 
@@ -71,6 +71,8 @@ export default function Home() {
     useState(false);
   const [dangLuuAnh, setDangLuuAnh] =
     useState(false);
+  const [anhHoaDon, setAnhHoaDon] = useState("");
+  const [tenFileAnh, setTenFileAnh] = useState("");
     const [loaiDon, setLoaiDon] =
   useState("");
 
@@ -544,104 +546,63 @@ const conPhaiThanhToan =
   soTienDaCoc;
 
   const taiPDF = async () => {
-
-    const input = hoaDonRef.current;
-    if (!input || dangLuuAnh) return;
-
-    // Mở tab giữ chỗ ngay trong thao tác bấm để Safari/Chrome mobile không
-    // chặn tab sau các bước await tạo ảnh.
-    const cuaSoAnh = window.open("about:blank", "_blank");
+    if (!hoaDonRef.current || dangLuuAnh) return;
 
     setDangLuuAnh(true);
-    const buttons = input.querySelectorAll(".no-print");
-    const oldDisplays = Array.from(buttons, (button) => button.style.display);
 
     try {
-      buttons.forEach((button) => {
-        button.style.display = "none";
-      });
+      if (document.fonts?.ready) await document.fonts.ready;
 
-      await new Promise((resolve) => setTimeout(resolve, 150));
-
-      const canvas = await html2canvas(input, {
-        scale: Math.min(window.devicePixelRatio * 2, 3),
-        useCORS: true,
-        allowTaint: true,
+      const dataUrl = await toPng(hoaDonRef.current, {
+        cacheBust: true,
+        pixelRatio: Math.min(window.devicePixelRatio * 2, 3),
         backgroundColor: "#ffffff",
-        logging: false,
-        onclone: (doc) => {
-          doc.querySelectorAll("*").forEach((element) => {
-            const style = doc.defaultView.getComputedStyle(element);
-            element.style.color = style.color;
-            element.style.backgroundColor = style.backgroundColor;
-            element.style.borderColor = style.borderColor;
-          });
-        },
-      });
-
-      const blob = await new Promise((resolve, reject) => {
-        canvas.toBlob((imageBlob) => {
-          if (imageBlob) resolve(imageBlob);
-          else reject(new Error("Không thể tạo ảnh hóa đơn."));
-        }, "image/png");
+        filter: (node) => !node.classList?.contains("no-print"),
       });
 
       const homNay = new Date();
       const ngay = `${homNay.getFullYear()}${String(homNay.getMonth() + 1).padStart(2, "0")}${String(homNay.getDate()).padStart(2, "0")}`;
       const key = `save_count_${ngay}`;
-      let soThuTu = Number(localStorage.getItem(key)) || 0;
-      soThuTu += 1;
+      const soThuTu = Number(localStorage.getItem(key) || "0") + 1;
       localStorage.setItem(key, String(soThuTu));
 
-      const tenFile = `${ngay}-${soThuTu}.png`;
+      setAnhHoaDon(dataUrl);
+      setTenFileAnh(`${ngay}-${soThuTu}.png`);
+    } catch (error) {
+      console.error("Không thể tạo ảnh hóa đơn:", error);
+      alert("Không thể tạo ảnh hóa đơn. Vui lòng thử lại.");
+    } finally {
+      setDangLuuAnh(false);
+    }
+  };
 
-      if (cuaSoAnh && !cuaSoAnh.closed) {
-        const url = URL.createObjectURL(blob);
+  const taiAnhHoaDon = () => {
+    if (!anhHoaDon) return;
+    const link = document.createElement("a");
+    link.href = anhHoaDon;
+    link.download = tenFileAnh || "hoa-don.png";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
 
-        cuaSoAnh.document.title = `Hóa đơn ${tenFile}`;
-        cuaSoAnh.location.href = url;
-        setTimeout(() => URL.revokeObjectURL(url), 60000);
+  const chiaSeAnhHoaDon = async () => {
+    if (!anhHoaDon) return;
+
+    try {
+      const blob = await (await fetch(anhHoaDon)).blob();
+      const file = new File([blob], tenFileAnh || "hoa-don.png", { type: "image/png" });
+
+      if (!navigator.share || (navigator.canShare && !navigator.canShare({ files: [file] }))) {
+        alert("Thiết bị không hỗ trợ chia sẻ trực tiếp. Hãy nhấn Tải ảnh xuống.");
         return;
       }
 
-      const file = new File([blob], tenFile, { type: "image/png" });
-      const coTheChiaSeFile =
-        typeof navigator.share === "function" &&
-        (!navigator.canShare || navigator.canShare({ files: [file] }));
-
-      if (coTheChiaSeFile) {
-        try {
-          await navigator.share({
-            files: [file],
-            title: "Hóa đơn",
-          });
-          return;
-        } catch (error) {
-          if (error?.name === "AbortError") return;
-        }
-      }
-
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = tenFile;
-      link.rel = "noopener";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      await navigator.share({ files: [file], title: "Hóa đơn cửa thép" });
     } catch (error) {
-      console.error("Không thể lưu ảnh hóa đơn:", error);
-      alert("Không thể lưu ảnh hóa đơn. Vui lòng thử lại hoặc kiểm tra quyền tải xuống của trình duyệt.");
-    } finally {
-      buttons.forEach((button, index) => {
-        button.style.display = oldDisplays[index];
-      });
-      setDangLuuAnh(false);
+      if (error?.name !== "AbortError") console.error("Chia sẻ ảnh thất bại:", error);
     }
-
-};
+  };
 
  if (xemHoaDon) {
 
@@ -2450,9 +2411,50 @@ setLoaiDon("");
   }}
 >
 
-                {dangLuuAnh ? "Đang tạo ảnh..." : "Lưu ảnh"}
+              {dangLuuAnh ? "Đang tạo ảnh..." : "Lưu ảnh"}
 
               </button>
+
+              {anhHoaDon && (
+                <div
+                  className="no-print"
+                  style={{
+                    flexBasis: "100%",
+                    marginTop: "8px",
+                    padding: "12px",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "16px",
+                    backgroundColor: "#f8fafc",
+                  }}
+                >
+                  <p style={{ margin: "0 0 8px", fontWeight: 600 }}>
+                    Ảnh đã tạo - chọn cách lưu:
+                  </p>
+                  <img
+                    src={anhHoaDon}
+                    alt="Xem trước hóa đơn cửa thép"
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      maxHeight: "420px",
+                      objectFit: "contain",
+                      borderRadius: "12px",
+                      backgroundColor: "#ffffff",
+                    }}
+                  />
+                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "12px" }}>
+                    <button type="button" onClick={taiAnhHoaDon} className="px-4 py-2 rounded-xl text-white" style={{ backgroundColor: "#111827" }}>
+                      Tải ảnh xuống
+                    </button>
+                    <button type="button" onClick={chiaSeAnhHoaDon} className="px-4 py-2 rounded-xl text-white" style={{ backgroundColor: "#2563eb" }}>
+                      Chia sẻ / Lưu ảnh
+                    </button>
+                    <button type="button" onClick={() => setAnhHoaDon("")} className="px-4 py-2 rounded-xl" style={{ backgroundColor: "#e5e7eb" }}>
+                      Đóng xem trước
+                    </button>
+                  </div>
+                </div>
+              )}
 
                         </div>
 
