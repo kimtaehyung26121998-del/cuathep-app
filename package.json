@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "vinext build && node scripts/prepare-sites-build.mjs",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
