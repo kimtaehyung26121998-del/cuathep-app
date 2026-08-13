@@ -5,8 +5,9 @@ import {
   useRef,
   useEffect,
 } from "react";
+import dynamic from "next/dynamic";
 import { toPng } from "html-to-image";
-import PaintOrder from "./PaintOrder";
+const PaintOrder = dynamic(() => import("./PaintOrder"), { ssr: false });
 const formatTien = (value) => {
 
   const number =
