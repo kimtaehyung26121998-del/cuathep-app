@@ -1060,6 +1060,61 @@ const [customerDeposit, setCustomerDeposit] =
   const [invoiceImage, setInvoiceImage] = useState("");
   const [invoiceFileName, setInvoiceFileName] = useState("");
   const [isCreatingImage, setIsCreatingImage] = useState(false);
+  const [savedOrders, setSavedOrders] = useState([]);
+  const [showSavedOrders, setShowSavedOrders] = useState(false);
+
+  useEffect(() => {
+    try {
+      setSavedOrders(JSON.parse(localStorage.getItem("order_archive_v1") || "[]"));
+    } catch {
+      setSavedOrders([]);
+    }
+  }, []);
+
+  const paintSavedOrders = savedOrders.filter((order) =>
+    order.type === "son" && (!selectedEmployee?.name || order.employee === selectedEmployee.name)
+  );
+
+  const savePaintOrder = () => {
+    if (!selectedEmployee?.name) {
+      alert("Vui lòng chọn nhân viên trước khi lưu đơn.");
+      return;
+    }
+    const saved = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      type: "son",
+      brand,
+      employee: selectedEmployee.name,
+      customer: customerName || "Khách chưa đặt tên",
+      createdAt: new Date().toISOString(),
+      selectedEmployee,
+      customerName,
+      customerAddress,
+      discountPercent,
+      customerDeposit,
+      orderItems,
+    };
+    const next = [saved, ...savedOrders];
+    localStorage.setItem("order_archive_v1", JSON.stringify(next));
+    setSavedOrders(next);
+    alert("Đã lưu đơn sơn vào kho lưu trữ của nhân viên.");
+  };
+
+  const openSavedPaintOrder = (saved) => {
+    setBrand(saved.brand || initialBrand);
+    setSelectedEmployee(saved.selectedEmployee || employees.find((emp) => emp.name === saved.employee) || null);
+    setCustomerName(saved.customerName || "");
+    setCustomerAddress(saved.customerAddress || "");
+    setDiscountPercent(saved.discountPercent || 0);
+    setCustomerDeposit(saved.customerDeposit || 0);
+    setOrderItems(saved.orderItems || []);
+  };
+
+  const deleteSavedPaintOrder = (id) => {
+    const next = savedOrders.filter((order) => order.id !== id);
+    localStorage.setItem("order_archive_v1", JSON.stringify(next));
+    setSavedOrders(next);
+  };
 
  const currentProducts =
   brand === "forich"
@@ -1658,6 +1713,24 @@ if (brand === "select") {
 
             </select>
 
+            <div className="mt-3 rounded-2xl border border-amber-300/40 bg-amber-100/10 p-3">
+              <button type="button" onClick={() => setShowSavedOrders(!showSavedOrders)} className="w-full text-left font-bold text-amber-200">
+                {showSavedOrders ? "Ẩn đơn đã lưu" : "Xem đơn đã lưu"} ({paintSavedOrders.length})
+              </button>
+              {showSavedOrders && (
+                <div className="mt-3 space-y-2">
+                  {!selectedEmployee && <p className="text-sm text-amber-100">Chọn nhân viên để xem kho đơn riêng.</p>}
+                  {selectedEmployee && paintSavedOrders.length === 0 && <p className="text-sm text-amber-100">Nhân viên này chưa có đơn sơn được lưu.</p>}
+                  {paintSavedOrders.map((saved) => (
+                    <div key={saved.id} className="flex items-center justify-between gap-2 rounded-xl bg-white p-2 text-sm text-slate-900">
+                      <div><b>{saved.customer}</b><div className="text-xs text-slate-500">{new Date(saved.createdAt).toLocaleString("vi-VN")}</div></div>
+                      <div className="flex gap-1"><button type="button" onClick={() => openSavedPaintOrder(saved)} className="rounded-lg bg-blue-600 px-2 py-1 text-white">Xem</button><button type="button" onClick={() => deleteSavedPaintOrder(saved.id)} className="rounded-lg bg-red-100 px-2 py-1 text-red-700">Xóa</button></div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
           </div>
 
           {/* khách */}
@@ -1985,6 +2058,9 @@ updateItem(
 `}
     >
       Lưu ảnh
+    </button>
+    <button type="button" onClick={savePaintOrder} className="rounded-2xl bg-amber-500 px-4 py-2 text-sm text-white">
+      Lưu đơn vào kho nhân viên
     </button>
 
   </div>

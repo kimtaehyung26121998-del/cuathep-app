@@ -25,6 +25,9 @@ const formatSoLuong = (value) => {
 
 const kichThuocMet = (value) => Number(value || 0) / 1000;
 
+const tinhTienBomForm = (cua) =>
+  Number(cua.khuon || 0) < 200 ? 150000 : 250000;
+
 const taoBoCuaMoi = (id = null) => ({
   id: id ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
 
@@ -84,6 +87,8 @@ export default function Home() {
 
   const [diaChiKhach, setDiaChiKhach] =
     useState("");
+  const [donDaLuu, setDonDaLuu] = useState([]);
+  const [hienDonDaLuu, setHienDonDaLuu] = useState(false);
     const [tienCoc, setTienCoc] =
   useState("");
   const [
@@ -116,6 +121,13 @@ useEffect(() => {
       checkMobile
     );
 
+}, []);
+useEffect(() => {
+  try {
+    setDonDaLuu(JSON.parse(localStorage.getItem("order_archive_v1") || "[]"));
+  } catch {
+    setDonDaLuu([]);
+  }
 }, []);
 useEffect(() => {
 
@@ -188,6 +200,52 @@ useEffect(() => {
       taoBoCuaMoi(),
     ]);
 
+  };
+
+  const donCuaDaLuu = donDaLuu.filter((don) =>
+    don.type === "cua" && (!nhanVien || don.employee === nhanVien)
+  );
+
+  const luuDonCua = () => {
+    if (!nhanVien) {
+      alert("Vui lòng chọn nhân viên trước khi lưu đơn.");
+      return;
+    }
+    const donMoi = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      type: "cua",
+      employee: nhanVien,
+      customer: tenKhach || "Khách chưa đặt tên",
+      createdAt: new Date().toISOString(),
+      danhSachCua,
+      nhanVien,
+      tenKhach,
+      diaChiKhach,
+      tienCoc,
+      cuocVanChuyen,
+      loaiDon,
+    };
+    const danhSachMoi = [donMoi, ...donDaLuu];
+    localStorage.setItem("order_archive_v1", JSON.stringify(danhSachMoi));
+    setDonDaLuu(danhSachMoi);
+    alert("Đã lưu đơn cửa vào kho lưu trữ của nhân viên.");
+  };
+
+  const moDonCuaDaLuu = (don) => {
+    setDanhSachCua(don.danhSachCua || [taoBoCuaMoi()]);
+    setNhanVien(don.nhanVien || don.employee || "");
+    setTenKhach(don.tenKhach || "");
+    setDiaChiKhach(don.diaChiKhach || "");
+    setTienCoc(don.tienCoc || "");
+    setCuocVanChuyen(don.cuocVanChuyen || "");
+    setLoaiDon(don.loaiDon || "khachle");
+    setXemHoaDon(true);
+  };
+
+  const xoaDonDaLuu = (id) => {
+    const danhSachMoi = donDaLuu.filter((don) => don.id !== id);
+    localStorage.setItem("order_archive_v1", JSON.stringify(danhSachMoi));
+    setDonDaLuu(danhSachMoi);
   };
 
   const saoChepCua = (id) => {
@@ -452,7 +510,7 @@ useEffect(() => {
 
         const tienBom =
           cua.coBomForm
-            ? 250000
+            ? tinhTienBomForm(cua)
             : 0;
            let tienOThoang = 0;
 
@@ -1618,7 +1676,7 @@ const tienPhaoDinh =
     verticalAlign: "middle",
   }}
 >
-            250,000
+            {tinhTienBomForm(cua).toLocaleString()}
           </td>
 
           <td
@@ -1631,7 +1689,7 @@ const tienPhaoDinh =
     whiteSpace: "nowrap",
   }}
 >
-            250,000
+            {tinhTienBomForm(cua).toLocaleString()}
           </td>
 
         </tr>
@@ -2583,6 +2641,15 @@ style={{
     "0 2px 10px rgba(0,0,0,0.1)"
 }}>
 
+        <button
+          type="button"
+          onClick={() => setLoaiDon("")}
+          className="mb-3 px-4 py-2 rounded-2xl"
+          style={{ backgroundColor: "#e5e7eb" }}
+        >
+          ← Quay lại
+        </button>
+
         <div className="form-heading">
           <div className="brand-chip"><img src="/logo-transparent.png?v=1" alt="An Phát" /></div>
           <div>
@@ -2622,6 +2689,24 @@ style={{
           ))}
 
         </select>
+
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3">
+          <button type="button" onClick={() => setHienDonDaLuu(!hienDonDaLuu)} className="w-full text-left font-bold text-amber-900">
+            {hienDonDaLuu ? "Ẩn đơn đã lưu" : "Xem đơn đã lưu"} ({donCuaDaLuu.length})
+          </button>
+          {hienDonDaLuu && (
+            <div className="mt-3 space-y-2">
+              {!nhanVien && <p className="text-sm text-amber-800">Chọn nhân viên để xem kho đơn riêng.</p>}
+              {nhanVien && donCuaDaLuu.length === 0 && <p className="text-sm text-amber-800">Nhân viên này chưa có đơn cửa được lưu.</p>}
+              {donCuaDaLuu.map((don) => (
+                <div key={don.id} className="flex items-center justify-between gap-2 rounded-xl bg-white p-2 text-sm">
+                  <div><b>{don.customer}</b><div className="text-xs text-gray-500">{new Date(don.createdAt).toLocaleString("vi-VN")}</div></div>
+                  <div className="flex gap-1"><button type="button" onClick={() => moDonCuaDaLuu(don)} className="rounded-lg bg-blue-600 px-2 py-1 text-white">Xem</button><button type="button" onClick={() => xoaDonDaLuu(don.id)} className="rounded-lg bg-red-100 px-2 py-1 text-red-700">Xóa</button></div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         <input
           placeholder="Tên khách hàng"
@@ -3327,7 +3412,7 @@ style={{
                 />
 
                 Có bơm Form
-                (+250.000đ)
+                (+{tinhTienBomForm(cua).toLocaleString()}đ)
 
               </label>
               )}
@@ -3756,6 +3841,10 @@ style={{
 
           Xem hóa đơn
 
+        </button>
+
+        <button type="button" onClick={luuDonCua} className="w-full p-4 rounded-2xl font-bold" style={{ backgroundColor: "#b7791f", color: "#ffffff" }}>
+          Lưu đơn vào kho nhân viên
         </button>
 
       </div>
