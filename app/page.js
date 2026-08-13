@@ -5,9 +5,8 @@ import {
   useRef,
   useEffect,
 } from "react";
-import dynamic from "next/dynamic";
 import { toPng } from "html-to-image";
-const PaintOrder = dynamic(() => import("./PaintOrder"), { ssr: false });
+import PaintOrder from "./PaintOrder";
 const formatTien = (value) => {
 
   const number =
@@ -125,7 +124,8 @@ useEffect(() => {
 }, []);
 useEffect(() => {
   try {
-    setDonDaLuu(JSON.parse(localStorage.getItem("order_archive_v1") || "[]"));
+    const savedOrders = JSON.parse(localStorage.getItem("order_archive_v1") || "[]");
+    setDonDaLuu(Array.isArray(savedOrders) ? savedOrders : []);
   } catch {
     setDonDaLuu([]);
   }
@@ -204,7 +204,7 @@ useEffect(() => {
   };
 
   const donCuaDaLuu = donDaLuu.filter((don) =>
-    don.type === "cua" && (!nhanVien || don.employee === nhanVien)
+    don?.type === "cua" && (!nhanVien || don.employee === nhanVien)
   );
 
   const luuDonCua = () => {

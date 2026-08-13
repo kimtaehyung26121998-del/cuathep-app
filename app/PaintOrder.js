@@ -1065,14 +1065,15 @@ const [customerDeposit, setCustomerDeposit] =
 
   useEffect(() => {
     try {
-      setSavedOrders(JSON.parse(localStorage.getItem("order_archive_v1") || "[]"));
+      const savedOrders = JSON.parse(localStorage.getItem("order_archive_v1") || "[]");
+      setSavedOrders(Array.isArray(savedOrders) ? savedOrders : []);
     } catch {
       setSavedOrders([]);
     }
   }, []);
 
   const paintSavedOrders = savedOrders.filter((order) =>
-    order.type === "son" && (!selectedEmployee?.name || order.employee === selectedEmployee.name)
+    order?.type === "son" && (!selectedEmployee?.name || order.employee === selectedEmployee.name)
   );
 
   const savePaintOrder = () => {
@@ -1107,7 +1108,7 @@ const [customerDeposit, setCustomerDeposit] =
     setCustomerAddress(saved.customerAddress || "");
     setDiscountPercent(saved.discountPercent || 0);
     setCustomerDeposit(saved.customerDeposit || 0);
-    setOrderItems(saved.orderItems || []);
+    setOrderItems(Array.isArray(saved.orderItems) ? saved.orderItems : []);
   };
 
   const deleteSavedPaintOrder = (id) => {
