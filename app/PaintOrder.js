@@ -2089,11 +2089,7 @@ updateItem(
             <div>
 
              <img
-  src={
-  brand === "mykolor"
-    ? window.location.origin + "/passion.png"
-    : window.location.origin + "/anphat.png"
-}
+  src={brand === "mykolor" ? "/passion.png" : "/anphat.png"}
   alt=""
   crossOrigin="anonymous"
   loading="eager"
