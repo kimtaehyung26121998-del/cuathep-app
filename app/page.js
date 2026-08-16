@@ -5,7 +5,7 @@ import {
   useRef,
   useEffect,
 } from "react";
-import { toPng } from "html-to-image";
+import html2canvas from "html2canvas";
 import PaintOrder from "./PaintOrder";
 const formatTien = (value) => {
 
@@ -613,25 +613,36 @@ const conPhaiThanhToan =
       if (document.fonts?.ready) await document.fonts.ready;
 
       const captureNode = hoaDonRef.current;
-      const captureWidth = Math.ceil(
-        Math.max(captureNode.scrollWidth, captureNode.getBoundingClientRect().width)
-      );
+      const captureWidth = Math.ceil(captureNode.getBoundingClientRect().width);
       const captureHeight = Math.ceil(captureNode.scrollHeight);
 
-      const dataUrl = await toPng(captureNode, {
-        cacheBust: true,
-        pixelRatio: Math.min(window.devicePixelRatio * 2, 3),
+      await Promise.all(
+        Array.from(captureNode.querySelectorAll("img")).map((image) => {
+          if (image.complete) {
+            return image.decode?.().catch(() => undefined);
+          }
+
+          return new Promise((resolve) => {
+            image.addEventListener("load", resolve, { once: true });
+            image.addEventListener("error", resolve, { once: true });
+          });
+        })
+      );
+
+      const canvas = await html2canvas(captureNode, {
+        allowTaint: false,
         backgroundColor: "#ffffff",
+        useCORS: true,
+        scale: Math.min(window.devicePixelRatio * 2, 3),
         width: captureWidth,
         height: captureHeight,
-        style: {
-          width: `${captureWidth}px`,
-          maxWidth: "none",
-          height: `${captureHeight}px`,
-          overflow: "visible",
-        },
-        filter: (node) => !node.classList?.contains("no-print"),
+        windowWidth: Math.max(document.documentElement.clientWidth, captureWidth),
+        windowHeight: Math.max(window.innerHeight, captureHeight),
+        scrollX: 0,
+        scrollY: 0,
+        ignoreElements: (element) => element.classList?.contains("no-print"),
       });
+      const dataUrl = canvas.toDataURL("image/png");
 
       const homNay = new Date();
       const ngay = `${homNay.getFullYear()}${String(homNay.getMonth() + 1).padStart(2, "0")}${String(homNay.getDate()).padStart(2, "0")}`;
