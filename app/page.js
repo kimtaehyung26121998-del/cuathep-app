@@ -612,10 +612,24 @@ const conPhaiThanhToan =
     try {
       if (document.fonts?.ready) await document.fonts.ready;
 
-      const dataUrl = await toPng(hoaDonRef.current, {
+      const captureNode = hoaDonRef.current;
+      const captureWidth = Math.ceil(
+        Math.max(captureNode.scrollWidth, captureNode.getBoundingClientRect().width)
+      );
+      const captureHeight = Math.ceil(captureNode.scrollHeight);
+
+      const dataUrl = await toPng(captureNode, {
         cacheBust: true,
         pixelRatio: Math.min(window.devicePixelRatio * 2, 3),
         backgroundColor: "#ffffff",
+        width: captureWidth,
+        height: captureHeight,
+        style: {
+          width: `${captureWidth}px`,
+          maxWidth: "none",
+          height: `${captureHeight}px`,
+          overflow: "visible",
+        },
         filter: (node) => !node.classList?.contains("no-print"),
       });
 
@@ -681,10 +695,183 @@ const conPhaiThanhToan =
             font-size: 34px !important;
           }
         }
+
+        .invoice-screen {
+          box-sizing: border-box;
+          width: 100% !important;
+          max-width: none !important;
+          min-height: 100vh;
+          padding: 28px 16px 48px;
+          overflow: visible !important;
+          background:
+            radial-gradient(circle at 8% 8%, rgba(125, 211, 252, 0.42), transparent 32%),
+            radial-gradient(circle at 92% 18%, rgba(196, 181, 253, 0.38), transparent 30%),
+            linear-gradient(135deg, #e8f1f8 0%, #f6f8fc 48%, #e9e7f5 100%);
+        }
+
+        .invoice-paper {
+          border: 1px solid rgba(255, 255, 255, 0.78) !important;
+          border-radius: 30px;
+          background: rgba(255, 255, 255, 0.66) !important;
+          box-shadow: 0 24px 70px rgba(57, 73, 101, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+        }
+
+        .invoice-header {
+          border-bottom-color: rgba(148, 163, 184, 0.28) !important;
+          padding-bottom: 26px !important;
+        }
+
+        .invoice-header h1 {
+          color: #172033;
+          letter-spacing: -0.025em;
+        }
+
+        .invoice-header p,
+        .invoice-customer,
+        .invoice-footer {
+          color: #536176;
+        }
+
+        .invoice-customer {
+          margin-top: 26px !important;
+          padding: 16px 18px;
+          border: 1px solid rgba(255, 255, 255, 0.78);
+          border-radius: 18px;
+          background: rgba(255, 255, 255, 0.42);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+        }
+
+        .invoice-table-wrap {
+          margin-top: 24px;
+          padding: 10px;
+          overflow: visible;
+          min-width: 0;
+          border: 1px solid rgba(255, 255, 255, 0.8);
+          border-radius: 22px;
+          background: rgba(255, 255, 255, 0.42);
+        }
+
+        .invoice-table-wrap table {
+          overflow: hidden;
+          border-radius: 14px;
+        }
+
+        .invoice-table-wrap th {
+          background: rgba(226, 232, 240, 0.72);
+          color: #25334a;
+        }
+
+        .invoice-table-wrap td,
+        .invoice-table-wrap th {
+          border-color: rgba(148, 163, 184, 0.3) !important;
+        }
+
+        .invoice-summary {
+          margin-top: 26px !important;
+        }
+
+        .invoice-total-card {
+          padding: 18px 20px !important;
+          border: 1px solid rgba(255, 255, 255, 0.82);
+          border-radius: 22px;
+          background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(226, 232, 240, 0.4));
+          box-shadow: 0 12px 28px rgba(71, 85, 105, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        }
+
+        .invoice-total-card table {
+          margin-top: 0 !important;
+          color: #46546a;
+        }
+
+        .invoice-total-card tr:last-child {
+          color: #18243a;
+          font-size: 1.08em;
+        }
+
+        .invoice-total-card tr:last-child td {
+          padding-top: 14px !important;
+          border-top: 1px solid rgba(100, 116, 139, 0.25);
+        }
+
+        .invoice-footer {
+          margin-top: 24px;
+          padding: 20px 8px 8px !important;
+          border-top: 1px solid rgba(148, 163, 184, 0.24);
+        }
+
+        .invoice-actions {
+          max-width: 210mm;
+          margin: 24px auto 0 !important;
+          padding: 14px;
+          border: 1px solid rgba(255, 255, 255, 0.78);
+          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.54);
+          box-shadow: 0 12px 30px rgba(71, 85, 105, 0.08);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+        }
+
+        .invoice-actions button {
+          border: 1px solid rgba(255, 255, 255, 0.68);
+          box-shadow: 0 5px 12px rgba(71, 85, 105, 0.1);
+          transition: transform 160ms ease, box-shadow 160ms ease;
+        }
+
+        .invoice-actions button:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 8px 16px rgba(71, 85, 105, 0.15);
+        }
+
+        .invoice-preview {
+          border-color: rgba(255, 255, 255, 0.8) !important;
+          background: rgba(255, 255, 255, 0.52) !important;
+        }
+
+        @media (max-width: 768px) {
+          .invoice-screen {
+            padding: 12px 8px 28px;
+          }
+
+          .invoice-paper {
+            border-radius: 22px;
+          }
+
+          .invoice-table-wrap {
+            margin-left: -2px;
+            margin-right: -2px;
+            padding: 6px;
+            border-radius: 16px;
+          }
+        }
+
+        @media print {
+          .invoice-screen {
+            padding: 0;
+            background: #ffffff;
+          }
+
+          .invoice-paper {
+            border: 0 !important;
+            border-radius: 0;
+            background: #ffffff !important;
+            box-shadow: none;
+            backdrop-filter: none;
+          }
+
+          .invoice-customer,
+          .invoice-table-wrap,
+          .invoice-total-card,
+          .invoice-footer {
+            background: #ffffff !important;
+            box-shadow: none;
+          }
+        }
       `}</style>
 
       <div
-        ref={hoaDonRef}
+        className="invoice-screen"
         style={{
           fontFamily:
             '"Be Vietnam Pro", Arial, sans-serif',
@@ -693,12 +880,14 @@ const conPhaiThanhToan =
           width: "100%",
           maxWidth: "210mm",
           margin: "0 auto",
-          overflowX: "auto",
+          overflowX: "visible",
+          boxSizing: "border-box",
         }}
       >
 
         <div
-  className="border"
+  className="border invoice-paper"
+  ref={hoaDonRef}
   style={{
     width: "100%",
     maxWidth: "210mm",
@@ -712,7 +901,7 @@ const conPhaiThanhToan =
   }}
 >
 
-        <div  className="border-b"
+        <div  className="border-b invoice-header"
 style={{
   paddingBottom: "10mm"
 }} >
@@ -774,7 +963,7 @@ style={{
 
             </h1>
 
-            <div className="grid grid-cols-2 mt-10 gap-4">
+            <div className="grid grid-cols-2 mt-10 gap-4 invoice-customer">
 
               <p>
                 <strong>
@@ -805,6 +994,7 @@ style={{
           </div>
 
         <div
+  className="invoice-table-wrap"
   style={{
     overflowX: "auto",
   }}
@@ -2086,6 +2276,7 @@ Number(cua.caoVom || 0)
           
 
           <div
+  className="invoice-summary"
   style={{
     marginTop: "20px",
   }}
@@ -2093,8 +2284,8 @@ Number(cua.caoVom || 0)
 
   {/* Tổng cộng */}
 
- <div
-  className="p-3 md:p-4"
+  <div
+   className="p-3 md:p-4 invoice-total-card"
   style={{
     textAlign: "right",
   }}
@@ -2303,7 +2494,7 @@ Number(cua.caoVom || 0)
 
   {/* Ngày tháng */}
 
-  <div className="p-6">
+  <div className="p-6 invoice-footer">
 
     <div className="text-right italic">
 
@@ -2396,7 +2587,7 @@ Number(cua.caoVom || 0)
 </div>
 
           <div
-  className="no-print"
+  className="no-print invoice-actions"
   style={{
     display: "flex",
     gap: "12px",
@@ -2487,7 +2678,7 @@ setLoaiDon("");
 
               {anhHoaDon && (
                 <div
-                  className="no-print"
+                   className="no-print invoice-preview"
                   style={{
                     flexBasis: "100%",
                     marginTop: "8px",
@@ -2958,6 +3149,44 @@ style={{
   }
   className="border p-3 rounded-2xl"
 />
+
+              </div>
+
+              <div>
+
+                <label className="flex items-center gap-2">
+
+                  <input
+                    type="checkbox"
+                    checked={cua.showNote}
+                    onChange={(e) =>
+                      capNhatCua(
+                        cua.id,
+                        "showNote",
+                        e.target.checked
+                      )
+                    }
+                  />
+
+                  Ghi chú
+
+                </label>
+
+                {cua.showNote && (
+                  <textarea
+                    value={cua.note || ""}
+                    onChange={(e) =>
+                      capNhatCua(
+                        cua.id,
+                        "note",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Nhập ghi chú..."
+                    className="w-full border p-3 rounded-2xl mt-2"
+                    rows={3}
+                  />
+                )}
 
               </div>
 
@@ -3764,54 +3993,6 @@ style={{
   </div>
 
 )}
-<div>
-
-  <label className="flex items-center gap-2">
-
-    <input
-      type="checkbox"
-      checked={cua.showNote}
-      onChange={(e) =>
-        capNhatCua(
-          cua.id,
-          "showNote",
-          e.target.checked
-        )
-      }
-    />
-
-    Ghi chú
-
-  </label>
-
-{cua.showNote && (
-
-    <textarea
-      value={cua.note || ""}
-      onChange={(e) =>
-        capNhatCua(
-          cua.id,
-          "note",
-          e.target.value
-        )
-      }
-
-      placeholder="Nhập ghi chú..."
-
-      className="
-        w-full
-        border
-        p-3
-        rounded-2xl
-        mt-2
-      "
-
-      rows={3}
-    />
-
-  )}
-
-</div>
                 </>
               )}
 
