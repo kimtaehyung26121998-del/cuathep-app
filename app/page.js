@@ -667,7 +667,7 @@ const conPhaiThanhToan =
       const file = new File([blob], tenFileAnh || "hoa-don.png", { type: "image/png" });
 
       if (!navigator.share || (navigator.canShare && !navigator.canShare({ files: [file] }))) {
-        alert("Thiết bị không hỗ trợ chia sẻ trực tiếp. Hãy nhấn Tải ảnh xuống.");
+        taiAnhHoaDon();
         return;
       }
 
@@ -2705,7 +2705,7 @@ setLoaiDon("");
                   />
                   <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "12px" }}>
                     <button type="button" onClick={chiaSeAnhHoaDon} className="px-4 py-2 rounded-xl text-white" style={{ backgroundColor: "#2563eb" }}>
-                      Chia sẻ / Lưu ảnh
+                      Chia sẻ / Tải ảnh
                     </button>
                     <button type="button" onClick={() => setAnhHoaDon("")} className="px-4 py-2 rounded-xl" style={{ backgroundColor: "#e5e7eb" }}>
                       Đóng xem trước
