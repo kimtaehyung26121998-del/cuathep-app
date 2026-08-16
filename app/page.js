@@ -2891,13 +2891,13 @@ setLoaiDon("");
       >
         Lên đơn đại lý
       </button>
-      <button type="button" onClick={() => setLoaiDon("son-mykolor")} className="choice-button choice-button--paint w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f8fafc", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
+      <button type="button" onClick={() => setLoaiDon("son-mykolor")} className="choice-button choice-button--paint choice-button--mykolor w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f8fafc", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
         L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Mykolor
       </button>
-      <button type="button" onClick={() => setLoaiDon("son-forich")} className="choice-button choice-button--paint w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f97316", color: "#ffffff", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
+      <button type="button" onClick={() => setLoaiDon("son-forich")} className="choice-button choice-button--paint choice-button--forich w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f97316", color: "#ffffff", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
         L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Forich
       </button>
-      <button type="button" onClick={() => setLoaiDon("son-sunpro")} className="choice-button choice-button--paint w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#facc15", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
+      <button type="button" onClick={() => setLoaiDon("son-sunpro")} className="choice-button choice-button--paint choice-button--sunpro w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#facc15", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
         L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Sunpro
       </button>
 

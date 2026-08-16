@@ -98,8 +98,11 @@ textarea {
 .eyebrow { margin: 0; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .22em; }
 .landing-title { color: #fff; letter-spacing: -.04em; text-align: center; }
 .choice-button { border: 1px solid rgba(255,255,255,.16); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-.choice-button--retail { background: linear-gradient(135deg, #d5aa5d, #a87528) !important; color: #17202b !important; box-shadow: 0 16px 30px rgba(201,154,74,.24); }
-.choice-button--dealer { background: rgba(255,255,255,.08) !important; color: #fff !important; box-shadow: 0 16px 30px rgba(0,0,0,.18); }
+.choice-button--retail { background: linear-gradient(135deg, #2563eb, #1d4ed8) !important; color: #fff !important; box-shadow: 0 16px 30px rgba(37,99,235,.28); }
+.choice-button--dealer { background: linear-gradient(135deg, #16a34a, #15803d) !important; color: #fff !important; box-shadow: 0 16px 30px rgba(22,163,74,.25); }
+.choice-button--mykolor { background: #f8fafc !important; color: #17202b !important; }
+.choice-button--forich { background: #f97316 !important; color: #fff !important; }
+.choice-button--sunpro { background: #facc15 !important; color: #17202b !important; }
 .choice-button:hover { transform: translateY(-3px); border-color: var(--gold); }
 
 .app-shell { background: radial-gradient(circle at 10% 0%, #fffdf7 0, transparent 35%), #f4f2ed !important; }
