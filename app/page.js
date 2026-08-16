@@ -89,6 +89,8 @@ export default function Home() {
     useState("");
   const [donDaLuu, setDonDaLuu] = useState([]);
   const [hienDonDaLuu, setHienDonDaLuu] = useState(false);
+  const [removingDoorId, setRemovingDoorId] = useState("");
+  const [animatedTongCong, setAnimatedTongCong] = useState(0);
     const [tienCoc, setTienCoc] =
   useState("");
   const [
@@ -121,6 +123,36 @@ useEffect(() => {
       checkMobile
     );
 
+}, []);
+useEffect(() => {
+  let pressedButton = null;
+
+  const handlePointerDown = (event) => {
+    pressedButton = event.target.closest?.("button");
+    pressedButton?.classList.add("is-pressing");
+  };
+
+  const handlePointerUp = () => {
+    if (!pressedButton) return;
+
+    const button = pressedButton;
+    button.classList.remove("is-pressing");
+    button.classList.remove("is-releasing");
+    void button.offsetWidth;
+    button.classList.add("is-releasing");
+    window.setTimeout(() => button.classList.remove("is-releasing"), 360);
+    pressedButton = null;
+  };
+
+  document.addEventListener("pointerdown", handlePointerDown, { passive: true });
+  document.addEventListener("pointerup", handlePointerUp, { passive: true });
+  document.addEventListener("pointercancel", handlePointerUp, { passive: true });
+
+  return () => {
+    document.removeEventListener("pointerdown", handlePointerDown);
+    document.removeEventListener("pointerup", handlePointerUp);
+    document.removeEventListener("pointercancel", handlePointerUp);
+  };
 }, []);
 useEffect(() => {
   try {
@@ -267,15 +299,14 @@ useEffect(() => {
 
   const xoaCua = (id) => {
 
-    if (danhSachCua.length === 1)
+    if (danhSachCua.length === 1 || removingDoorId === id)
       return;
 
-    setDanhSachCua(
-      danhSachCua.filter(
-        (item) =>
-          item.id !== id
-      )
-    );
+    setRemovingDoorId(id);
+    window.setTimeout(() => {
+      setDanhSachCua((prev) => prev.filter((item) => item.id !== id));
+      setRemovingDoorId((current) => (current === id ? "" : current));
+    }, 230);
 
   };
 
@@ -603,6 +634,31 @@ const tongSauVanChuyen =
 const conPhaiThanhToan =
   tongSauVanChuyen -
   soTienDaCoc;
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const from = animatedTongCong;
+    const to = tongCong;
+
+    if (reducedMotion || from === to) {
+      setAnimatedTongCong(to);
+      return undefined;
+    }
+
+    let frameId;
+    const startedAt = performance.now();
+    const duration = Math.min(760, Math.max(280, 280 + Math.abs(to - from) / 14000));
+
+    const tick = (now) => {
+      const progress = Math.min(1, (now - startedAt) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setAnimatedTongCong(Math.round(from + (to - from) * eased));
+      if (progress < 1) frameId = requestAnimationFrame(tick);
+    };
+
+    frameId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frameId);
+  }, [tongCong]);
 
   const taiPDF = async () => {
     if (!hoaDonRef.current || dangLuuAnh) return;
@@ -2760,6 +2816,15 @@ setLoaiDon("");
       }}
     >
 
+      <div className="liquid-decoration" aria-hidden="true">
+        <span className="ambient-glow ambient-glow--one" />
+        <span className="ambient-glow ambient-glow--two" />
+        <span className="ambient-glow ambient-glow--three" />
+        <span className="orbit-ring orbit-ring--one" />
+        <span className="orbit-ring orbit-ring--two" />
+        <span className="orbit-ring orbit-ring--three" />
+      </div>
+
       <div className="landing-mark" aria-hidden="true"><img src="/logo-transparent.png?v=1" alt="An Phát" /></div>
 
       <p className="eyebrow">AN PHÁT BẮC NINH · QUOTATION STUDIO</p>
@@ -2826,13 +2891,13 @@ setLoaiDon("");
       >
         Lên đơn đại lý
       </button>
-      <button type="button" onClick={() => setLoaiDon("son-mykolor")} className="choice-button w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f8fafc", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
+      <button type="button" onClick={() => setLoaiDon("son-mykolor")} className="choice-button choice-button--paint w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f8fafc", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
         L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Mykolor
       </button>
-      <button type="button" onClick={() => setLoaiDon("son-forich")} className="choice-button w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f97316", color: "#ffffff", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
+      <button type="button" onClick={() => setLoaiDon("son-forich")} className="choice-button choice-button--paint w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f97316", color: "#ffffff", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
         L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Forich
       </button>
-      <button type="button" onClick={() => setLoaiDon("son-sunpro")} className="choice-button w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#facc15", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
+      <button type="button" onClick={() => setLoaiDon("son-sunpro")} className="choice-button choice-button--paint w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#facc15", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
         L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Sunpro
       </button>
 
@@ -2985,7 +3050,8 @@ style={{
 
             <div
               key={cua.id}
-              className="border rounded-3xl p-4 space-y-4 door-card"
+              className={`border rounded-3xl p-4 space-y-4 door-card ${removingDoorId === cua.id ? "door-card--removing" : ""}`}
+              style={{ "--door-index": index }}
             >
 
               <div className="flex justify-between items-center gap-3">
@@ -4016,7 +4082,7 @@ style={{
 
         <button
           onClick={themCua}
-          className="w-full p-4 rounded-2xl font-bold"
+          className="w-full p-4 rounded-2xl font-bold form-action form-action--secondary"
           style={{
   backgroundColor: "#2563eb",
   color: "#ffffff",
@@ -4033,7 +4099,7 @@ style={{
           onClick={() =>
             setXemHoaDon(true)
           }
-          className="w-full p-4 rounded-2xl font-bold"
+          className="w-full p-4 rounded-2xl font-bold form-action form-action--primary"
 style={{
   backgroundColor: "#2563eb",
   color: "#ffffff"
@@ -4043,6 +4109,14 @@ style={{
           Xem hóa đơn
 
         </button>
+
+        <div className="mobile-total-bar" aria-live="polite">
+          <div>
+            <span className="mobile-total-label">Tổng tạm tính</span>
+            <span className="mobile-total-caption">Chưa gồm cước vận chuyển &amp; VAT</span>
+          </div>
+          <strong className="mobile-total-value">{animatedTongCong.toLocaleString("vi-VN")} đ</strong>
+        </div>
 
       </div>
 

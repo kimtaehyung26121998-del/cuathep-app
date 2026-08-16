@@ -1607,7 +1607,7 @@ if (brand === "select") {
 
   return (
 
-    <main className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+    <main className="min-h-screen paint-order-screen paint-order-select flex items-center justify-center p-6">
 
       <div className="w-full max-w-md space-y-4">
 
@@ -1644,13 +1644,13 @@ if (brand === "select") {
   );
 }
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-3">
+    <main className="min-h-screen paint-order-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-3">
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-2 gap-4">
 
         {/* FORM */}
 
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-[30px] shadow-2xl p-4 text-white">
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-[30px] shadow-2xl p-4 text-white paint-panel">
         <button
   onClick={() => onBack ? onBack() : setBrand("select")}
   className="mb-3 bg-white/10 px-4 py-2 rounded-2xl text-sm"
@@ -2034,6 +2034,14 @@ updateItem(
 
             ))}
 
+          </div>
+
+          <div className="mobile-total-bar paint-mobile-total" aria-live="polite">
+            <div>
+              <span className="mobile-total-label">Tổng đơn sơn</span>
+              <span className="mobile-total-caption">Sau chiết khấu</span>
+            </div>
+            <strong className="mobile-total-value">{finalAfterDiscount.toLocaleString("vi-VN")} đ</strong>
           </div>
 
         </div>
