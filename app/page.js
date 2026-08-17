@@ -3970,7 +3970,7 @@ style={{
                       checked={cua.coKhoaNgoai}
                       onChange={(e) => capNhatCua(cua.id, "coKhoaNgoai", e.target.checked)}
                     />
-                    Khóa ngoài
+                    Phí đục lỗ khóa ngoài
                   </label>
                   {cua.coKhoaNgoai && (
                     <input
