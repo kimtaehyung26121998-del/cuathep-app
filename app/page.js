@@ -34,6 +34,17 @@ const kichThuocMet = (value) => Number(value || 0) / 1000;
 const tinhTienBomForm = (cua) =>
   Number(cua.khuon || 0) < 200 ? 150000 : 250000;
 
+const DANH_SACH_KHOA = [
+  { ma: "KDCC", ten: "Hệ thống khóa đồng cao cấp", giaLe: 2500000, giaDaiLy: 2100000 },
+  { ma: "KDMV", ten: "Hệ thống khóa đồng mạ vang cao cấp", giaLe: 2800000, giaDaiLy: 2240000 },
+  { ma: "VT4941", ten: "Khóa cửa chính 4941 cao cấp", giaLe: 1500000, giaDaiLy: 1200000 },
+  { ma: "VT82", ten: "Khóa inox chuyên cửa thông phòng", giaLe: 800000, giaDaiLy: 640000 },
+  { ma: "VT333", ten: "Khóa inox đa điểm VT333", giaLe: 1500000, giaDaiLy: 1040000 },
+  { ma: "VT666", ten: "Hệ thống khóa chữ H Luxury mạ đồng cao cấp", giaLe: 3300000, giaDaiLy: 2040000 },
+  { ma: "KB", ten: "Hệ thống khóa bi và tay năm rồng vàng", giaLe: 3300000, giaDaiLy: 2500000 },
+  { ma: "AP10", ten: "Khóa inox mạ đồng cao cấp", giaLe: 1800000, giaDaiLy: 1300000 },
+];
+
 const taoBoCuaMoi = (id = null) => ({
   id: id ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
 
@@ -48,9 +59,12 @@ const taoBoCuaMoi = (id = null) => ({
   donGia: "",
 
   coKhoa: false,
+  maKhoa: "",
   tenKhoa: "",
   soLuongKhoa: 1,
   donGiaKhoa: "",
+  coKhoaNgoai: false,
+  donGiaKhoaNgoai: "300000",
 
   loaiPhao: "",
 
@@ -420,6 +434,10 @@ useEffect(() => {
               )
             : 0;
 
+        const tienKhoaNgoai = cua.coKhoaNgoai
+          ? Number(cua.donGiaKhoaNgoai ?? 300000)
+          : 0;
+
         const tienPhao =
 
   cua.loaiPhao ===
@@ -646,6 +664,7 @@ const tienKinhCanh =
         return (
   tienCua +
   tienKhoa +
+  tienKhoaNgoai +
   tienPhao +
   tienBom +
   tienOThoang +
@@ -1895,7 +1914,7 @@ const tienPhaoDinh =
               <div className="invoice-detail-item invoice-detail-money"><strong>Tiền cửa</strong><span>{Math.round(tinhTienCua(cua)).toLocaleString()} đ</span></div>
             </div>
 
-            {(cua.coKhoa || cua.loaiPhao === "Phào phụ" || cua.loaiPhao === "Phào đỉnh" || cua.coBomForm ||
+            {(cua.coKhoa || cua.coKhoaNgoai || cua.loaiPhao === "Phào phụ" || cua.loaiPhao === "Phào đỉnh" || cua.coBomForm ||
               (cua.loaiOThoang === "kinh" && Number(cua.kinhOThoang) > 0) ||
               (cua.loaiOThoang === "dac" && Number(cua.oThoangDac) > 0) ||
               (cua.loaiOThoang === "nanchop" && Number(cua.oThoangNanChop) > 0) ||
@@ -1906,6 +1925,9 @@ const tienPhaoDinh =
                 <ul>
                   {cua.coKhoa && (
                     <li>{cua.tenKhoa || "Khóa"}: {(Number(cua.soLuongKhoa || 0) * Number(cua.donGiaKhoa || 0)).toLocaleString()} đ</li>
+                  )}
+                  {cua.coKhoaNgoai && (
+                    <li>Phí gia công ổ khóa: {Number(cua.donGiaKhoaNgoai ?? 300000).toLocaleString()} đ</li>
                   )}
                   {cua.loaiPhao === "Phào phụ" && (
                     <li>Phào phụ: {Math.round(slPhaoPhu * Number(cua.donGiaPhao || 0)).toLocaleString()} đ</li>
@@ -2143,9 +2165,7 @@ const tienPhaoDinh =
   }}
 >
 
-            Khóa:
-            {" "}
-            {cua.tenKhoa}
+            {cua.tenKhoa || "Khóa"}
 
           </td>
 
@@ -2210,6 +2230,23 @@ const tienPhaoDinh =
 
         </tr>
 
+      )}
+      {cua.coKhoaNgoai && (
+        <tr>
+          <td
+            className="border"
+            colSpan={8}
+            style={{ padding: "6px", textAlign: "right", fontSize: isMobile ? "5px" : "7px" }}
+          >
+            Phí gia công ổ khóa
+          </td>
+          <td
+            className="border"
+            style={{ padding: "6px", textAlign: "right", fontSize: isMobile ? "5px" : "7px", fontWeight: "700", whiteSpace: "nowrap" }}
+          >
+            {Number(cua.donGiaKhoaNgoai ?? 300000).toLocaleString()}
+          </td>
+        </tr>
       )}
 
       {cua.loaiPhao ===
@@ -3864,20 +3901,23 @@ style={{
 
                 <>
 
-                  <input
-                    placeholder="Tên khóa"
-                    autoCapitalize="words"
-                    autoComplete="off"
-                    value={cua.tenKhoa}
-                    onChange={(e) =>
-                      capNhatCua(
-                        cua.id,
-                        "tenKhoa",
-                        e.target.value
-                      )
-                    }
+                  <select
+                    value={cua.maKhoa || ""}
+                    onChange={(e) => {
+                      const khoa = DANH_SACH_KHOA.find((item) => item.ma === e.target.value);
+                      capNhatCua(cua.id, "maKhoa", khoa?.ma || "");
+                      capNhatCua(cua.id, "tenKhoa", khoa?.ten || "");
+                      capNhatCua(cua.id, "donGiaKhoa", khoa ? (loaiDon === "daily" ? khoa.giaDaiLy : khoa.giaLe) : "");
+                    }}
                     className="w-full border p-3 rounded-2xl"
-                  />
+                  >
+                    <option value="">Chọn loại khóa</option>
+                    {DANH_SACH_KHOA.map((khoa) => (
+                      <option key={khoa.ma} value={khoa.ma}>
+                        {khoa.ma} · {khoa.ten} · {formatTien(String(loaiDon === "daily" ? khoa.giaDaiLy : khoa.giaLe))} đ
+                      </option>
+                    ))}
+                  </select>
 
                   <div className="grid grid-cols-2 gap-4">
 
@@ -3920,6 +3960,29 @@ style={{
 
                 </>
 
+              )}
+
+              {!laCuaSo && (
+                <>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={cua.coKhoaNgoai}
+                      onChange={(e) => capNhatCua(cua.id, "coKhoaNgoai", e.target.checked)}
+                    />
+                    Khóa ngoài
+                  </label>
+                  {cua.coKhoaNgoai && (
+                    <input
+                      placeholder="Phí gia công ổ khóa"
+                      inputMode="numeric"
+                      autoComplete="off"
+                      value={cua.donGiaKhoaNgoai ? formatTien(String(cua.donGiaKhoaNgoai)) : ""}
+                      onChange={(e) => capNhatCua(cua.id, "donGiaKhoaNgoai", e.target.value.replace(/\D/g, ""))}
+                      className="w-full border p-3 rounded-2xl"
+                    />
+                  )}
+                </>
               )}
 
               <div>
