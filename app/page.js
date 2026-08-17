@@ -921,6 +921,23 @@ const conPhaiThanhToan =
         .invoice-door-table td { font-variant-numeric: tabular-nums; }
         .invoice-door-meta { display: none; }
         .invoice-mobile-card-row { display: none; }
+        .invoice-mobile-door-card {
+          font-weight: 400 !important;
+        }
+        .invoice-mobile-door-card .invoice-mobile-door-title {
+          font-weight: 700 !important;
+        }
+        .invoice-mobile-door-card .invoice-detail-item strong,
+        .invoice-mobile-door-card .invoice-mobile-accessories > strong {
+          font-weight: 700 !important;
+        }
+        .invoice-mobile-door-card .invoice-detail-item span,
+        .invoice-mobile-door-card .invoice-mobile-accessories li {
+          font-weight: 400 !important;
+        }
+        .invoice-mobile-door-card .invoice-mobile-door-total strong {
+          font-weight: 800 !important;
+        }
         .invoice-door-table th:nth-child(n+2) {
           white-space: nowrap;
           word-break: normal;
