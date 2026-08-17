@@ -2087,14 +2087,14 @@ updateItem(
 
  <div
   ref={invoiceRef}
-  className="bg-white rounded-[30px] p-4"
+  className="bg-white rounded-[30px] p-4 paint-invoice"
 >
 
           
 
-          <div className="flex items-start justify-between border-b pb-3 gap-3">
+          <div className="flex items-start justify-between border-b pb-3 gap-3 paint-invoice-header">
 
-            <div>
+            <div className="paint-invoice-company">
 
              <img
   src={brand === "mykolor" ? "/passion.png" : "/anphat.png"}
@@ -2105,7 +2105,7 @@ updateItem(
   className="w-[90px] object-contain"
 />
 
-              <h2 className="font-bold text-xs mt-2">
+              <h2 className="font-bold text-xs mt-2 paint-invoice-company-name">
                 {
   brand !== "mykolor"
     ? "CÔNG TY TNHH CÔNG NGHỆ AN PHÁT BẮC NINH"
@@ -2113,7 +2113,7 @@ updateItem(
 }
               </h2>
 
-              <p className="text-[10px] mt-1">
+              <p className="text-[10px] mt-1 paint-invoice-company-detail">
                 {
   brand !== "mykolor"
     ? "Khu phố Lựa, Phường Quế Võ, Tỉnh Bắc Ninh"
@@ -2121,13 +2121,13 @@ updateItem(
 }
               </p>
 
-              <p className="text-[10px] mt-1">
+              <p className="text-[10px] mt-1 paint-invoice-company-detail">
                 SĐT: {selectedEmployee?.phone || ""}
               </p>
 
             </div>
 
-            <h1 className="text-lg font-bold">
+            <h1 className="text-lg font-bold paint-invoice-title">
               HÓA ĐƠN BÁN HÀNG
             </h1>
 
@@ -2135,16 +2135,16 @@ updateItem(
 
           {/* khách */}
 
-          <div className="mt-3 text-xs space-y-1">
+          <div className="mt-3 text-xs space-y-1 paint-invoice-customer">
 
-            <p>
+            <p className="paint-customer-row">
               <span className="font-bold">
                 Khách:
               </span>{" "}
               {customerName}
             </p>
 
-            <p>
+            <p className="paint-customer-row">
               <span className="font-bold">
                 Địa chỉ:
               </span>{" "}
@@ -2155,9 +2155,9 @@ updateItem(
 
           {/* table */}
 
-          <div className="mt-4">
+          <div className="mt-4 paint-invoice-table-wrap">
 
-            <table className="w-full border text-[5px] md:text-[8px] leading-tight table-auto">
+            <table className="w-full border text-[5px] md:text-[8px] leading-tight table-auto paint-invoice-table">
 
               <thead className="bg-gray-100">
 
@@ -2224,19 +2224,19 @@ updateItem(
 
     return (
 
-      <tr key={index}>
+      <tr key={index} className="paint-invoice-product-row">
 
         <td className="border px-[2px] py-1 text-center align-top">
           {index + 1}
         </td>
 
-        <td className="border px-[1px] py-[1px] align-top break-words w-[160px] leading-tight">
+        <td className="border px-[1px] py-[1px] align-top break-words w-[160px] leading-tight paint-invoice-product-name">
 
           <p className="leading-tight">
             {item.vn} - {item.size}
           </p>
 
-          <p className="text-[7px] text-gray-500 leading-tight mt-1">
+          <p className="text-[7px] text-gray-500 leading-tight mt-1 paint-invoice-product-en">
             {item.en}
           </p>
 
@@ -2283,13 +2283,13 @@ updateItem(
 
           {/* tổng */}
 
-<div className="mt-4 text-right space-y-1">
+<div className="mt-4 text-right space-y-1 paint-invoice-summary">
 
-  <p className="text-lg font-bold">
+  <p className="text-lg font-bold paint-summary-row paint-summary-total">
     Tổng: {total.toLocaleString("vi-VN")}đ
   </p>
 
-  <p className="text-sm">
+  <p className="text-sm paint-summary-row paint-summary-after-discount">
 
     Tổng sau chiết khấu
     {" "}
@@ -2300,7 +2300,7 @@ updateItem(
 
   </p>
 
-  <p className="text-sm">
+  <p className="text-sm paint-summary-row paint-summary-deposit">
 
     Khách đã cọc:
     {" "}
@@ -2309,7 +2309,7 @@ updateItem(
 
   </p>
 
-  <p className="text-base font-bold text-red-600">
+  <p className="text-base font-bold text-red-600 paint-summary-row paint-summary-remaining">
 
     Còn phải thanh toán:
     {" "}
@@ -2319,15 +2319,39 @@ updateItem(
   </p>
 
 </div>
+<div className="paint-invoice-summary-new" aria-label="Tóm tắt thanh toán">
+  <div className="paint-summary-row">
+    <span>Tổng tiền hàng</span>
+    <strong>{total.toLocaleString("vi-VN")} đ</strong>
+  </div>
+  {discountPercent > 0 && (
+    <div className="paint-summary-row">
+      <span>Chiết khấu</span>
+      <strong>{discountPercent}%</strong>
+    </div>
+  )}
+  <div className="paint-summary-row">
+    <span>Sau chiết khấu</span>
+    <strong>{finalAfterDiscount.toLocaleString("vi-VN")} đ</strong>
+  </div>
+  <div className="paint-summary-row">
+    <span>Đã cọc</span>
+    <strong>{customerDeposit.toLocaleString("vi-VN")} đ</strong>
+  </div>
+  <div className="paint-summary-row paint-summary-remaining">
+    <span>CÒN PHẢI THANH TOÁN</span>
+    <strong>{remainingPayment.toLocaleString("vi-VN")} đ</strong>
+  </div>
+</div>
          <div
-  className="mt-10"
+  className="mt-10 paint-invoice-signature"
   style={{
     breakInside: "avoid",
     pageBreakInside: "avoid",
   }}
 >
 
-  <div className="text-right text-xs">
+  <div className="text-right text-xs paint-invoice-date">
 
     Bắc Ninh, ngày {new Date().getDate()}
     {" "}tháng {new Date().getMonth() + 1}
@@ -2335,7 +2359,7 @@ updateItem(
 
   </div>
 
-  <div className="grid grid-cols-2 mt-6 text-xs">
+  <div className="grid grid-cols-2 mt-6 text-xs paint-invoice-signature-grid">
 
     <div className="text-center">
 
@@ -2343,7 +2367,7 @@ updateItem(
         Người lên đơn
       </p>
 
-      <p className="mt-10">
+      <p className="mt-10 paint-invoice-signer-name">
         {selectedEmployee?.name || ""}
       </p>
 

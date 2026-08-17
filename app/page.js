@@ -753,6 +753,7 @@ const conPhaiThanhToan =
 
       <style jsx global>{`
         @media print {
+          .no-export,
           .no-print {
             display: none !important;
           }
@@ -862,6 +863,15 @@ const conPhaiThanhToan =
         }
 
         .invoice-table-wrap table { width: 100%; table-layout: fixed; }
+        .invoice-door-table { font-variant-numeric: tabular-nums; }
+        .invoice-door-table th,
+        .invoice-door-table td { font-variant-numeric: tabular-nums; }
+        .invoice-door-meta { display: none; }
+        .invoice-door-table th:nth-child(n+2) {
+          white-space: nowrap;
+          word-break: normal;
+          overflow-wrap: normal;
+        }
         .invoice-table-wrap th,
         .invoice-table-wrap td {
           font-size: 11px !important;
@@ -919,7 +929,7 @@ const conPhaiThanhToan =
         }
 
         .invoice-total-card {
-          padding: 12px 16px !important;
+          padding: 10px 14px !important;
           border: 1px solid #dbe2ea;
           border-radius: 10px;
           background: #f8fafc;
@@ -948,8 +958,8 @@ const conPhaiThanhToan =
         }
 
         .invoice-total-card tr:last-child td {
-          padding-top: 12px !important;
-          padding-bottom: 12px !important;
+          padding-top: 10px !important;
+          padding-bottom: 10px !important;
           border-top: 1px solid #e6a7a0;
           background: #fff5f3;
           color: #b42318;
@@ -963,10 +973,10 @@ const conPhaiThanhToan =
           border-top: 1px solid rgba(148, 163, 184, 0.24);
         }
         .invoice-footer .grid {
-          margin-top: 28px !important;
+          margin-top: 20px !important;
         }
         .invoice-footer .grid > div > div {
-          height: 52px !important;
+          height: 54px !important;
         }
         .invoice-footer .grid p {
           margin: 3px 0 !important;
@@ -986,6 +996,8 @@ const conPhaiThanhToan =
         }
 
         .invoice-actions button {
+          color: #ffffff !important;
+          background: #2563eb !important;
           border: 1px solid rgba(255, 255, 255, 0.68);
           box-shadow: 0 5px 12px rgba(71, 85, 105, 0.1);
           transition: transform 160ms ease, box-shadow 160ms ease;
@@ -995,6 +1007,10 @@ const conPhaiThanhToan =
           transform: translateY(-1px);
           box-shadow: 0 8px 16px rgba(71, 85, 105, 0.15);
         }
+        .invoice-actions button:first-child { background: #64748b !important; }
+        .invoice-actions button:nth-child(2),
+        .invoice-actions button:nth-child(3),
+        .invoice-actions button:nth-child(4) { background: #2563eb !important; }
 
         .invoice-preview {
           border-color: rgba(255, 255, 255, 0.8) !important;
@@ -1026,10 +1042,59 @@ const conPhaiThanhToan =
           .invoice-customer p { font-size: 11px; }
           .invoice-table-wrap th,
           .invoice-table-wrap td { font-size: 9px !important; padding: 7px 3px !important; }
+          .invoice-door-table col:nth-child(1) { width: 34% !important; }
+          .invoice-door-table col:nth-child(2) { width: 8% !important; }
+          .invoice-door-table col:nth-child(3) { width: 9% !important; }
+          .invoice-door-table col:nth-child(4) { width: 9% !important; }
+          .invoice-door-table col:nth-child(5),
+          .invoice-door-table col:nth-child(6) { display: none; }
+          .invoice-door-table col:nth-child(7) { width: 13% !important; }
+          .invoice-door-table col:nth-child(8) { width: 13% !important; }
+          .invoice-door-table col:nth-child(9) { width: 14% !important; }
+          .invoice-door-table th:nth-child(5),
+          .invoice-door-table td:nth-child(5),
+          .invoice-door-table th:nth-child(6),
+          .invoice-door-table td:nth-child(6) { display: none; }
+          .invoice-door-table th:nth-child(n+2) {
+            white-space: nowrap !important;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+          }
+          .invoice-door-table th:first-child { white-space: normal !important; }
+          .invoice-door-table td:nth-child(2),
+          .invoice-door-table td:nth-child(3),
+          .invoice-door-table td:nth-child(4) {
+            white-space: nowrap !important;
+            overflow-wrap: normal !important;
+            word-break: normal !important;
+          }
+          .invoice-door-table td:nth-child(7),
+          .invoice-door-table td:nth-child(8),
+          .invoice-door-table td:nth-child(9) {
+            white-space: nowrap !important;
+            overflow-wrap: normal !important;
+            word-break: normal !important;
+            font-size: 8px !important;
+            font-variant-numeric: tabular-nums;
+          }
+          .invoice-door-meta {
+            display: block;
+            margin-top: 3px;
+            color: #536176;
+            font-size: 9px;
+            font-weight: 500;
+            line-height: 1.3;
+            white-space: normal;
+            overflow-wrap: anywhere;
+          }
           .invoice-table-wrap tbody tr:has(> td[colspan="9"]) > td { font-size: 10px !important; }
-          .invoice-total-card { padding: 9px 10px !important; }
+          .invoice-total-card { padding: 8px 9px !important; }
           .invoice-total-card td { font-size: 11px; }
           .invoice-total-card tr:last-child td { font-size: 12px !important; }
+          .invoice-total-card tr:last-child td { padding-top: 8px !important; padding-bottom: 8px !important; }
+          .invoice-footer { padding-top: 10px !important; }
+          .invoice-footer .grid { margin-top: 16px !important; }
+          .invoice-footer .grid > div > div { height: 34px !important; }
         }
 
         @media print {
@@ -1053,6 +1118,14 @@ const conPhaiThanhToan =
             background: #ffffff !important;
             box-shadow: none;
           }
+
+          .invoice-door-meta { display: none !important; }
+          .invoice-door-table col:nth-child(5),
+          .invoice-door-table col:nth-child(6) { display: table-column !important; }
+          .invoice-door-table th:nth-child(5),
+          .invoice-door-table td:nth-child(5),
+          .invoice-door-table th:nth-child(6),
+          .invoice-door-table td:nth-child(6) { display: table-cell !important; }
         }
       `}</style>
 
@@ -1186,7 +1259,7 @@ style={{
   }}
 >
 
-<table className="w-full border-collapse table-fixed">
+<table className="w-full border-collapse table-fixed invoice-door-table">
         <colgroup>
   <col style={{ width: "31%" }} />
   <col style={{ width: "5%" }} />
@@ -1598,6 +1671,10 @@ const tienPhaoDinh =
           :
           {" "}
           {cua.loaiCua}
+
+          <span className="invoice-door-meta">
+            Màu: {cua.maMau || "-"} · Hướng mở: {cua.huongMo || "-"}
+          </span>
 
         </td>
 
@@ -2772,7 +2849,7 @@ Number(cua.caoVom || 0)
 </div>
 
           <div
-  className="no-print invoice-actions"
+  className="no-print no-export invoice-actions"
   style={{
     display: "flex",
     gap: "12px",
