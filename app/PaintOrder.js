@@ -2330,13 +2330,15 @@ updateItem(
 
                     <dl className="paint-mobile-card-details">
                       <div>
-                        <dt>Màu</dt>
-                        <dd>{item.colorCode?.slice(0, 6) || "-"}</dd>
-                      </div>
-                      <div>
                         <dt>Số lượng</dt>
                         <dd>{item.qty}</dd>
                       </div>
+                      {item.canMixColor && (
+                        <div>
+                          <dt>Mã màu</dt>
+                          <dd>{item.colorCode?.slice(0, 6) || "-"}</dd>
+                        </div>
+                      )}
                       <div>
                         <dt>Đơn giá sơn</dt>
                         <dd>{item.basePrice.toLocaleString("vi-VN")} đ</dd>
@@ -2345,14 +2347,18 @@ updateItem(
                         <dt>Tiền sơn</dt>
                         <dd>{paintTotal.toLocaleString("vi-VN")} đ</dd>
                       </div>
-                      <div className={item.colorPrice === 0 ? "paint-mobile-muted" : ""}>
-                        <dt>Đơn giá màu</dt>
-                        <dd>{item.colorPrice.toLocaleString("vi-VN")} đ</dd>
-                      </div>
-                      <div className={colorTotal === 0 ? "paint-mobile-muted" : ""}>
-                        <dt>Tiền màu</dt>
-                        <dd>{colorTotal.toLocaleString("vi-VN")} đ</dd>
-                      </div>
+                      {item.canMixColor && (
+                        <>
+                          <div className={item.colorPrice === 0 ? "paint-mobile-muted" : ""}>
+                            <dt>Đơn giá màu</dt>
+                            <dd>{item.colorPrice.toLocaleString("vi-VN")} đ</dd>
+                          </div>
+                          <div className={colorTotal === 0 ? "paint-mobile-muted" : ""}>
+                            <dt>Tiền màu</dt>
+                            <dd>{colorTotal.toLocaleString("vi-VN")} đ</dd>
+                          </div>
+                        </>
+                      )}
                     </dl>
 
                     <div className="paint-mobile-card-total">
