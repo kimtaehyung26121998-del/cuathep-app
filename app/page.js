@@ -333,6 +333,27 @@ useEffect(() => {
 
   };
 
+  const capNhatLoaiCua = (id, loaiCuaMoi) => {
+    const laCuaSo = loaiCuaMoi.toLowerCase().includes("sổ");
+
+    setDanhSachCua((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              loaiCua: loaiCuaMoi,
+              ...(laCuaSo
+                ? {
+                    huongMo: "Ngoài",
+                    coKhoa: false,
+                  }
+                : {}),
+            }
+          : item
+      )
+    );
+  };
+
   const tinhSoLuongCua = (cua) => {
     return (
       kichThuocMet(cua.rong) *
@@ -781,7 +802,7 @@ const conPhaiThanhToan =
           }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
           .tong-tien {
             font-size: 34px !important;
           }
@@ -819,11 +840,21 @@ const conPhaiThanhToan =
         }
 
         .invoice-company-name {
-          max-width: 340px;
+          max-width: none;
           margin: 0 !important;
-          font-size: clamp(18px, 2.5vw, 28px) !important;
+          font-size: clamp(22px, 3vw, 30px) !important;
           line-height: 1.12 !important;
           text-wrap: balance;
+        }
+
+        .invoice-brand-row {
+          width: 100%;
+          align-items: flex-start;
+        }
+
+        .invoice-company-block {
+          flex: 1 1 auto;
+          min-width: 0;
         }
 
         .invoice-company-name + p,
@@ -1040,7 +1071,7 @@ const conPhaiThanhToan =
           background: rgba(255, 255, 255, 0.52) !important;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
           .invoice-screen {
             padding: 8px 4px 18px;
           }
@@ -1057,7 +1088,7 @@ const conPhaiThanhToan =
           }
 
           .invoice-paper { padding: 10px !important; }
-          .invoice-company-name { font-size: 18px !important; max-width: 250px; }
+          .invoice-company-name { font-size: 20px !important; max-width: none; }
           .invoice-company-name + p,
           .invoice-company-name + p + p { font-size: 10px !important; }
           .invoice-title { margin: 12px 0 8px !important; font-size: 22px !important; }
@@ -1163,7 +1194,20 @@ const conPhaiThanhToan =
           .invoice-footer .grid > div > div { height: 34px !important; }
         }
 
-        @media (min-width: 769px) {
+        @media (min-width: 360px) and (max-width: 767px) {
+          .invoice-mobile-door-details {
+            grid-template-columns: 64px minmax(0, 1fr) 64px minmax(0, 1fr);
+            gap: 5px 8px;
+          }
+          .invoice-mobile-door-details .invoice-detail-money {
+            display: grid;
+            grid-template-columns: 64px minmax(0, 1fr);
+            grid-column: 1 / -1;
+            gap: 0 8px;
+          }
+        }
+
+        @media (min-width: 768px) {
           .invoice-door-table thead { display: none; }
           .invoice-door-table tbody > tr:not(.invoice-mobile-card-row) { display: none !important; }
           .invoice-door-table tbody > tr.invoice-mobile-card-row { display: table-row !important; }
@@ -1193,7 +1237,7 @@ const conPhaiThanhToan =
           }
           .invoice-mobile-door-details {
             display: grid;
-            grid-template-columns: 130px minmax(0, 1fr);
+            grid-template-columns: 112px minmax(0, 1fr) 112px minmax(0, 1fr);
             gap: 6px 12px;
             font-size: 14px;
             line-height: 1.45;
@@ -1205,6 +1249,12 @@ const conPhaiThanhToan =
             color: #374151;
             white-space: nowrap;
           }
+          .invoice-mobile-door-details .invoice-detail-money {
+            display: grid;
+            grid-template-columns: 112px minmax(0, 1fr);
+            grid-column: 1 / -1;
+            gap: 0 12px;
+          }
           .invoice-mobile-accessories {
             margin-top: 12px;
             padding-top: 10px;
@@ -1213,7 +1263,13 @@ const conPhaiThanhToan =
             line-height: 1.5;
           }
           .invoice-mobile-accessories > strong { font-size: 14px; }
-          .invoice-mobile-accessories ul { margin: 5px 0 0; padding-left: 20px; }
+          .invoice-mobile-accessories ul {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 2px 24px;
+            margin: 5px 0 0;
+            padding-left: 20px;
+          }
           .invoice-mobile-accessories li { padding: 2px 0; }
           .invoice-mobile-door-note {
             margin: 12px 0 0;
@@ -1315,7 +1371,7 @@ style={{
   paddingBottom: "10mm"
 }} >
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 invoice-brand-row">
 
              <img
   src="/logo-transparent.png?v=1"
@@ -1328,7 +1384,7 @@ style={{
 }}
 />
 
-              <div>
+              <div className="invoice-company-block">
 
                 <h1 className="text-2xl font-bold uppercase invoice-company-name">
 
@@ -1811,14 +1867,14 @@ const tienPhaoDinh =
             </h3>
 
             <div className="invoice-mobile-door-details">
-              <div><strong>Khuôn</strong><span>{formatKichThuoc(cua.khuon)} mm</span></div>
-              <div><strong>Rộng</strong><span>{formatKichThuoc(cua.rong)} mm</span></div>
-              <div><strong>Cao</strong><span>{formatKichThuoc(cua.cao)} mm</span></div>
-              <div><strong>Màu</strong><span>{cua.maMau || "-"}</span></div>
-              <div><strong>Hướng mở</strong><span>{cua.huongMo || "-"}</span></div>
-              <div><strong>Diện tích</strong><span>{formatSoLuong(kichThuocMet(cua.rong) * kichThuocMet(cua.cao))} m²</span></div>
-              <div><strong>Đơn giá</strong><span>{Number(cua.donGia || 0).toLocaleString()} đ/m²</span></div>
-              <div><strong>Tiền cửa</strong><span>{Math.round(tinhTienCua(cua)).toLocaleString()} đ</span></div>
+              <div className="invoice-detail-item"><strong>Khuôn</strong><span>{formatKichThuoc(cua.khuon)} mm</span></div>
+              <div className="invoice-detail-item"><strong>Rộng</strong><span>{formatKichThuoc(cua.rong)} mm</span></div>
+              <div className="invoice-detail-item"><strong>Cao</strong><span>{formatKichThuoc(cua.cao)} mm</span></div>
+              <div className="invoice-detail-item"><strong>Màu</strong><span>{cua.maMau || "-"}</span></div>
+              <div className="invoice-detail-item"><strong>Hướng mở</strong><span>{cua.huongMo || "-"}</span></div>
+              <div className="invoice-detail-item"><strong>Diện tích</strong><span>{formatSoLuong(kichThuocMet(cua.rong) * kichThuocMet(cua.cao))} m²</span></div>
+              <div className="invoice-detail-item invoice-detail-money"><strong>Đơn giá</strong><span>{Number(cua.donGia || 0).toLocaleString()} đ/m²</span></div>
+              <div className="invoice-detail-item invoice-detail-money"><strong>Tiền cửa</strong><span>{Math.round(tinhTienCua(cua)).toLocaleString()} đ</span></div>
             </div>
 
             {(cua.coKhoa || cua.loaiPhao === "Phào phụ" || cua.loaiPhao === "Phào đỉnh" || cua.coBomForm ||
@@ -3499,6 +3555,7 @@ style={{
         {danhSachCua.map(
           (cua, index) => {
             const laChanSong = cua.loaiCua === "Chấn song";
+            const laCuaSo = cua.loaiCua.toLowerCase().includes("sổ");
 
             return (
 
@@ -3540,13 +3597,7 @@ style={{
 
               <select
                 value={cua.loaiCua}
-                onChange={(e) =>
-                  capNhatCua(
-                    cua.id,
-                    "loaiCua",
-                    e.target.value
-                  )
-                }
+                onChange={(e) => capNhatLoaiCua(cua.id, e.target.value)}
                 className="w-full border p-3 rounded-2xl"
               >
 
@@ -3654,7 +3705,7 @@ style={{
                   className="border p-3 rounded-2xl"
                 />
 
-                {!laChanSong && <input
+                {!laChanSong && !laCuaSo && <input
                   placeholder="Hướng mở"
                   autoCapitalize="words"
                   autoComplete="off"
@@ -3773,7 +3824,7 @@ style={{
 
               </div>
 
-              <label className="flex items-center gap-2">
+              {!laCuaSo && <label className="flex items-center gap-2">
 
                 <input
                   type="checkbox"
@@ -3789,9 +3840,9 @@ style={{
 
                 Có khóa
 
-              </label>
+              </label>}
 
-              {cua.coKhoa && (
+              {!laCuaSo && cua.coKhoa && (
 
                 <>
 
