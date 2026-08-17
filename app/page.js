@@ -7,6 +7,7 @@ import {
 } from "react";
 import html2canvas from "html2canvas";
 import PaintOrder from "./PaintOrder";
+import { createOrderCode, getOrderCode } from "./orderCode";
 const formatTien = (value) => {
 
   const number =
@@ -77,6 +78,7 @@ export default function Home() {
 
   const [xemHoaDon, setXemHoaDon] =
     useState(false);
+  const [editingOrderId, setEditingOrderId] = useState("");
   const [dangLuuAnh, setDangLuuAnh] =
     useState(false);
   const [anhHoaDon, setAnhHoaDon] = useState("");
@@ -250,12 +252,22 @@ useEffect(() => {
       alert("Vui lòng chọn nhân viên trước khi lưu đơn.");
       return;
     }
+    const donCu = editingOrderId
+      ? donDaLuu.find((don) => don.id === editingOrderId)
+      : null;
     const donMoi = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      id: donCu?.id || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       type: "cua",
       employee: nhanVien,
       customer: tenKhach || "Khách chưa đặt tên",
-      createdAt: new Date().toISOString(),
+      createdAt: donCu?.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      orderCode: donCu?.orderCode || createOrderCode(
+        nhanVien,
+        donCu?.createdAt || new Date(),
+        donDaLuu.map((don) => don.orderCode)
+      ),
+      edited: Boolean(donCu) || Boolean(donCu?.edited),
       danhSachCua,
       nhanVien,
       tenKhach,
@@ -264,13 +276,17 @@ useEffect(() => {
       cuocVanChuyen,
       loaiDon,
     };
-    const danhSachMoi = [donMoi, ...donDaLuu];
+    const danhSachMoi = donCu
+      ? donDaLuu.map((don) => don.id === donCu.id ? donMoi : don)
+      : [donMoi, ...donDaLuu];
     localStorage.setItem("order_archive_v1", JSON.stringify(danhSachMoi));
     setDonDaLuu(danhSachMoi);
-    alert("Đã lưu đơn cửa vào kho lưu trữ của nhân viên.");
+    setEditingOrderId("");
+    alert(donCu ? "Đã cập nhật đơn cửa cũ." : "Đã lưu đơn cửa vào kho lưu trữ của nhân viên.");
   };
 
   const moDonCuaDaLuu = (don) => {
+    setEditingOrderId(don.id);
     setDanhSachCua(don.danhSachCua || [taoBoCuaMoi()]);
     setNhanVien(don.nhanVien || don.employee || "");
     setTenKhach(don.tenKhach || "");
@@ -285,6 +301,7 @@ useEffect(() => {
     const danhSachMoi = donDaLuu.filter((don) => don.id !== id);
     localStorage.setItem("order_archive_v1", JSON.stringify(danhSachMoi));
     setDonDaLuu(danhSachMoi);
+    if (editingOrderId === id) setEditingOrderId("");
   };
 
   const saoChepCua = (id) => {
@@ -1144,6 +1161,87 @@ const conPhaiThanhToan =
           .invoice-footer { padding-top: 10px !important; }
           .invoice-footer .grid { margin-top: 16px !important; }
           .invoice-footer .grid > div > div { height: 34px !important; }
+        }
+
+        @media (min-width: 769px) {
+          .invoice-door-table thead { display: none; }
+          .invoice-door-table tbody > tr:not(.invoice-mobile-card-row) { display: none !important; }
+          .invoice-door-table tbody > tr.invoice-mobile-card-row { display: table-row !important; }
+          .invoice-mobile-card-row > td {
+            display: table-cell !important;
+            width: 100% !important;
+            padding: 0 !important;
+            border: 0 !important;
+            color: #172033 !important;
+            background: transparent !important;
+          }
+          .invoice-mobile-door-card {
+            display: block;
+            margin: 0 0 12px;
+            padding: 16px 18px;
+            border: 1px solid #dbe2ea;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #172033;
+            text-align: left;
+          }
+          .invoice-mobile-door-title {
+            margin: 0 0 12px;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.3;
+          }
+          .invoice-mobile-door-details {
+            display: grid;
+            grid-template-columns: 130px minmax(0, 1fr);
+            gap: 6px 12px;
+            font-size: 14px;
+            line-height: 1.45;
+          }
+          .invoice-mobile-door-details > div { display: contents; }
+          .invoice-mobile-door-details strong { font-weight: 700; }
+          .invoice-mobile-door-details span {
+            min-width: 0;
+            color: #374151;
+            white-space: nowrap;
+          }
+          .invoice-mobile-accessories {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 13px;
+            line-height: 1.5;
+          }
+          .invoice-mobile-accessories > strong { font-size: 14px; }
+          .invoice-mobile-accessories ul { margin: 5px 0 0; padding-left: 20px; }
+          .invoice-mobile-accessories li { padding: 2px 0; }
+          .invoice-mobile-door-note {
+            margin: 12px 0 0;
+            padding: 8px 10px;
+            border-radius: 7px;
+            color: #b42318;
+            background: #fff5f3;
+            font-size: 13px;
+            font-style: italic;
+            line-height: 1.45;
+          }
+          .invoice-mobile-door-total {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 13px;
+            padding-top: 10px;
+            border-top: 1px solid #dbe2ea;
+            font-size: 15px;
+            line-height: 1.35;
+          }
+          .invoice-mobile-door-total strong:last-child {
+            color: #172033;
+            font-size: 17px;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+          }
         }
 
         @media print {
@@ -2978,6 +3076,17 @@ Number(cua.caoVom || 0)
   }}
 >
 
+              {editingOrderId && (
+                <button
+                  type="button"
+                  onClick={() => setXemHoaDon(false)}
+                  className="px-5 py-3 rounded-xl"
+                  style={{ backgroundColor: "#2563eb", color: "#ffffff" }}
+                >
+                  Sửa hóa đơn
+                </button>
+              )}
+
               <button
                 onClick={() => {
 
@@ -3019,6 +3128,7 @@ style={{
     setTienCoc("");
     setCuocVanChuyen("");
 setLoaiDon("");
+    setEditingOrderId("");
     setXemHoaDon(false);
 
   }}
@@ -3312,7 +3422,7 @@ style={{
               {nhanVien && donCuaDaLuu.length === 0 && <p className="text-sm text-amber-800">Nhân viên này chưa có đơn cửa được lưu.</p>}
               {donCuaDaLuu.map((don) => (
                 <div key={don.id} className="flex items-center justify-between gap-2 rounded-xl bg-white p-2 text-sm">
-                  <div><b>{don.customer}</b><div className="text-xs text-gray-500">{new Date(don.createdAt).toLocaleString("vi-VN")}</div></div>
+                  <div><b>{don.customer}</b><div className="text-xs font-semibold text-slate-700">{getOrderCode(don)}{don.edited ? " (sửa)" : ""}</div><div className="text-xs text-gray-500">{new Date(don.createdAt).toLocaleString("vi-VN")}</div></div>
                   <div className="flex gap-1"><button type="button" onClick={() => moDonCuaDaLuu(don)} className="rounded-lg bg-blue-600 px-2 py-1 text-white">Xem</button><button type="button" onClick={() => xoaDonDaLuu(don.id)} className="rounded-lg bg-red-100 px-2 py-1 text-red-700">Xóa</button></div>
                 </div>
               ))}
