@@ -867,6 +867,7 @@ const conPhaiThanhToan =
         .invoice-door-table th,
         .invoice-door-table td { font-variant-numeric: tabular-nums; }
         .invoice-door-meta { display: none; }
+        .invoice-mobile-card-row { display: none; }
         .invoice-door-table th:nth-child(n+2) {
           white-space: nowrap;
           word-break: normal;
@@ -1042,52 +1043,95 @@ const conPhaiThanhToan =
           .invoice-customer p { font-size: 11px; }
           .invoice-table-wrap th,
           .invoice-table-wrap td { font-size: 9px !important; padding: 7px 3px !important; }
-          .invoice-door-table col:nth-child(1) { width: 34% !important; }
-          .invoice-door-table col:nth-child(2) { width: 8% !important; }
-          .invoice-door-table col:nth-child(3) { width: 9% !important; }
-          .invoice-door-table col:nth-child(4) { width: 9% !important; }
-          .invoice-door-table col:nth-child(5),
-          .invoice-door-table col:nth-child(6) { display: none; }
-          .invoice-door-table col:nth-child(7) { width: 13% !important; }
-          .invoice-door-table col:nth-child(8) { width: 13% !important; }
-          .invoice-door-table col:nth-child(9) { width: 14% !important; }
-          .invoice-door-table th:nth-child(5),
-          .invoice-door-table td:nth-child(5),
-          .invoice-door-table th:nth-child(6),
-          .invoice-door-table td:nth-child(6) { display: none; }
-          .invoice-door-table th:nth-child(n+2) {
-            white-space: nowrap !important;
-            word-break: normal !important;
-            overflow-wrap: normal !important;
+          .invoice-door-table thead { display: none; }
+          .invoice-door-table tbody > tr:not(.invoice-mobile-card-row) { display: none !important; }
+          .invoice-door-table tbody > tr.invoice-mobile-card-row { display: table-row !important; }
+          .invoice-mobile-card-row > td {
+            display: table-cell !important;
+            width: 100% !important;
+            padding: 0 !important;
+            border: 0 !important;
+            background: transparent !important;
           }
-          .invoice-door-table th:first-child { white-space: normal !important; }
-          .invoice-door-table td:nth-child(2),
-          .invoice-door-table td:nth-child(3),
-          .invoice-door-table td:nth-child(4) {
-            white-space: nowrap !important;
-            overflow-wrap: normal !important;
-            word-break: normal !important;
+          .invoice-mobile-door-card {
+            display: block;
+            margin: 0 0 10px;
+            padding: 13px;
+            border: 1px solid #dbe2ea;
+            border-radius: 11px;
+            background: #ffffff;
+            color: #172033;
+            text-align: left;
           }
-          .invoice-door-table td:nth-child(7),
-          .invoice-door-table td:nth-child(8),
-          .invoice-door-table td:nth-child(9) {
-            white-space: nowrap !important;
-            overflow-wrap: normal !important;
-            word-break: normal !important;
-            font-size: 8px !important;
+          .invoice-mobile-door-title {
+            margin: 0 0 10px;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.3;
+            overflow-wrap: anywhere;
+          }
+          .invoice-mobile-door-details {
+            display: grid;
+            grid-template-columns: 94px minmax(0, 1fr);
+            gap: 5px 8px;
+            font-size: 13px;
+            line-height: 1.4;
+          }
+          .invoice-mobile-door-details > div { display: contents; }
+          .invoice-mobile-door-details strong { font-weight: 700; }
+          .invoice-mobile-door-details span {
+            min-width: 0;
+            color: #374151;
+            white-space: nowrap;
+            overflow-wrap: normal;
+          }
+          .invoice-mobile-accessories {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 12px;
+            line-height: 1.45;
+          }
+          .invoice-mobile-accessories > strong { font-size: 13px; }
+          .invoice-mobile-accessories ul { margin: 4px 0 0; padding-left: 17px; }
+          .invoice-mobile-accessories li { padding: 1px 0; }
+          .invoice-mobile-door-note {
+            margin: 10px 0 0;
+            padding: 7px 8px;
+            border-radius: 6px;
+            color: #b42318;
+            background: #fff5f3;
+            font-size: 12px;
+            font-style: italic;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+          }
+          .invoice-mobile-door-total {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 11px;
+            padding-top: 9px;
+            border-top: 1px solid #dbe2ea;
+            font-size: 14px;
+            line-height: 1.3;
+          }
+          .invoice-mobile-door-total strong:last-child {
+            color: #172033;
+            font-size: 15px;
+            white-space: nowrap;
             font-variant-numeric: tabular-nums;
           }
           .invoice-door-meta {
-            display: block;
-            margin-top: 3px;
-            color: #536176;
-            font-size: 9px;
-            font-weight: 500;
-            line-height: 1.3;
-            white-space: normal;
-            overflow-wrap: anywhere;
+            display: none;
           }
           .invoice-table-wrap tbody tr:has(> td[colspan="9"]) > td { font-size: 10px !important; }
+          .invoice-mobile-card-row > td {
+            color: #172033 !important;
+            background: transparent !important;
+            font-size: inherit !important;
+          }
           .invoice-total-card { padding: 8px 9px !important; }
           .invoice-total-card td { font-size: 11px; }
           .invoice-total-card tr:last-child td { font-size: 12px !important; }
@@ -1120,6 +1164,9 @@ const conPhaiThanhToan =
           }
 
           .invoice-door-meta { display: none !important; }
+          .invoice-door-table thead { display: table-header-group !important; }
+          .invoice-door-table tbody > tr { display: table-row !important; }
+          .invoice-door-table tbody > tr.invoice-mobile-card-row { display: none !important; }
           .invoice-door-table col:nth-child(5),
           .invoice-door-table col:nth-child(6) { display: table-column !important; }
           .invoice-door-table th:nth-child(5),
@@ -1652,6 +1699,71 @@ const tienPhaoDinh =
   return (
 
     <>
+
+      <tr className="invoice-mobile-card-row">
+        <td colSpan={9}>
+          <article className="invoice-mobile-door-card">
+            <h3 className="invoice-mobile-door-title">
+              Bộ cửa {index + 1}: {cua.loaiCua || "Chưa chọn loại cửa"}
+            </h3>
+
+            <div className="invoice-mobile-door-details">
+              <div><strong>Kích thước</strong><span>{cua.khuon || "-"} × {cua.rong || "-"} × {cua.cao || "-"}</span></div>
+              <div><strong>Màu</strong><span>{cua.maMau || "-"}</span></div>
+              <div><strong>Hướng mở</strong><span>{cua.huongMo || "-"}</span></div>
+              <div><strong>Diện tích</strong><span>{formatSoLuong(kichThuocMet(cua.rong) * kichThuocMet(cua.cao))} m²</span></div>
+              <div><strong>Đơn giá</strong><span>{Number(cua.donGia || 0).toLocaleString()} đ</span></div>
+            </div>
+
+            {(cua.coKhoa || cua.loaiPhao === "Phào phụ" || cua.loaiPhao === "Phào đỉnh" || cua.coBomForm ||
+              (cua.loaiOThoang === "kinh" && Number(cua.kinhOThoang) > 0) ||
+              (cua.loaiOThoang === "dac" && Number(cua.oThoangDac) > 0) ||
+              (cua.loaiOThoang === "nanchop" && Number(cua.oThoangNanChop) > 0) ||
+              (cua.loaiOThoang === "vom" && Number(cua.caoVom) > 0) ||
+              (cua.coKinhCanh && Number(cua.kinhCanh) > 0)) && (
+              <div className="invoice-mobile-accessories">
+                <strong>Phụ kiện</strong>
+                <ul>
+                  {cua.coKhoa && (
+                    <li>Khóa {cua.tenKhoa || ""}: {(Number(cua.soLuongKhoa || 0) * Number(cua.donGiaKhoa || 0)).toLocaleString()} đ</li>
+                  )}
+                  {cua.loaiPhao === "Phào phụ" && (
+                    <li>Phào phụ: {Math.round(slPhaoPhu * Number(cua.donGiaPhao || 0)).toLocaleString()} đ</li>
+                  )}
+                  {cua.loaiPhao === "Phào đỉnh" && (
+                    <li>Phào đỉnh: {Math.round(tienPhaoDinh).toLocaleString()} đ</li>
+                  )}
+                  {cua.coBomForm && (
+                    <li>Foam: {tinhTienBomForm(cua).toLocaleString()} đ</li>
+                  )}
+                  {cua.loaiOThoang === "kinh" && Number(cua.kinhOThoang) > 0 && (
+                    <li>Ô thoáng kính: {(Number(cua.kinhOThoang) * 60000).toLocaleString()} đ</li>
+                  )}
+                  {cua.loaiOThoang === "dac" && Number(cua.oThoangDac) > 0 && (
+                    <li>Ô thoáng đặc: {(Number(cua.oThoangDac) * 350000).toLocaleString()} đ</li>
+                  )}
+                  {cua.loaiOThoang === "nanchop" && Number(cua.oThoangNanChop) > 0 && (
+                    <li>Ô thoáng nan chớp: {(Number(cua.oThoangNanChop) * 250000).toLocaleString()} đ</li>
+                  )}
+                  {cua.loaiOThoang === "vom" && Number(cua.caoVom) > 0 && (
+                    <li>Ô thoáng vòm: {Math.round(((Math.PI * kichThuocMet(cua.rong) * Number(cua.caoVom || 0)) / 4) * (Number(cua.donGia || 0) + 350000)).toLocaleString()} đ</li>
+                  )}
+                  {cua.coKinhCanh && Number(cua.kinhCanh) > 0 && (
+                    <li>Kính cánh: {(Number(cua.kinhCanh) * (cua.loaiKinhCanh === "to" ? 350000 : 250000)).toLocaleString()} đ</li>
+                  )}
+                </ul>
+              </div>
+            )}
+
+            {cua.note && <p className="invoice-mobile-door-note">Ghi chú: {cua.note}</p>}
+
+            <div className="invoice-mobile-door-total">
+              <strong>Thành tiền</strong>
+              <strong>{Math.round((kichThuocMet(cua.rong) * kichThuocMet(cua.cao)) * Number(cua.donGia || 0)).toLocaleString()} đ</strong>
+            </div>
+          </article>
+        </td>
+      </tr>
 
       <tr className="invoice-door-row">
 
