@@ -2318,7 +2318,7 @@ updateItem(
                       </div>
                     </div>
 
-                    <dl className="paint-mobile-card-details">
+                    <dl className={`paint-mobile-card-details ${item.canMixColor ? "" : "paint-no-color-details"}`}>
                       <div>
                         <dt>Số lượng</dt>
                         <dd>{item.qty}</dd>
@@ -2448,7 +2448,9 @@ updateItem(
         Người lên đơn
       </p>
 
-      <p className="mt-10 paint-invoice-signer-name">
+      <div className="paint-invoice-signature-space" aria-hidden="true" />
+
+      <p className="paint-invoice-signer-name">
         {selectedEmployee?.name || ""}
       </p>
 

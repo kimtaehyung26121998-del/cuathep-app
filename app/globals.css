@@ -1135,8 +1135,8 @@ select {
 }
 
 .paint-invoice-summary-new {
-  width: min(60%, 650px);
-  max-width: 650px;
+  width: 100%;
+  max-width: none;
   margin-left: auto;
   box-sizing: border-box;
 }
@@ -1157,6 +1157,28 @@ select {
   white-space: nowrap;
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+.paint-invoice-signature-space {
+  height: 34px;
+}
+
+.paint-invoice-signature-line {
+  margin: 0 !important;
+  color: #697586;
+  line-height: 1 !important;
+}
+
+.paint-invoice-signer-name {
+  margin-top: 6px !important;
+}
+
+.paint-invoice-signature-grid > div:last-child::after {
+  margin-top: 34px;
+}
+
+.paint-no-color-details > div:first-child {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 767px) {
@@ -1184,6 +1206,10 @@ select {
 
   .paint-invoice-summary-new .paint-summary-row span {
     white-space: normal;
+  }
+
+  .paint-invoice-signature-space {
+    height: 28px;
   }
 }
 
@@ -1308,8 +1334,8 @@ select {
   }
 
   .paint-invoice-summary-new {
-    width: min(60%, 650px);
-    max-width: 650px;
+    width: 100%;
+    max-width: none;
   }
 }
 
