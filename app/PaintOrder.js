@@ -1740,6 +1740,8 @@ if (brand === "select") {
 
             <input
               placeholder="Tên khách hàng"
+              autoCapitalize="words"
+              autoComplete="name"
               value={customerName}
               onChange={(e) =>
                 setCustomerName(
@@ -1751,6 +1753,8 @@ if (brand === "select") {
 
             <input
               placeholder="Địa chỉ"
+              autoCapitalize="words"
+              autoComplete="street-address"
               value={customerAddress}
               onChange={(e) =>
                 setCustomerAddress(
@@ -1766,6 +1770,8 @@ if (brand === "select") {
 
   <input
     placeholder="Mức chiết khấu (%)"
+    inputMode="numeric"
+    autoComplete="off"
     value={
       discountPercent === 0
         ? ""
@@ -1788,6 +1794,8 @@ if (brand === "select") {
 
   <input
     placeholder="Khách đã cọc"
+    inputMode="numeric"
+    autoComplete="off"
     value={
       customerDeposit === 0
         ? ""
@@ -1908,6 +1916,7 @@ if (brand === "select") {
                   <input
   type="text"
   inputMode="numeric"
+  autoComplete="off"
   value={
     item.qty === 0
       ? ""
@@ -1946,6 +1955,8 @@ if (brand === "select") {
 
                     <input
                       placeholder="Mã màu"
+                      autoCapitalize="characters"
+                      autoComplete="off"
                       value={item.colorCode}
                       onChange={(e) => {
 
@@ -2005,6 +2016,8 @@ updateItem(
 
       }}
       placeholder="Nhập giá gồm sơn + màu"
+      inputMode="numeric"
+      autoComplete="off"
       className="w-full bg-white/10 border border-white/20 rounded-2xl p-3 text-sm outline-none"
     />
 

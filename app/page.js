@@ -23,6 +23,11 @@ const formatSoLuong = (value) => {
     .replace(/(\.\d*[1-9])0$/, "$1");
 };
 
+const formatKichThuoc = (value) => {
+  if (value === "" || value === null || value === undefined) return "-";
+  return Number(value).toLocaleString("vi-VN");
+};
+
 const kichThuocMet = (value) => Number(value || 0) / 1000;
 
 const tinhTienBomForm = (cua) =>
@@ -362,8 +367,7 @@ useEffect(() => {
 
   };
 
-  const tongCong = danhSachCua.reduce(
-      (tong, cua) => {
+  const tinhTongBoCua = (cua) => {
 
         const tienCua =
           tinhTienCua(cua);
@@ -602,7 +606,6 @@ const tienKinhCanh =
     : 0;
 
         return (
-  tong +
   tienCua +
   tienKhoa +
   tienPhao +
@@ -610,10 +613,12 @@ const tienKinhCanh =
   tienOThoang +
   tienKinhCanh
 );
+  };
 
-      },
-      0
-    );
+  const tongCong = danhSachCua.reduce(
+    (tong, cua) => tong + tinhTongBoCua(cua),
+    0
+  );
 
   const soTienDaCoc =
   Number(tienCoc || 0);
@@ -1708,11 +1713,14 @@ const tienPhaoDinh =
             </h3>
 
             <div className="invoice-mobile-door-details">
-              <div><strong>Kích thước</strong><span>{cua.khuon || "-"} × {cua.rong || "-"} × {cua.cao || "-"}</span></div>
+              <div><strong>Khuôn</strong><span>{formatKichThuoc(cua.khuon)} mm</span></div>
+              <div><strong>Rộng</strong><span>{formatKichThuoc(cua.rong)} mm</span></div>
+              <div><strong>Cao</strong><span>{formatKichThuoc(cua.cao)} mm</span></div>
               <div><strong>Màu</strong><span>{cua.maMau || "-"}</span></div>
               <div><strong>Hướng mở</strong><span>{cua.huongMo || "-"}</span></div>
               <div><strong>Diện tích</strong><span>{formatSoLuong(kichThuocMet(cua.rong) * kichThuocMet(cua.cao))} m²</span></div>
-              <div><strong>Đơn giá</strong><span>{Number(cua.donGia || 0).toLocaleString()} đ</span></div>
+              <div><strong>Đơn giá</strong><span>{Number(cua.donGia || 0).toLocaleString()} đ/m²</span></div>
+              <div><strong>Tiền cửa</strong><span>{Math.round(tinhTienCua(cua)).toLocaleString()} đ</span></div>
             </div>
 
             {(cua.coKhoa || cua.loaiPhao === "Phào phụ" || cua.loaiPhao === "Phào đỉnh" || cua.coBomForm ||
@@ -1725,7 +1733,7 @@ const tienPhaoDinh =
                 <strong>Phụ kiện</strong>
                 <ul>
                   {cua.coKhoa && (
-                    <li>Khóa {cua.tenKhoa || ""}: {(Number(cua.soLuongKhoa || 0) * Number(cua.donGiaKhoa || 0)).toLocaleString()} đ</li>
+                    <li>{cua.tenKhoa || "Khóa"}: {(Number(cua.soLuongKhoa || 0) * Number(cua.donGiaKhoa || 0)).toLocaleString()} đ</li>
                   )}
                   {cua.loaiPhao === "Phào phụ" && (
                     <li>Phào phụ: {Math.round(slPhaoPhu * Number(cua.donGiaPhao || 0)).toLocaleString()} đ</li>
@@ -1758,8 +1766,8 @@ const tienPhaoDinh =
             {cua.note && <p className="invoice-mobile-door-note">Ghi chú: {cua.note}</p>}
 
             <div className="invoice-mobile-door-total">
-              <strong>Thành tiền</strong>
-              <strong>{Math.round((kichThuocMet(cua.rong) * kichThuocMet(cua.cao)) * Number(cua.donGia || 0)).toLocaleString()} đ</strong>
+              <strong>THÀNH TIỀN BỘ CỬA</strong>
+              <strong>{Math.round(tinhTongBoCua(cua)).toLocaleString()} đ</strong>
             </div>
           </article>
         </td>
@@ -3202,6 +3210,21 @@ setLoaiDon("");
         Lên đơn đại lý
       </button>
       )}
+      {hienLuaChonCuaThep && (
+        <button
+          type="button"
+          onClick={() => setHienLuaChonCuaThep(false)}
+          className="choice-button w-full max-w-md rounded-2xl py-3 text-lg font-semibold relative z-10 cursor-pointer select-none"
+          style={{
+            backgroundColor: "#e5e7eb",
+            color: "#17202b",
+            touchAction: "manipulation",
+            WebkitTapHighlightColor: "transparent",
+          }}
+        >
+          ← Quay lại chọn đơn sơn
+        </button>
+      )}
       {!hienLuaChonCuaThep && (<>
       <button type="button" onClick={() => setLoaiDon("son-mykolor")} className="choice-button choice-button--paint choice-button--mykolor w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f8fafc", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
         L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Mykolor
@@ -3299,6 +3322,8 @@ style={{
 
         <input
           placeholder="Tên khách hàng"
+          autoCapitalize="words"
+          autoComplete="name"
           value={tenKhach}
           onChange={(e) =>
             setTenKhach(
@@ -3310,6 +3335,8 @@ style={{
 
         <input
           placeholder="Địa chỉ khách hàng"
+          autoCapitalize="words"
+          autoComplete="street-address"
           value={diaChiKhach}
           onChange={(e) =>
             setDiaChiKhach(
@@ -3318,8 +3345,10 @@ style={{
           }
           className="w-full border p-3 rounded-2xl"
         />
-        <input
+<input
   placeholder="Khách đã cọc"
+  inputMode="numeric"
+  autoComplete="off"
   value={
     tienCoc
       ? formatTien(tienCoc)
@@ -3337,6 +3366,8 @@ style={{
 />
 <input
   placeholder="Cước vận chuyển"
+  inputMode="numeric"
+  autoComplete="off"
   value={
     cuocVanChuyen
       ? formatTien(
@@ -3455,6 +3486,8 @@ style={{
 
                 {!laChanSong && <input
                   placeholder="Độ dày khuôn"
+                  inputMode="numeric"
+                  autoComplete="off"
                   value={cua.khuon}
                   onChange={(e) =>
                     capNhatCua(
@@ -3468,6 +3501,8 @@ style={{
 
                 {!laChanSong && <input
                   placeholder="Mã màu"
+                  autoCapitalize="characters"
+                  autoComplete="off"
                   value={cua.maMau}
                   onChange={(e) =>
                     capNhatCua(
@@ -3481,6 +3516,8 @@ style={{
 
                 <input
                   placeholder="Chiều rộng"
+                  inputMode="numeric"
+                  autoComplete="off"
                   value={cua.rong}
                   onChange={(e) =>
                     capNhatCua(
@@ -3494,6 +3531,8 @@ style={{
 
                 <input
                   placeholder="Chiều cao"
+                  inputMode="numeric"
+                  autoComplete="off"
                   value={cua.cao}
                   onChange={(e) =>
                     capNhatCua(
@@ -3507,6 +3546,8 @@ style={{
 
                 {!laChanSong && <input
                   placeholder="Hướng mở"
+                  autoCapitalize="words"
+                  autoComplete="off"
                   value={cua.huongMo}
                   onChange={(e) =>
                     capNhatCua(
@@ -3518,8 +3559,10 @@ style={{
                   className="border p-3 rounded-2xl"
                 />}
 
-                <input
+<input
   placeholder="Đơn giá"
+  inputMode="numeric"
+  autoComplete="off"
   value={
     cua.donGia
       ? formatTien(
@@ -3565,6 +3608,7 @@ style={{
                 {cua.showNote && (
                   <textarea
                     value={cua.note || ""}
+                    autoCapitalize="sentences"
                     onChange={(e) =>
                       capNhatCua(
                         cua.id,
@@ -3643,6 +3687,8 @@ style={{
 
                   <input
                     placeholder="Tên khóa"
+                    autoCapitalize="words"
+                    autoComplete="off"
                     value={cua.tenKhoa}
                     onChange={(e) =>
                       capNhatCua(
