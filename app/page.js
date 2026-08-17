@@ -76,8 +76,9 @@ export default function Home() {
     useState(false);
   const [anhHoaDon, setAnhHoaDon] = useState("");
   const [tenFileAnh, setTenFileAnh] = useState("");
-    const [loaiDon, setLoaiDon] =
+  const [loaiDon, setLoaiDon] =
   useState("");
+  const [hienLuaChonCuaThep, setHienLuaChonCuaThep] = useState(false);
 
   const [nhanVien, setNhanVien] =
     useState("");
@@ -767,32 +768,52 @@ const conPhaiThanhToan =
           box-sizing: border-box;
           width: 100% !important;
           max-width: none !important;
-          min-height: 100vh;
-          padding: 28px 16px 48px;
+          min-height: auto;
+          padding: 16px 12px 28px;
           overflow: visible !important;
           background:
-            radial-gradient(circle at 8% 8%, rgba(125, 211, 252, 0.42), transparent 32%),
-            radial-gradient(circle at 92% 18%, rgba(196, 181, 253, 0.38), transparent 30%),
-            linear-gradient(135deg, #e8f1f8 0%, #f6f8fc 48%, #e9e7f5 100%);
+            #f5f7fa;
         }
 
         .invoice-paper {
           border: 1px solid rgba(255, 255, 255, 0.78) !important;
-          border-radius: 30px;
-          background: rgba(255, 255, 255, 0.66) !important;
-          box-shadow: 0 24px 70px rgba(57, 73, 101, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
+          border-radius: 12px;
+          background: #ffffff !important;
+          box-shadow: 0 8px 24px rgba(57, 73, 101, 0.08);
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          min-height: auto !important;
         }
 
         .invoice-header {
           border-bottom-color: rgba(148, 163, 184, 0.28) !important;
-          padding-bottom: 26px !important;
+          padding-bottom: 12px !important;
         }
 
         .invoice-header h1 {
           color: #172033;
           letter-spacing: -0.025em;
+        }
+
+        .invoice-company-name {
+          max-width: 340px;
+          margin: 0 !important;
+          font-size: clamp(18px, 2.5vw, 28px) !important;
+          line-height: 1.12 !important;
+          text-wrap: balance;
+        }
+
+        .invoice-company-name + p,
+        .invoice-company-name + p + p {
+          margin: 3px 0 0 !important;
+          font-size: 12px !important;
+          line-height: 1.35 !important;
+        }
+
+        .invoice-title {
+          margin: 16px 0 10px !important;
+          font-size: clamp(22px, 4vw, 34px) !important;
+          line-height: 1.1 !important;
         }
 
         .invoice-header p,
@@ -802,27 +823,85 @@ const conPhaiThanhToan =
         }
 
         .invoice-customer {
-          margin-top: 26px !important;
-          padding: 16px 18px;
+          margin-top: 0 !important;
+          padding: 9px 12px;
           border: 1px solid rgba(255, 255, 255, 0.78);
-          border-radius: 18px;
-          background: rgba(255, 255, 255, 0.42);
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+          border-radius: 10px;
+          background: #f8fafc;
+          box-shadow: none;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: 3px 18px;
+        }
+
+        .invoice-customer p {
+          margin: 0 !important;
+          font-size: 13px;
+          line-height: 1.35;
+          min-width: 0;
+          overflow-wrap: anywhere;
+        }
+
+        .invoice-customer p:last-child {
+          grid-column: 1 / -1;
         }
 
         .invoice-table-wrap {
-          margin-top: 24px;
-          padding: 10px;
+          margin-top: 14px;
+          padding: 4px;
           overflow: visible;
           min-width: 0;
           border: 1px solid rgba(255, 255, 255, 0.8);
-          border-radius: 22px;
-          background: rgba(255, 255, 255, 0.42);
+          border-radius: 10px;
+          background: #ffffff;
         }
 
         .invoice-table-wrap table {
           overflow: hidden;
-          border-radius: 14px;
+          border-radius: 6px;
+        }
+
+        .invoice-table-wrap table { width: 100%; table-layout: fixed; }
+        .invoice-table-wrap th,
+        .invoice-table-wrap td {
+          font-size: 11px !important;
+          line-height: 1.35 !important;
+          padding: 8px 5px !important;
+          vertical-align: middle;
+          overflow-wrap: anywhere;
+        }
+        .invoice-table-wrap th { padding: 8px 3px !important; }
+        .invoice-table-wrap tbody tr:has(> td:nth-child(2)[colspan]) > td:first-child {
+          padding-left: 12px !important;
+          text-align: left !important;
+          font-weight: 500 !important;
+          font-size: 10px !important;
+        }
+        .invoice-table-wrap tbody tr:has(> td:nth-child(2)[colspan]) {
+          background: #fbfcfd;
+        }
+        .invoice-table-wrap tbody tr:first-child > td:first-child,
+        .invoice-table-wrap tbody tr > td:first-child[style*="fontWeight"] {
+          font-weight: 700 !important;
+        }
+        .invoice-table-wrap .invoice-door-row {
+          background: #f3f6f9;
+        }
+        .invoice-table-wrap .invoice-door-row > td:first-child {
+          font-weight: 700 !important;
+          font-size: 12px !important;
+          padding-top: 10px !important;
+          padding-bottom: 10px !important;
+        }
+        .invoice-table-wrap tbody tr:not(:has(> td:nth-child(2)[colspan])):not(:has(> td[colspan="9"])) {
+          background: #f7f9fb;
+        }
+        .invoice-table-wrap tbody tr:has(> td[colspan="9"]) > td {
+          padding: 9px 10px !important;
+          color: #b42318 !important;
+          background: #fff5f3;
+          font-size: 11px !important;
+          line-height: 1.4 !important;
         }
 
         .invoice-table-wrap th {
@@ -836,20 +915,31 @@ const conPhaiThanhToan =
         }
 
         .invoice-summary {
-          margin-top: 26px !important;
+          margin-top: 16px !important;
         }
 
         .invoice-total-card {
-          padding: 18px 20px !important;
-          border: 1px solid rgba(255, 255, 255, 0.82);
-          border-radius: 22px;
-          background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(226, 232, 240, 0.4));
-          box-shadow: 0 12px 28px rgba(71, 85, 105, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+          padding: 12px 16px !important;
+          border: 1px solid #dbe2ea;
+          border-radius: 10px;
+          background: #f8fafc;
+          box-shadow: none;
         }
 
         .invoice-total-card table {
           margin-top: 0 !important;
           color: #46546a;
+          width: min(100%, 460px) !important;
+          table-layout: fixed;
+        }
+        .invoice-total-card td {
+          padding: 6px 4px !important;
+          line-height: 1.35;
+        }
+        .invoice-total-card td:last-child {
+          text-align: right;
+          white-space: nowrap;
+          width: 46%;
         }
 
         .invoice-total-card tr:last-child {
@@ -858,14 +948,29 @@ const conPhaiThanhToan =
         }
 
         .invoice-total-card tr:last-child td {
-          padding-top: 14px !important;
-          border-top: 1px solid rgba(100, 116, 139, 0.25);
+          padding-top: 12px !important;
+          padding-bottom: 12px !important;
+          border-top: 1px solid #e6a7a0;
+          background: #fff5f3;
+          color: #b42318;
+          font-size: 1.08em;
+          font-weight: 800;
         }
 
         .invoice-footer {
-          margin-top: 24px;
-          padding: 20px 8px 8px !important;
+          margin-top: 14px;
+          padding: 14px 8px 4px !important;
           border-top: 1px solid rgba(148, 163, 184, 0.24);
+        }
+        .invoice-footer .grid {
+          margin-top: 28px !important;
+        }
+        .invoice-footer .grid > div > div {
+          height: 52px !important;
+        }
+        .invoice-footer .grid p {
+          margin: 3px 0 !important;
+          line-height: 1.3;
         }
 
         .invoice-actions {
@@ -898,19 +1003,33 @@ const conPhaiThanhToan =
 
         @media (max-width: 768px) {
           .invoice-screen {
-            padding: 12px 8px 28px;
+            padding: 8px 4px 18px;
           }
 
           .invoice-paper {
-            border-radius: 22px;
+            border-radius: 10px;
           }
 
           .invoice-table-wrap {
             margin-left: -2px;
             margin-right: -2px;
-            padding: 6px;
-            border-radius: 16px;
+            padding: 3px;
+            border-radius: 8px;
           }
+
+          .invoice-paper { padding: 10px !important; }
+          .invoice-company-name { font-size: 18px !important; max-width: 250px; }
+          .invoice-company-name + p,
+          .invoice-company-name + p + p { font-size: 10px !important; }
+          .invoice-title { margin: 12px 0 8px !important; font-size: 22px !important; }
+          .invoice-customer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3px 8px; }
+          .invoice-customer p { font-size: 11px; }
+          .invoice-table-wrap th,
+          .invoice-table-wrap td { font-size: 9px !important; padding: 7px 3px !important; }
+          .invoice-table-wrap tbody tr:has(> td[colspan="9"]) > td { font-size: 10px !important; }
+          .invoice-total-card { padding: 9px 10px !important; }
+          .invoice-total-card td { font-size: 11px; }
+          .invoice-total-card tr:last-child td { font-size: 12px !important; }
         }
 
         @media print {
@@ -958,7 +1077,7 @@ const conPhaiThanhToan =
   style={{
     width: "100%",
     maxWidth: "210mm",
-    minHeight: "297mm",
+    minHeight: "auto",
     margin: "0 auto",
     backgroundColor: "#ffffff",
    padding: window.innerWidth < 768
@@ -988,7 +1107,7 @@ style={{
 
               <div>
 
-                <h1 className="text-2xl font-bold uppercase">
+                <h1 className="text-2xl font-bold uppercase invoice-company-name">
 
                   Công Ty TNHH
                   Công Nghệ
@@ -1017,7 +1136,7 @@ style={{
             </div>
 
             <h1
-  className="text-center font-bold mt-10"
+  className="text-center font-bold mt-10 invoice-title"
   style={{
     fontSize: isMobile
   ? "22px"
@@ -1069,15 +1188,15 @@ style={{
 
 <table className="w-full border-collapse table-fixed">
         <colgroup>
-  <col style={{ width: "28%" }} />
+  <col style={{ width: "31%" }} />
   <col style={{ width: "5%" }} />
+  <col style={{ width: "7%" }} />
+  <col style={{ width: "7%" }} />
+  <col style={{ width: "4%" }} />
   <col style={{ width: "8%" }} />
-  <col style={{ width: "8%" }} />
-  <col style={{ width: "5%" }} />
-  <col style={{ width: "10%" }} />
-  <col style={{ width: "6%" }} />
+  <col style={{ width: "7%" }} />
   <col style={{ width: "14%" }} />
-  <col style={{ width: "16%" }} />
+  <col style={{ width: "17%" }} />
 </colgroup>
 
             <thead>
@@ -1461,7 +1580,7 @@ const tienPhaoDinh =
 
     <>
 
-      <tr>
+      <tr className="invoice-door-row">
 
        <td
   className="border"
@@ -1572,10 +1691,9 @@ const tienPhaoDinh =
     textAlign: "right",
 
     whiteSpace: "nowrap",
-
-    overflow: "hidden",
-
-    textOverflow: "ellipsis",
+    minWidth: isMobile ? "34px" : "48px",
+    overflow: "visible",
+    textOverflow: "clip",
 
     verticalAlign: "middle",
   }}
@@ -1584,7 +1702,7 @@ const tienPhaoDinh =
           {formatSoLuong(
             kichThuocMet(cua.rong) *
             kichThuocMet(cua.cao)
-          )}
+          )} m²
 
         </td>
 
@@ -2841,7 +2959,9 @@ setLoaiDon("");
       <button
         type="button"
         onClick={() =>
-          setLoaiDon("khachle")
+          hienLuaChonCuaThep
+            ? setLoaiDon("khachle")
+            : setHienLuaChonCuaThep(true)
         }
         className="choice-button choice-button--retail
           w-full
@@ -2862,9 +2982,10 @@ setLoaiDon("");
           WebkitTapHighlightColor: "transparent",
         }}
       >
-        Lên đơn khách lẻ
+        {hienLuaChonCuaThep ? "Lên đơn khách lẻ" : "Lên đơn cửa thép"}
       </button>
 
+      {hienLuaChonCuaThep && (
       <button
         type="button"
         onClick={() =>
@@ -2891,6 +3012,8 @@ setLoaiDon("");
       >
         Lên đơn đại lý
       </button>
+      )}
+      {!hienLuaChonCuaThep && (<>
       <button type="button" onClick={() => setLoaiDon("son-mykolor")} className="choice-button choice-button--paint choice-button--mykolor w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#f8fafc", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
         L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Mykolor
       </button>
@@ -2900,6 +3023,7 @@ setLoaiDon("");
       <button type="button" onClick={() => setLoaiDon("son-sunpro")} className="choice-button choice-button--paint choice-button--sunpro w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none" style={{ backgroundColor: "#facc15", color: "#17202b", touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}>
         L&#xEA;n &#x111;&#x1A1;n s&#x1A1;n Sunpro
       </button>
+      </>)}
 
     </div>
 

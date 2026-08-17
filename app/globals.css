@@ -331,16 +331,30 @@ button.is-releasing {
 }
 
 [data-screen="order-type"] .choice-button--retail {
-  background: linear-gradient(135deg, #f0d69a 0%, #c89643 100%) !important;
-  color: var(--navy-deep) !important;
-  border-color: rgba(255, 238, 190, 0.72);
-  box-shadow: 0 18px 36px rgba(183, 133, 49, 0.28), inset 0 1px 0 rgba(255, 250, 218, 0.7);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(147, 197, 253, 0.72);
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
-[data-screen="order-type"] .choice-button--dealer,
-[data-screen="order-type"] .choice-button--paint {
-  background: rgba(255, 255, 255, 0.075) !important;
-  color: #fffaf0 !important;
+[data-screen="order-type"] .choice-button--dealer {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+  color: #ffffff !important;
+}
+
+[data-screen="order-type"] .choice-button--paint.choice-button--mykolor {
+  background: #f8fafc !important;
+  color: #17202b !important;
+}
+
+[data-screen="order-type"] .choice-button--paint.choice-button--forich {
+  background: #f97316 !important;
+  color: #ffffff !important;
+}
+
+[data-screen="order-type"] .choice-button--paint.choice-button--sunpro {
+  background: #facc15 !important;
+  color: #17202b !important;
 }
 
 [data-screen="order-type"] .choice-button:hover {
