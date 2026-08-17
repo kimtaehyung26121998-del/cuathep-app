@@ -1870,6 +1870,7 @@ const tienPhaoDinh =
 
       );
 
+  const laCuaSo = cua.loaiCua.toLowerCase().includes("sổ");
 
 
   return (
@@ -1885,10 +1886,10 @@ const tienPhaoDinh =
 
             <div className="invoice-mobile-door-details">
               <div className="invoice-detail-item"><strong>Khuôn</strong><span>{formatKichThuoc(cua.khuon)} mm</span></div>
+              <div className="invoice-detail-item"><strong>Màu</strong><span>{cua.maMau || "-"}</span></div>
               <div className="invoice-detail-item"><strong>Rộng</strong><span>{formatKichThuoc(cua.rong)} mm</span></div>
               <div className="invoice-detail-item"><strong>Cao</strong><span>{formatKichThuoc(cua.cao)} mm</span></div>
-              <div className="invoice-detail-item"><strong>Màu</strong><span>{cua.maMau || "-"}</span></div>
-              <div className="invoice-detail-item"><strong>Hướng mở</strong><span>{cua.huongMo || "-"}</span></div>
+              {!laCuaSo && <div className="invoice-detail-item"><strong>Hướng mở</strong><span>{cua.huongMo || "-"}</span></div>}
               <div className="invoice-detail-item"><strong>Diện tích</strong><span>{formatSoLuong(kichThuocMet(cua.rong) * kichThuocMet(cua.cao))} m²</span></div>
               <div className="invoice-detail-item invoice-detail-money"><strong>Đơn giá</strong><span>{Number(cua.donGia || 0).toLocaleString()} đ/m²</span></div>
               <div className="invoice-detail-item invoice-detail-money"><strong>Tiền cửa</strong><span>{Math.round(tinhTienCua(cua)).toLocaleString()} đ</span></div>
