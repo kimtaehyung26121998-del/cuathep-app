@@ -445,6 +445,241 @@ select {
   content: "________________";
 }
 
+.paint-invoice-mobile-cards {
+  display: none;
+}
+
+.paint-invoice-table th:nth-child(n+5),
+.paint-invoice-table td:nth-child(n+5) {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.paint-invoice-summary-new .paint-summary-row span {
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .paint-invoice {
+    padding: 12px 10px !important;
+    overflow: hidden;
+  }
+
+  .paint-invoice-header {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(104px, 31%);
+    align-items: start;
+    gap: 8px !important;
+  }
+
+  .paint-invoice-company {
+    min-width: 0;
+  }
+
+  .paint-invoice-company img {
+    width: 54px !important;
+    max-height: 38px;
+  }
+
+  .paint-invoice-company-name {
+    max-width: none;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .paint-invoice-company-detail {
+    font-size: 8px !important;
+    line-height: 1.25 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .paint-invoice-title {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 15px !important;
+    line-height: 1.15 !important;
+    text-align: right;
+    white-space: normal;
+  }
+
+  .paint-invoice-customer {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    margin-top: 8px !important;
+    padding: 7px 8px;
+    font-size: 10px !important;
+  }
+
+  .paint-customer-row {
+    line-height: 1.35;
+  }
+
+  .paint-invoice-table-wrap {
+    margin-top: 10px !important;
+  }
+
+  .paint-invoice-table {
+    display: none;
+  }
+
+  .paint-invoice-mobile-cards {
+    display: grid;
+    gap: 10px;
+  }
+
+  .paint-invoice-mobile-card {
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #dbe2ea;
+    border-radius: 11px;
+    color: #1f2937;
+    background: #fbfcfd;
+  }
+
+  .paint-mobile-card-heading {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 7px;
+    align-items: start;
+    padding-bottom: 9px;
+    border-bottom: 1px solid #e5eaf0;
+  }
+
+  .paint-mobile-card-index {
+    color: #172033;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .paint-mobile-product-name {
+    margin: 0;
+    color: #172033;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .paint-mobile-product-en {
+    margin: 4px 0 0;
+    color: #536176;
+    font-size: 10px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .paint-mobile-card-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px 12px;
+    margin: 10px 0;
+  }
+
+  .paint-mobile-card-details > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .paint-mobile-card-details dt,
+  .paint-mobile-card-details dd {
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .paint-mobile-card-details dt {
+    color: #64748b;
+    font-size: 11px;
+  }
+
+  .paint-mobile-card-details dd {
+    min-width: 0;
+    color: #172033;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .paint-mobile-card-details .paint-mobile-muted dt,
+  .paint-mobile-card-details .paint-mobile-muted dd {
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  .paint-mobile-card-total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 9px;
+    border-top: 1px solid #dbe2ea;
+    color: #172033;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .paint-mobile-card-total strong {
+    color: #b42318;
+    font-size: 15px;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .paint-invoice-summary-new {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    margin-top: 10px;
+    padding: 8px 10px;
+  }
+
+  .paint-invoice-summary-new .paint-summary-row {
+    min-height: 27px;
+    gap: 10px;
+    font-size: 11px;
+  }
+
+  .paint-invoice-summary-new .paint-summary-row strong {
+    font-size: 11px;
+  }
+
+  .paint-invoice-summary-new .paint-summary-remaining {
+    font-size: 11px;
+  }
+
+  .paint-invoice-summary-new .paint-summary-remaining strong {
+    font-size: 13px;
+  }
+
+  .paint-invoice-signature {
+    margin-top: 12px !important;
+  }
+
+  .paint-invoice-date {
+    font-size: 9px !important;
+  }
+
+  .paint-invoice-signature-grid {
+    margin-top: 14px !important;
+  }
+
+  .paint-invoice-signer-name {
+    margin-top: 24px !important;
+  }
+
+  .paint-invoice-signature-grid > div:last-child::after {
+    margin-top: 24px;
+  }
+}
+
 @media (max-width: 640px) {
   .paint-invoice {
     padding: 10px 8px !important;

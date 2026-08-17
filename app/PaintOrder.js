@@ -2309,6 +2309,61 @@ updateItem(
 
             </table>
 
+            <div className="paint-invoice-mobile-cards">
+              {groupedItems.map((item, index) => {
+                const paintTotal = item.basePrice * item.qty;
+                const colorTotal = item.colorPrice * item.qty;
+                const rowTotal =
+                  (item.finalPrice === 0 ? item.basePrice : item.finalPrice) * item.qty;
+
+                return (
+                  <article key={index} className="paint-invoice-mobile-card">
+                    <div className="paint-mobile-card-heading">
+                      <span className="paint-mobile-card-index">{index + 1}.</span>
+                      <div>
+                        <p className="paint-mobile-product-name">
+                          {item.vn} - {item.size}
+                        </p>
+                        <p className="paint-mobile-product-en">{item.en}</p>
+                      </div>
+                    </div>
+
+                    <dl className="paint-mobile-card-details">
+                      <div>
+                        <dt>Màu</dt>
+                        <dd>{item.colorCode?.slice(0, 6) || "-"}</dd>
+                      </div>
+                      <div>
+                        <dt>Số lượng</dt>
+                        <dd>{item.qty}</dd>
+                      </div>
+                      <div>
+                        <dt>Đơn giá sơn</dt>
+                        <dd>{item.basePrice.toLocaleString("vi-VN")} đ</dd>
+                      </div>
+                      <div>
+                        <dt>Tiền sơn</dt>
+                        <dd>{paintTotal.toLocaleString("vi-VN")} đ</dd>
+                      </div>
+                      <div className={item.colorPrice === 0 ? "paint-mobile-muted" : ""}>
+                        <dt>Đơn giá màu</dt>
+                        <dd>{item.colorPrice.toLocaleString("vi-VN")} đ</dd>
+                      </div>
+                      <div className={colorTotal === 0 ? "paint-mobile-muted" : ""}>
+                        <dt>Tiền màu</dt>
+                        <dd>{colorTotal.toLocaleString("vi-VN")} đ</dd>
+                      </div>
+                    </dl>
+
+                    <div className="paint-mobile-card-total">
+                      <span>THÀNH TIỀN</span>
+                      <strong>{rowTotal.toLocaleString("vi-VN")} đ</strong>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
           </div>
 
           {/* tổng */}
