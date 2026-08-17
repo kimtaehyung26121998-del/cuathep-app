@@ -1263,6 +1263,7 @@ const [customerDeposit, setCustomerDeposit] =
   }, {})
 
 );
+  const hasColorableItems = groupedItems.some((item) => item.canMixColor);
   const total = orderItems.reduce((sum, item) => {
 
   if (item.finalPrice === 0) {
@@ -2187,48 +2188,36 @@ updateItem(
 
           <div className="mt-4 paint-invoice-table-wrap">
 
-            <table className="w-full border text-[5px] md:text-[8px] leading-tight table-auto paint-invoice-table">
+            <table className={`w-full border leading-tight paint-invoice-table desktop-table ${hasColorableItems ? "has-color-columns" : "no-color-columns"}`}>
+
+              <colgroup>
+                <col className="invoice-col-index" />
+                <col className="invoice-col-product" />
+                {hasColorableItems && <col className="invoice-col-color" />}
+                <col className="invoice-col-qty" />
+                <col className="invoice-col-money" />
+                <col className="invoice-col-money" />
+                {hasColorableItems && <>
+                  <col className="invoice-col-money" />
+                  <col className="invoice-col-money" />
+                </>}
+                <col className="invoice-col-total" />
+              </colgroup>
 
               <thead className="bg-gray-100">
 
   <tr>
-
-    <th className="border px-[1px] py-[1px] w-[12px]">
-      STT
-    </th>
-
-    <th className="border px-[2px] py-[1px] w-[160px]">
-  Sản phẩm
-</th>
-
-    <th className="border px-[1px] py-[1px] w-[18px]">
-  Màu
-</th>
-
-    <th className="border px-[2px] py-1 w-[28px]">
-      SL
-    </th>
-
-    <th className="border px-[2px] py-1 w-[34px]">
-  ĐG Sơn
-</th>
-
-<th className="border px-[2px] py-1 w-[34px]">
-   Tổng tiền sơn
-</th>
-
-<th className="border px-[2px] py-1 w-[34px]">
-  ĐG Màu
-</th>
-
-<th className="border px-[2px] py-1 w-[34px]">
-  Tổng tiền màu
-</th>
-
-<th className="border px-[1px] py-[1px] w-[38px] break-words">
-  Tổng
-</th>
-
+    <th className="border px-[1px] py-[1px]">STT</th>
+    <th className="border px-[2px] py-[1px]">Sản phẩm</th>
+    {hasColorableItems && <th className="border px-[1px] py-[1px]">Màu</th>}
+    <th className="border px-[2px] py-1">SL</th>
+    <th className="border px-[2px] py-1">ĐG Sơn</th>
+    <th className="border px-[2px] py-1">Tổng tiền sơn</th>
+    {hasColorableItems && <>
+      <th className="border px-[2px] py-1">ĐG Màu</th>
+      <th className="border px-[2px] py-1">Tổng tiền màu</th>
+    </>}
+    <th className="border px-[1px] py-[1px]">Tổng</th>
   </tr>
 
 </thead>
@@ -2272,9 +2261,9 @@ updateItem(
 
         </td>
 
-        <td className="border px-[1px] py-[1px] text-center align-top w-[18px] overflow-hidden">
-  {item.colorCode?.slice(0, 6)}
-</td>
+        {hasColorableItems && <td className="border px-[1px] py-[1px] text-center align-top overflow-hidden">
+          {item.canMixColor ? item.colorCode?.slice(0, 6) : ""}
+        </td>}
 
         <td className="border px-[2px] py-1 text-center align-top">
           {item.qty}
@@ -2288,13 +2277,14 @@ updateItem(
   {(paintTotal).toLocaleString("vi-VN")}
 </td>
 
-<td className="border px-[2px] py-1 text-right align-top">
-  {(item.colorPrice).toLocaleString("vi-VN")}
-</td>
-
-<td className="border px-[2px] py-1 text-right align-top">
-  {(colorTotal).toLocaleString("vi-VN")}
-</td>
+        {hasColorableItems && <>
+          <td className="border px-[2px] py-1 text-right align-top">
+            {item.canMixColor ? item.colorPrice.toLocaleString("vi-VN") : ""}
+          </td>
+          <td className="border px-[2px] py-1 text-right align-top">
+            {item.canMixColor ? colorTotal.toLocaleString("vi-VN") : ""}
+          </td>
+        </>}
 
         <td className="border px-[2px] py-1 text-right font-bold align-top">
           {(rowTotal).toLocaleString("vi-VN")}
@@ -2309,7 +2299,7 @@ updateItem(
 
             </table>
 
-            <div className="paint-invoice-mobile-cards">
+            <div className="paint-invoice-mobile-cards mobile-items">
               {groupedItems.map((item, index) => {
                 const paintTotal = item.basePrice * item.qty;
                 const colorTotal = item.colorPrice * item.qty;
