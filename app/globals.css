@@ -1077,7 +1077,7 @@ select {
   }
 }
 
-/* Invoice responsive contract: mobile cards, tablet/desktop table. */
+/* Invoice responsive contract: one shared card layout at every viewport. */
 .paint-invoice {
   width: 100%;
   max-width: 1200px;
@@ -1195,11 +1195,116 @@ select {
   }
 
   .mobile-items {
-    display: none !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
 
   .desktop-table {
-    display: table !important;
+    display: none !important;
+  }
+
+  .paint-invoice-mobile-card {
+    min-width: 0;
+    padding: 14px;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    color: #1f2937;
+    background: #fbfcfd;
+  }
+
+  .paint-mobile-card-heading {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px;
+    align-items: start;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5eaf0;
+  }
+
+  .paint-mobile-card-index {
+    color: #172033;
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .paint-mobile-product-name {
+    margin: 0;
+    color: #172033;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .paint-mobile-product-en {
+    margin: 4px 0 0;
+    color: #536176;
+    font-size: 10px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .paint-mobile-card-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 16px;
+    margin: 11px 0;
+  }
+
+  .paint-mobile-card-details > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .paint-mobile-card-details dt,
+  .paint-mobile-card-details dd {
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .paint-mobile-card-details dt {
+    color: #64748b;
+    font-size: 11px;
+  }
+
+  .paint-mobile-card-details dd {
+    min-width: 0;
+    color: #172033;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .paint-mobile-card-details .paint-mobile-muted dt,
+  .paint-mobile-card-details .paint-mobile-muted dd {
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  .paint-mobile-card-total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #dbe2ea;
+    color: #172033;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .paint-mobile-card-total strong {
+    color: #b42318;
+    font-size: 16px;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
   }
 
   .paint-invoice-summary-new {
