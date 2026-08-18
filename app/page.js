@@ -10,8 +10,7 @@ import PaintOrder from "./PaintOrder";
 import { createOrderCode, getOrderCode } from "./orderCode";
 const formatTien = (value) => {
 
-  const number =
-    value.replace(/\D/g, "");
+  const number = String(value ?? "").replace(/\D/g, "");
 
   return Number(number)
     .toLocaleString("en-US");
