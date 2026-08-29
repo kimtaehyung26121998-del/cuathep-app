@@ -1957,3 +1957,342 @@ button.is-releasing {
     animation: none !important;
   }
 }
+
+/* Imported door quotation */
+[data-screen="order-type"] .choice-button--imported {
+  color: #fff9e9 !important;
+  border-color: rgba(249, 211, 126, 0.62);
+  background: linear-gradient(135deg, #9a6a1d, #d2a64b 55%, #805111) !important;
+  box-shadow: 0 18px 36px rgba(173, 126, 42, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.imported-order-shell,
+.imported-invoice-screen {
+  min-height: 100svh;
+  padding: 20px;
+  color: #102235;
+  background:
+    radial-gradient(circle at 9% 0%, rgba(255, 255, 255, 0.9), transparent 28%),
+    radial-gradient(circle at 92% 13%, rgba(214, 175, 96, 0.24), transparent 25%),
+    linear-gradient(140deg, #f8f2e8, #eee2cf);
+}
+
+.imported-order-panel {
+  width: min(100%, 900px);
+  margin: 0 auto;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 28px;
+  background: rgba(255, 253, 248, 0.78);
+  box-shadow: 0 28px 74px rgba(26, 37, 49, 0.14);
+  backdrop-filter: blur(22px);
+}
+
+.imported-order-panel button,
+.imported-order-panel input,
+.imported-order-panel select {
+  min-height: 46px;
+  border-radius: 14px;
+}
+
+.imported-order-panel input,
+.imported-order-panel select {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid rgba(25, 51, 72, 0.14);
+  color: #102235;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.imported-order-panel input:focus,
+.imported-order-panel select:focus {
+  border-color: #c59b48;
+  outline: 0;
+  box-shadow: 0 0 0 4px rgba(197, 155, 72, 0.15);
+}
+
+.imported-back {
+  padding: 0 16px;
+  border: 1px solid #d8dfe7;
+  background: #fff;
+  font-weight: 700;
+}
+
+.imported-order-heading {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin: 22px 0;
+}
+
+.imported-order-heading img {
+  width: 82px;
+  height: 82px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(122, 88, 28, 0.15);
+}
+
+.imported-order-heading p,
+.imported-extras header p {
+  margin: 0 0 4px;
+  color: #9a6a1d;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.imported-order-heading h1 {
+  margin: 0;
+  font-size: clamp(25px, 5vw, 38px);
+  line-height: 1.05;
+}
+
+.imported-order-heading span {
+  display: block;
+  margin-top: 7px;
+  color: #6d7784;
+  font-size: 13px;
+}
+
+.imported-tier {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 6px;
+  border-radius: 18px;
+  background: #e9edf1;
+}
+
+.imported-tier button {
+  border: 0;
+  color: #526071;
+  background: transparent;
+  font-weight: 800;
+}
+
+.imported-tier button.active {
+  color: #fff;
+  background: linear-gradient(135deg, #15314a, #0a1b2b);
+  box-shadow: 0 8px 20px rgba(16, 34, 53, 0.2);
+}
+
+.imported-saved {
+  margin: 14px 0;
+  padding: 12px;
+  border: 1px solid #ead8ae;
+  border-radius: 16px;
+  background: #fff9e9;
+}
+
+.imported-saved > button {
+  width: 100%;
+  border: 0;
+  color: #725019;
+  background: transparent;
+  text-align: left;
+  font-weight: 800;
+}
+
+.imported-saved article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.imported-saved article span:first-child { min-width: 0; }
+.imported-saved article small { display: block; color: #798392; }
+.imported-saved article span:last-child { display: flex; gap: 5px; }
+.imported-saved article button { min-height: 34px; padding: 0 10px; border: 0; background: #e7edf3; font-weight: 700; }
+
+.imported-customer-inputs,
+.imported-door-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+  margin-top: 14px;
+}
+
+.imported-door-list { margin-top: 18px; }
+
+.imported-door-card {
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px solid rgba(185, 143, 61, 0.24);
+  border-radius: 22px;
+  background: linear-gradient(155deg, rgba(255,255,255,0.94), rgba(249,243,232,0.9));
+  box-shadow: 0 13px 30px rgba(48, 57, 66, 0.07);
+}
+
+.imported-door-card > header,
+.imported-extras > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.imported-door-card h2,
+.imported-extras h2 { margin: 0; font-size: 20px; }
+.imported-door-card header span { display: flex; gap: 5px; }
+.imported-door-card header button { min-height: 34px; padding: 0 9px; border: 0; color: #805111; background: #f7ead0; font-weight: 800; }
+.imported-door-card header button:last-child { color: #9d3834; background: #fdeceb; }
+.imported-door-card header button:disabled { opacity: 0.4; }
+.imported-door-card label { display: block; color: #526071; font-size: 12px; font-weight: 800; }
+.imported-door-card label select { margin-top: 6px; font-size: 14px; }
+
+.imported-spec {
+  display: grid;
+  gap: 4px;
+  margin: 10px 0 0;
+  padding: 11px 13px;
+  border-left: 3px solid #c99d45;
+  border-radius: 0 12px 12px 0;
+  color: #536176;
+  background: #fff9ea;
+  font-size: 12px;
+}
+
+.imported-spec b { color: #192d40; }
+
+.imported-door-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 13px;
+  padding: 13px 15px;
+  border-radius: 15px;
+  color: #fff;
+  background: #102a40;
+}
+
+.imported-door-total span { font-size: 12px; }
+.imported-door-total span b,
+.imported-door-total span small { display: block; }
+.imported-door-total small { color: #f0d69a; }
+.imported-door-total strong { color: #fff7e4; font-size: 21px; white-space: nowrap; }
+
+.imported-add-door {
+  width: 100%;
+  margin-top: 13px;
+  border: 1px dashed #b58a37;
+  color: #7c571a;
+  background: #fff9e9;
+  font-weight: 900;
+}
+
+.imported-extras {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #dfe5eb;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.74);
+}
+
+.imported-extras header select { width: min(100%, 310px); }
+.imported-empty { color: #7b8795; font-size: 13px; }
+.imported-extras article {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 70px 35px 125px 120px 36px;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid #e6eaee;
+}
+.imported-extras article small { display: block; color: #85909d; }
+.imported-extras article > b { text-align: right; color: #8b5e19; white-space: nowrap; }
+.imported-extras article > button { min-height: 36px; border: 0; color: #9f3434; background: #fdeceb; font-size: 20px; }
+
+.imported-total-card {
+  margin-top: 18px;
+  padding: 15px 18px;
+  border-radius: 18px;
+  color: #dfe7ee;
+  background: linear-gradient(145deg, #102a40, #071725);
+}
+
+.imported-total-card p,
+.imported-summary p { display: flex; justify-content: space-between; gap: 18px; margin: 8px 0; }
+.imported-total-card .grand { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.18); color: #f4d996; font-size: 20px; }
+
+.imported-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.imported-actions button { border: 0; color: #fff; background: #183a55; font-weight: 900; }
+.imported-actions button:last-child { color: #172434; background: linear-gradient(135deg, #edcf8c, #c5953d); }
+
+.imported-invoice-actions {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  margin-bottom: 14px;
+}
+.imported-invoice-actions button { min-height: 44px; padding: 0 16px; border: 0; border-radius: 12px; color: #fff; background: #17354e; font-weight: 800; }
+.imported-invoice-actions button:last-child { color: #142638; background: #e7c87e; }
+
+.imported-invoice {
+  width: min(100%, 1100px);
+  margin: 0 auto;
+  padding: 28px;
+  border-radius: 14px;
+  color: #1d2936;
+  background: #fff;
+  box-shadow: 0 12px 38px rgba(35, 47, 58, 0.13);
+}
+.imported-invoice-header { display: flex; align-items: center; gap: 17px; padding-bottom: 17px; border-bottom: 2px solid #cda552; }
+.imported-invoice-header img { width: 92px; height: 92px; object-fit: contain; }
+.imported-invoice-header p { margin: 0; color: #a06c1d; font-weight: 900; }
+.imported-invoice-header h1 { margin: 3px 0; color: #102a40; font-size: clamp(24px, 4vw, 36px); }
+.imported-invoice-header span { color: #718092; }
+.imported-customer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 18px; margin: 15px 0; padding: 12px 14px; border-radius: 10px; background: #f4f7f9; }
+.imported-customer-grid p { margin: 0; font-size: 13px; }
+.imported-table-wrap { overflow-x: auto; }
+.imported-invoice table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.imported-invoice th { color: #fff; background: #17354e; }
+.imported-invoice th,
+.imported-invoice td { padding: 9px 7px; border: 1px solid #d7dde3; text-align: left; vertical-align: top; }
+.imported-invoice th:first-child,
+.imported-invoice td:first-child { width: 42px; text-align: center; }
+.imported-invoice th:nth-child(n+4),
+.imported-invoice td:nth-child(n+4) { text-align: right; }
+.imported-invoice td small { display: block; margin-top: 4px; color: #718092; }
+.imported-summary { width: min(100%, 470px); margin: 16px 0 0 auto; padding: 13px 15px; border-radius: 12px; background: #f4f7f9; }
+.imported-summary .grand { margin-top: 11px; padding-top: 11px; border-top: 2px solid #cda552; color: #a06c1d; font-size: 18px; }
+.imported-invoice footer { margin-top: 20px; color: #6f7b88; font-size: 11px; }
+.imported-invoice footer > div { display: grid; grid-template-columns: 1fr 1fr; margin-top: 24px; color: #27394a; font-weight: 900; text-align: center; }
+
+@media (max-width: 720px) {
+  .imported-order-shell,
+  .imported-invoice-screen { padding: 10px; }
+  .imported-order-panel { padding: 15px; border-radius: 21px; }
+  .imported-order-heading { align-items: flex-start; }
+  .imported-order-heading img { width: 64px; height: 64px; border-radius: 17px; }
+  .imported-customer-inputs,
+  .imported-door-grid { grid-template-columns: 1fr; }
+  .imported-door-card { padding: 14px; }
+  .imported-door-card > header { align-items: flex-start; }
+  .imported-door-card header span { flex-direction: column; }
+  .imported-door-total { align-items: flex-start; flex-direction: column; }
+  .imported-extras > header { align-items: stretch; flex-direction: column; }
+  .imported-extras header select { width: 100%; }
+  .imported-extras article { grid-template-columns: minmax(0, 1fr) 68px 30px 36px; }
+  .imported-extras article > div { grid-column: 1 / -1; }
+  .imported-extras article > input:nth-of-type(2) { grid-column: 1 / 3; }
+  .imported-extras article > b { grid-column: 1 / 4; text-align: left; }
+  .imported-actions { grid-template-columns: 1fr; }
+  .imported-invoice { min-width: 760px; padding: 20px; }
+  .imported-invoice-screen { overflow-x: auto; }
+}
+
+@media print {
+  .imported-invoice-screen { padding: 0; background: #fff; }
+  .imported-invoice { box-shadow: none; }
+}

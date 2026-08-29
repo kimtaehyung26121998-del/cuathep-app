@@ -7,6 +7,7 @@ import {
 } from "react";
 import html2canvas from "html2canvas";
 import PaintOrder from "./PaintOrder";
+import ImportedDoorOrder from "./ImportedDoorOrder";
 import { createOrderCode, getOrderCode } from "./orderCode";
 const formatTien = (value) => {
 
@@ -3402,6 +3403,16 @@ setLoaiDon("");
         {hienLuaChonCuaThep ? "Lên đơn khách lẻ" : "Lên đơn cửa thép"}
       </button>
 
+      {!hienLuaChonCuaThep && (
+        <button
+          type="button"
+          onClick={() => setLoaiDon("nhapkhau")}
+          className="choice-button choice-button--imported w-full max-w-md py-4 rounded-2xl text-xl font-bold relative z-10 cursor-pointer select-none"
+        >
+          Lên đơn cửa nhập khẩu
+        </button>
+      )}
+
       {hienLuaChonCuaThep && (
       <button
         type="button"
@@ -3459,6 +3470,8 @@ setLoaiDon("");
 
     </div>
 
+  ) : loaiDon === "nhapkhau" ? (
+    <ImportedDoorOrder onBack={() => setLoaiDon("")} />
   ) : loaiDon.startsWith("son-") ? (
     <PaintOrder initialBrand={loaiDon.replace("son-", "")} onBack={() => setLoaiDon("")} />
   ) : (
