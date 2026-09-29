@@ -86,6 +86,10 @@ const taoBoCuaMoi = (id = null) => ({
   note: "",
 });
 
+// Chấp nhận cả tên chuẩn hiện tại và dữ liệu cũ đã từng lưu sai chính tả.
+const laPhaoDinh = (cua) =>
+  cua?.loaiPhao === "Phào đình" || cua?.loaiPhao === "Phào đỉnh";
+
 export default function Home() {
   const [danhSachCua, setDanhSachCua] =
     useState([taoBoCuaMoi("initial")]);
@@ -445,8 +449,7 @@ useEffect(() => {
 
     ? tinhTienPhao(cua)
 
-    : cua.loaiPhao ===
-      "Phào đình"
+    : laPhaoDinh(cua)
 
     ? (() => {
 
@@ -1914,7 +1917,7 @@ const tienPhaoDinh =
               <div className="invoice-detail-item invoice-detail-money"><strong>Tiền cửa</strong><span>{Math.round(tinhTienCua(cua)).toLocaleString()} đ</span></div>
             </div>
 
-            {(cua.coKhoa || cua.coKhoaNgoai || cua.loaiPhao === "Phào phụ" || cua.loaiPhao === "Phào đỉnh" || cua.coBomForm ||
+            {(cua.coKhoa || cua.coKhoaNgoai || cua.loaiPhao === "Phào phụ" || laPhaoDinh(cua) || cua.coBomForm ||
               (cua.loaiOThoang === "kinh" && Number(cua.kinhOThoang) > 0) ||
               (cua.loaiOThoang === "dac" && Number(cua.oThoangDac) > 0) ||
               (cua.loaiOThoang === "nanchop" && Number(cua.oThoangNanChop) > 0) ||
@@ -1932,8 +1935,8 @@ const tienPhaoDinh =
                   {cua.loaiPhao === "Phào phụ" && (
                     <li>Phào phụ: {Math.round(slPhaoPhu * Number(cua.donGiaPhao || 0)).toLocaleString()} đ</li>
                   )}
-                  {cua.loaiPhao === "Phào đỉnh" && (
-                    <li>Phào đỉnh: {Math.round(tienPhaoDinh).toLocaleString()} đ</li>
+                  {laPhaoDinh(cua) && (
+                    <li>Phào đình: {Math.round(tienPhaoDinh).toLocaleString()} đ</li>
                   )}
                   {cua.coBomForm && (
                     <li>Foam: {tinhTienBomForm(cua).toLocaleString()} đ</li>
@@ -2338,8 +2341,7 @@ const tienPhaoDinh =
 
       )}
 
-      {cua.loaiPhao ===
-        "Phào đình" && (
+      {laPhaoDinh(cua) && (
 
         <tr>
 
@@ -4034,10 +4036,7 @@ style={{
   <input
     type="radio"
     name={`phao-${cua.id}`}
-    checked={
-      cua.loaiPhao ===
-      "Phào đình"
-    }
+    checked={laPhaoDinh(cua)}
     onChange={() =>
       capNhatCua(
         cua.id,
@@ -4097,8 +4096,7 @@ style={{
 
 )}
 
-{cua.loaiPhao ===
-  "Phào đình" && (
+{laPhaoDinh(cua) && (
 
   <div className="space-y-4 border rounded-2xl p-4">
 
