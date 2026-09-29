@@ -90,6 +90,27 @@ const taoBoCuaMoi = (id = null) => ({
 const laPhaoDinh = (cua) =>
   cua?.loaiPhao === "Phào đình" || cua?.loaiPhao === "Phào đỉnh";
 
+const thongTinPhaoDinh = (cua) => {
+  if (cua?.kieuPhaoDinh === "tieuchuan") {
+    return {
+      phaoDung: "25 cm",
+      phaoNgang: "25 cm",
+      phaoDinh: "45 cm",
+    };
+  }
+
+  const hienThiCm = (value) =>
+    value === "" || value === null || value === undefined
+      ? "-"
+      : `${value} cm`;
+
+  return {
+    phaoDung: hienThiCm(cua?.rongPhaoDung),
+    phaoNgang: hienThiCm(cua?.caoPhaoNgang),
+    phaoDinh: hienThiCm(cua?.caoPhaoDinh),
+  };
+};
+
 export default function Home() {
   const [danhSachCua, setDanhSachCua] =
     useState([taoBoCuaMoi("initial")]);
@@ -1892,6 +1913,8 @@ const tienPhaoDinh =
 
       );
 
+const chiTietPhaoDinh = thongTinPhaoDinh(cua);
+
   const laCuaSo = cua.loaiCua.toLowerCase().includes("sổ");
 
 
@@ -1936,7 +1959,13 @@ const tienPhaoDinh =
                     <li>Phào phụ: {Math.round(slPhaoPhu * Number(cua.donGiaPhao || 0)).toLocaleString()} đ</li>
                   )}
                   {laPhaoDinh(cua) && (
-                    <li>Phào đình: {Math.round(tienPhaoDinh).toLocaleString()} đ</li>
+                    <li>
+                      <strong>Phào đình</strong>
+                      <span style={{ display: "block" }}>Bản rộng phào đứng: {chiTietPhaoDinh.phaoDung}</span>
+                      <span style={{ display: "block" }}>Phào ngang: {chiTietPhaoDinh.phaoNgang}</span>
+                      <span style={{ display: "block" }}>Phào đỉnh: {chiTietPhaoDinh.phaoDinh}</span>
+                      <span style={{ display: "block" }}>Giá phào đình: {Math.round(tienPhaoDinh).toLocaleString()} đ</span>
+                    </li>
                   )}
                   {cua.coBomForm && (
                     <li>Foam: {tinhTienBomForm(cua).toLocaleString()} đ</li>
@@ -2361,47 +2390,18 @@ const tienPhaoDinh =
 
           <td
             className="border p-2"
-            colSpan={5}
-          ></td>
-
-          <td
-  className="border"
-  style={{ overflowWrap: "break-word",
-    textAlign: "right",
-    padding: "6px",
-    fontSize: isMobile
- ? "5px"
-  : "7px",
-    verticalAlign: "middle",
-    whiteSpace: "nowrap",
-  }}
->
-
-            {formatSoLuong(slPhaoDinh)}
-            {" "}
-            md
-
+            colSpan={7}
+            style={{
+              padding: "6px",
+              fontSize: isMobile ? "5px" : "7px",
+              lineHeight: "1.5",
+              overflowWrap: "break-word",
+            }}
+          >
+            <span style={{ display: "block" }}>Bản rộng phào đứng: {chiTietPhaoDinh.phaoDung}</span>
+            <span style={{ display: "block" }}>Phào ngang: {chiTietPhaoDinh.phaoNgang}</span>
+            <span style={{ display: "block" }}>Phào đỉnh: {chiTietPhaoDinh.phaoDinh}</span>
           </td>
-
-          <td
-  className="border"
-  style={{ overflowWrap: "break-word",
-    textAlign: "right",
-    padding: "6px",
-    fontSize: isMobile
- ? "5px"
-  : "7px",
-    verticalAlign: "middle",
-  }}
->
-
-  {
-  Math.round(
-    tienPhaoDinh
-  ).toLocaleString()
-}
-
-</td>
 
 <td
   className="border"
@@ -2413,12 +2413,8 @@ const tienPhaoDinh =
     whiteSpace: "nowrap",
   }}
 >
-
-  {
-  Math.round(
-    tienPhaoDinh
-  ).toLocaleString()
-}
+  <span style={{ display: "block", fontWeight: "500" }}>Giá phào đình</span>
+  {Math.round(tienPhaoDinh).toLocaleString()}
 
 </td>
 
