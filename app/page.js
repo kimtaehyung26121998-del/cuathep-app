@@ -121,7 +121,7 @@ export default function Home() {
   const [editingOrderId, setEditingOrderId] = useState("");
   const [dangXuatPDF, setDangXuatPDF] =
     useState(false);
-  const [huongGiay, setHuongGiay] = useState("portrait");
+  const huongGiay = "portrait";
   const [loaiDon, setLoaiDon] =
   useState("");
   const [hienLuaChonCuaThep, setHienLuaChonCuaThep] = useState(false);
@@ -1272,13 +1272,15 @@ const conPhaiThanhToan =
         .invoice-actions {
           max-width: 210mm;
           margin: 24px auto 0 !important;
-          padding: 14px;
+          padding: 10px 12px;
           border: 1px solid rgba(255, 255, 255, 0.78);
           border-radius: 20px;
           background: rgba(255, 255, 255, 0.54);
           box-shadow: 0 12px 30px rgba(71, 85, 105, 0.08);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
+          align-items: center;
+          justify-content: space-between;
         }
 
         .invoice-actions button {
@@ -1297,6 +1299,37 @@ const conPhaiThanhToan =
         .invoice-actions button:nth-child(2),
         .invoice-actions button:nth-child(3),
         .invoice-actions button:nth-child(4) { background: #2563eb !important; }
+        .invoice-actions .invoice-back-button {
+          min-height: 44px;
+          padding: 0 18px !important;
+          border-radius: 12px !important;
+          background: #475569 !important;
+          font-weight: 700;
+        }
+        .invoice-actions > button:last-child {
+          min-height: 44px;
+          padding: 0 22px !important;
+          border: 0 !important;
+          border-radius: 12px !important;
+          background: #0f766e !important;
+          box-shadow: 0 5px 12px rgba(15, 118, 110, 0.2) !important;
+          font-weight: 800;
+        }
+        @media (max-width: 640px) {
+          .invoice-actions {
+            display: grid !important;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 8px !important;
+            padding: 8px !important;
+            margin-top: 14px !important;
+          }
+          .invoice-actions .invoice-back-button { justify-self: start; }
+          .invoice-actions > button:last-child {
+            justify-self: stretch;
+            padding: 0 10px !important;
+            font-size: 14px;
+          }
+        }
 
         .invoice-preview {
           border-color: rgba(255, 255, 255, 0.8) !important;
@@ -3582,9 +3615,11 @@ Number(cua.caoVom || 0)
   className="no-print no-export invoice-actions"
   style={{
     display: "flex",
-    gap: "12px",
-    marginTop: "40px",
+    gap: "10px",
+    marginTop: "20px",
     flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
     maxWidth: huongGiay === "landscape" ? "297mm" : "210mm",
   }}
 >
@@ -3610,51 +3645,6 @@ Number(cua.caoVom || 0)
                 style={{ backgroundColor: "#e5e7eb" }}
               >
                 Quay lại
-              </button>
-
-              <div
-                role="group"
-                aria-label="Chọn hướng giấy A4"
-                className="invoice-orientation-picker"
-                style={{
-                  display: "flex",
-                  gap: "6px",
-                  padding: "5px",
-                  borderRadius: "12px",
-                  backgroundColor: "#e2e8f0",
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setHuongGiay("portrait")}
-                  aria-pressed={huongGiay === "portrait"}
-                  className="px-4 py-2 rounded-lg"
-                  style={{
-                    backgroundColor: huongGiay === "portrait" ? "#0f172a" : "#64748b",
-                  }}
-                >
-                  A4 dọc
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setHuongGiay("landscape")}
-                  aria-pressed={huongGiay === "landscape"}
-                  className="px-4 py-2 rounded-lg"
-                  style={{
-                    backgroundColor: huongGiay === "landscape" ? "#0f172a" : "#64748b",
-                  }}
-                >
-                  A4 ngang
-                </button>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => window.print()}
-                className="px-5 py-3 rounded-xl"
-                style={{ backgroundColor: "#0f766e", color: "#ffffff" }}
-              >
-                In hóa đơn
               </button>
 
               {editingOrderId && (
