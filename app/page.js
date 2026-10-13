@@ -6,6 +6,7 @@ import {
   useEffect,
 } from "react";
 import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import PaintOrder from "./PaintOrder";
 import ImportedDoorOrder from "./ImportedDoorOrder";
 import { createOrderCode, getOrderCode } from "./orderCode";
@@ -118,10 +119,9 @@ export default function Home() {
   const [xemHoaDon, setXemHoaDon] =
     useState(false);
   const [editingOrderId, setEditingOrderId] = useState("");
-  const [dangLuuAnh, setDangLuuAnh] =
+  const [dangXuatPDF, setDangXuatPDF] =
     useState(false);
-  const [anhHoaDon, setAnhHoaDon] = useState("");
-  const [tenFileAnh, setTenFileAnh] = useState("");
+  const [huongGiay, setHuongGiay] = useState("portrait");
   const [loaiDon, setLoaiDon] =
   useState("");
   const [hienLuaChonCuaThep, setHienLuaChonCuaThep] = useState(false);
@@ -146,6 +146,7 @@ export default function Home() {
 ] = useState("");
 
   const hoaDonRef = useRef(null);
+  const daKhoiPhucBanNhap = useRef(false);
   const [isMobile, setIsMobile] =
   useState(false);
 
@@ -239,12 +240,35 @@ useEffect(() => {
       setCuocVanChuyen(data.cuocVanChuyen || "");
 
       setLoaiDon(data.loaiDon || "");
+      daKhoiPhucBanNhap.current = true;
     };
 
     setTimeout(restoreDraft, 0);
+  } else {
+    daKhoiPhucBanNhap.current = true;
   }
 
 }, []);
+useEffect(() => {
+  if (!daKhoiPhucBanNhap.current) return;
+  if (!loaiDon) {
+    sessionStorage.removeItem("draft_invoice");
+    return;
+  }
+  try {
+    sessionStorage.setItem("draft_invoice", JSON.stringify({
+      danhSachCua,
+      nhanVien,
+      tenKhach,
+      diaChiKhach,
+      tienCoc,
+      cuocVanChuyen,
+      loaiDon,
+    }));
+  } catch (error) {
+    console.warn("Không thể lưu bản nháp đơn hàng:", error);
+  }
+}, [danhSachCua, nhanVien, tenKhach, diaChiKhach, tienCoc, cuocVanChuyen, loaiDon]);
   const danhSachNhanVien = {
     "Nguyễn Tuấn Vũ": "0335 952 952",
     "Nguyễn Văn Hướng": "0345 109 555",
@@ -748,16 +772,44 @@ const conPhaiThanhToan =
   }, [tongCong]);
 
   const taiPDF = async () => {
-    if (!hoaDonRef.current || dangLuuAnh) return;
+    if (!hoaDonRef.current || dangXuatPDF) return;
 
-    setDangLuuAnh(true);
+    setDangXuatPDF(true);
+    const captureNode = hoaDonRef.current;
+    const originalStyle = captureNode.getAttribute("style");
 
     try {
       if (document.fonts?.ready) await document.fonts.ready;
 
-      const captureNode = hoaDonRef.current;
+      const laGiayNgang = huongGiay === "landscape";
+      const captureWidthCss = laGiayNgang ? 1123 : 794;
+      captureNode.classList.add("invoice-exporting", `invoice-exporting--${huongGiay}`);
+      captureNode.style.width = `${captureWidthCss}px`;
+      captureNode.style.maxWidth = `${captureWidthCss}px`;
+      captureNode.style.padding = laGiayNgang ? "24px 30px" : "30px 32px";
+
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
       const captureWidth = Math.ceil(captureNode.getBoundingClientRect().width);
       const captureHeight = Math.ceil(captureNode.scrollHeight);
+
+      const captureRect = captureNode.getBoundingClientRect();
+      const layDiemNgat = (selector) => Array.from(captureNode.querySelectorAll(selector))
+        .map((element) => element.getBoundingClientRect().top - captureRect.top)
+        .filter((value) => value > 0 && value < captureHeight)
+        .sort((a, b) => a - b);
+      const diemBatDauBoCua = layDiemNgat(".invoice-door-row");
+      const diemKetThucHoaDon = layDiemNgat(".invoice-summary")[0] || captureHeight;
+      const invoiceTable = captureNode.querySelector(".invoice-door-table");
+      const tableRect = invoiceTable?.getBoundingClientRect();
+      const tableLeft = tableRect ? tableRect.left - captureRect.left : 0;
+      const tableWidth = tableRect?.width || captureWidth;
+      const tableHeaderCells = Array.from(
+        invoiceTable?.querySelectorAll("thead th") || []
+      );
+      const tableHeaderWidths = tableHeaderCells.map(
+        (cell) => cell.getBoundingClientRect().width
+      );
 
       await Promise.all(
         Array.from(captureNode.querySelectorAll("img")).map((image) => {
@@ -785,49 +837,163 @@ const conPhaiThanhToan =
         scrollY: 0,
         ignoreElements: (element) => element.classList?.contains("no-print"),
       });
-      const dataUrl = canvas.toDataURL("image/png");
+
+      const pdf = new jsPDF({
+        orientation: laGiayNgang ? "landscape" : "portrait",
+        unit: "mm",
+        format: "a4",
+        compress: true,
+      });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const marginX = 5;
+      const marginTop = 5;
+      const footerHeight = 7;
+      const contentWidth = pageWidth - marginX * 2;
+      const contentHeight = pageHeight - marginTop - footerHeight;
+      const maxSliceHeight = Math.floor(
+        canvas.width * (contentHeight / contentWidth)
+      );
+      const renderScale = canvas.width / captureWidth;
+      // html2canvas đặt phần tbody lệch một hàng so với tọa độ DOM của table-row-group.
+      // Bù đúng chiều cao hàng để trang sau bắt đầu tại tên bộ cửa, không tại ghi chú bộ trước.
+      const tableRowOffset = Math.round(28 * renderScale);
+      const doorStarts = diemBatDauBoCua.map(
+        (value) => Math.round(value * renderScale) + tableRowOffset
+      );
+      const doorGroups = doorStarts.map((start, index) => ({
+        start,
+        end: doorStarts[index + 1]
+          ?? Math.round(diemKetThucHoaDon * renderScale) + tableRowOffset,
+      }));
+      const repeatedHeaderHeight = Math.round(28 * renderScale);
+      const headerLabels = [
+        "Tên sản phẩm", "Khuôn", "Rộng", "Cao", "Màu",
+        "Hướng mở", "SL", "Đơn giá", "Thành tiền",
+      ];
+      const headerWidths = [31, 5, 7, 7, 4, 8, 7, 14, 17];
+      const pageSlices = [];
+      let sliceStart = 0;
+
+      while (sliceStart < canvas.height) {
+        const headerAllowance = pageSlices.length > 0 ? repeatedHeaderHeight : 0;
+        const availableSliceHeight = Math.max(1, maxSliceHeight - headerAllowance);
+        const hardEnd = Math.min(canvas.height, sliceStart + availableSliceHeight);
+        let sliceEnd = hardEnd;
+
+        if (hardEnd < canvas.height) {
+          const unfinishedDoor = doorGroups.find(
+            (group) => group.start < hardEnd && group.end > hardEnd
+          );
+
+          if (unfinishedDoor && unfinishedDoor.start > sliceStart) {
+            // Bộ cửa đã bắt đầu nhưng không đủ chỗ đến hết phụ kiện/ghi chú: chuyển nguyên bộ.
+            sliceEnd = unfinishedDoor.start;
+          } else {
+            const completedDoorGroups = doorGroups.filter(
+              (group) => group.end <= hardEnd && group.end > sliceStart
+            );
+            if (completedDoorGroups.length) {
+              sliceEnd = completedDoorGroups[completedDoorGroups.length - 1].end;
+            }
+          }
+        }
+
+        if (sliceEnd <= sliceStart) sliceEnd = hardEnd;
+        pageSlices.push({ start: sliceStart, end: sliceEnd });
+        sliceStart = sliceEnd;
+      }
+
+      pageSlices.forEach((slice, index) => {
+        if (index > 0) pdf.addPage();
+
+        const sliceHeight = slice.end - slice.start;
+        const shouldRepeatHeader = index > 0 && repeatedHeaderHeight > 0;
+        const pageCanvas = document.createElement("canvas");
+        pageCanvas.width = canvas.width;
+        pageCanvas.height = sliceHeight + (shouldRepeatHeader ? repeatedHeaderHeight : 0);
+        const context = pageCanvas.getContext("2d");
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+        if (shouldRepeatHeader) {
+          const headerLeft = Math.round(tableLeft * renderScale);
+          const headerWidth = Math.round(tableWidth * renderScale);
+          context.fillStyle = "#eef2f6";
+          context.fillRect(headerLeft, 0, headerWidth, repeatedHeaderHeight);
+          context.strokeStyle = "#cbd5e1";
+          context.lineWidth = Math.max(1, renderScale);
+          context.font = `700 ${Math.round(9 * renderScale)}px Arial, sans-serif`;
+          context.textAlign = "center";
+          context.textBaseline = "middle";
+          context.fillStyle = "#25334a";
+          let headerX = headerLeft;
+          headerWidths.forEach((widthPercent, headerIndex) => {
+            const measuredWidth = tableHeaderWidths[headerIndex];
+            const cellWidth = measuredWidth
+              ? measuredWidth * renderScale
+              : headerWidth * widthPercent / 100;
+            context.strokeRect(headerX, 0, cellWidth, repeatedHeaderHeight);
+            context.fillText(
+              headerLabels[headerIndex],
+              headerX + cellWidth / 2,
+              repeatedHeaderHeight / 2,
+              Math.max(1, cellWidth - 4 * renderScale)
+            );
+            headerX += cellWidth;
+          });
+        }
+        context.drawImage(
+          canvas,
+          0,
+          slice.start,
+          canvas.width,
+          sliceHeight,
+          0,
+          shouldRepeatHeader ? repeatedHeaderHeight : 0,
+          canvas.width,
+          sliceHeight
+        );
+
+        const renderedHeight = pageCanvas.height * (contentWidth / canvas.width);
+        pdf.addImage(
+          pageCanvas.toDataURL("image/jpeg", 0.94),
+          "JPEG",
+          marginX,
+          marginTop,
+          contentWidth,
+          renderedHeight,
+          undefined,
+          "FAST"
+        );
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(8);
+        pdf.setTextColor(100, 116, 139);
+        pdf.text(
+          `Trang ${index + 1}/${pageSlices.length}`,
+          pageWidth / 2,
+          pageHeight - 3,
+          { align: "center" }
+        );
+      });
 
       const homNay = new Date();
       const ngay = `${homNay.getFullYear()}${String(homNay.getMonth() + 1).padStart(2, "0")}${String(homNay.getDate()).padStart(2, "0")}`;
       const key = `save_count_${ngay}`;
       const soThuTu = Number(localStorage.getItem(key) || "0") + 1;
       localStorage.setItem(key, String(soThuTu));
-
-      setAnhHoaDon(dataUrl);
-      setTenFileAnh(`${ngay}-${soThuTu}.png`);
+      pdf.save(`hoa-don-${ngay}-${soThuTu}.pdf`);
     } catch (error) {
-      console.error("Không thể tạo ảnh hóa đơn:", error);
-      alert("Không thể tạo ảnh hóa đơn. Vui lòng thử lại.");
+      console.error("Không thể tạo PDF hóa đơn:", error);
+      alert("Không thể tạo PDF hóa đơn. Vui lòng thử lại.");
     } finally {
-      setDangLuuAnh(false);
-    }
-  };
-
-  const taiAnhHoaDon = () => {
-    if (!anhHoaDon) return;
-    const link = document.createElement("a");
-    link.href = anhHoaDon;
-    link.download = tenFileAnh || "hoa-don.png";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  };
-
-  const chiaSeAnhHoaDon = async () => {
-    if (!anhHoaDon) return;
-
-    try {
-      const blob = await (await fetch(anhHoaDon)).blob();
-      const file = new File([blob], tenFileAnh || "hoa-don.png", { type: "image/png" });
-
-      if (!navigator.share || (navigator.canShare && !navigator.canShare({ files: [file] }))) {
-        taiAnhHoaDon();
-        return;
-      }
-
-      await navigator.share({ files: [file], title: "Hóa đơn cửa thép" });
-    } catch (error) {
-      if (error?.name !== "AbortError") console.error("Chia sẻ ảnh thất bại:", error);
+      captureNode.classList.remove(
+        "invoice-exporting",
+        "invoice-exporting--portrait",
+        "invoice-exporting--landscape"
+      );
+      if (originalStyle === null) captureNode.removeAttribute("style");
+      else captureNode.setAttribute("style", originalStyle);
+      setDangXuatPDF(false);
     }
   };
 
@@ -838,6 +1004,11 @@ const conPhaiThanhToan =
     <>
 
       <style jsx global>{`
+        @page {
+          size: A4 ${huongGiay};
+          margin: 8mm;
+        }
+
         @media print {
           .no-export,
           .no-print {
@@ -1057,7 +1228,8 @@ const conPhaiThanhToan =
           table-layout: fixed;
         }
         .invoice-total-card td {
-          padding: 6px 4px !important;
+          padding: 4px !important;
+          font-size: 11px !important;
           line-height: 1.35;
         }
         .invoice-total-card td:last-child {
@@ -1068,17 +1240,17 @@ const conPhaiThanhToan =
 
         .invoice-total-card tr:last-child {
           color: #18243a;
-          font-size: 1.08em;
+          font-size: 11px !important;
         }
 
         .invoice-total-card tr:last-child td {
-          padding-top: 10px !important;
-          padding-bottom: 10px !important;
+          padding-top: 4px !important;
+          padding-bottom: 4px !important;
           border-top: 1px solid #e6a7a0;
           background: #fff5f3;
           color: #b42318;
-          font-size: 1.08em;
-          font-weight: 800;
+          font-size: 11px !important;
+          font-weight: 600;
         }
 
         .invoice-footer {
@@ -1156,18 +1328,22 @@ const conPhaiThanhToan =
           .invoice-customer p { font-size: 11px; }
           .invoice-table-wrap th,
           .invoice-table-wrap td { font-size: 9px !important; padding: 7px 3px !important; }
-          .invoice-door-table thead { display: none; }
+          .invoice-door-table { display: table !important; }
+          .invoice-door-table thead { display: none !important; }
+          .invoice-door-table tbody { display: table-row-group !important; }
           .invoice-door-table tbody > tr:not(.invoice-mobile-card-row) { display: none !important; }
-          .invoice-door-table tbody > tr.invoice-mobile-card-row { display: table-row !important; }
+          .invoice-door-table tbody > tr.invoice-mobile-card-row { display: table-row !important; visibility: visible !important; }
           .invoice-mobile-card-row > td {
             display: table-cell !important;
             width: 100% !important;
             padding: 0 !important;
             border: 0 !important;
             background: transparent !important;
+            visibility: visible !important;
           }
           .invoice-mobile-door-card {
-            display: block;
+            display: block !important;
+            visibility: visible !important;
             margin: 0 0 10px;
             padding: 13px;
             border: 1px solid #dbe2ea;
@@ -1246,9 +1422,20 @@ const conPhaiThanhToan =
             font-size: inherit !important;
           }
           .invoice-total-card { padding: 8px 9px !important; }
-          .invoice-total-card td { font-size: 11px; }
-          .invoice-total-card tr:last-child td { font-size: 12px !important; }
-          .invoice-total-card tr:last-child td { padding-top: 8px !important; padding-bottom: 8px !important; }
+          .invoice-total-card table,
+          .invoice-total-card tbody,
+          .invoice-total-card tr,
+          .invoice-total-card td,
+          .invoice-total-card tr:last-child td {
+            font-size: 11px !important;
+            line-height: 1.35 !important;
+          }
+          .invoice-total-card td,
+          .invoice-total-card tr:last-child td {
+            padding: 4px !important;
+            font-weight: 500 !important;
+          }
+          .invoice-total-card tr:last-child td:first-child { font-weight: 600 !important; }
           .invoice-footer { padding-top: 10px !important; }
           .invoice-footer .grid { margin-top: 16px !important; }
           .invoice-footer .grid > div > div { height: 34px !important; }
@@ -1360,13 +1547,185 @@ const conPhaiThanhToan =
           }
         }
 
+        /* Dùng thẻ chi tiết cho bản xem trên mọi kích thước; PDF/in vẫn dùng bảng. */
+        @media screen {
+          .invoice-door-table thead { display: none !important; }
+          .invoice-door-table tbody > tr:not(.invoice-mobile-card-row) {
+            display: none !important;
+          }
+          .invoice-door-table tbody > tr.invoice-mobile-card-row {
+            display: table-row !important;
+            visibility: visible !important;
+          }
+          .invoice-door-table .invoice-mobile-card-row > td {
+            display: table-cell !important;
+            visibility: visible !important;
+          }
+          .invoice-mobile-door-card {
+            display: block !important;
+            visibility: visible !important;
+          }
+
+          .invoice-paper:not(.invoice-exporting) .invoice-table-wrap {
+            margin-top: 7px !important;
+            padding: 2px !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-card {
+            margin-bottom: 6px !important;
+            padding: 9px 11px !important;
+            border-radius: 9px !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-title {
+            margin-bottom: 5px !important;
+            font-size: 14px !important;
+            line-height: 1.25 !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-details {
+            gap: 3px 7px !important;
+            font-size: 12px !important;
+            line-height: 1.3 !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-accessories {
+            margin-top: 6px !important;
+            padding-top: 5px !important;
+            font-size: 11px !important;
+            line-height: 1.3 !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-accessories > strong {
+            font-size: 12px !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-accessories ul {
+            gap: 1px 12px !important;
+            margin-top: 2px !important;
+            padding-left: 15px !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-accessories li {
+            padding: 0 !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-note {
+            margin-top: 6px !important;
+            padding: 4px 6px !important;
+            font-size: 11px !important;
+            line-height: 1.3 !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-total {
+            gap: 8px !important;
+            margin-top: 6px !important;
+            padding-top: 5px !important;
+            font-size: 12px !important;
+            line-height: 1.25 !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-total strong:last-child {
+            font-size: 13px !important;
+          }
+        }
+
+        .invoice-exporting {
+          min-height: 0 !important;
+          border: 0 !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
+          background: #ffffff !important;
+        }
+        .invoice-exporting .invoice-header { padding-bottom: 12px !important; }
+        .invoice-exporting .invoice-brand-row > img {
+          width: 68px !important;
+          height: 68px !important;
+        }
+        .invoice-exporting .invoice-company-name {
+          font-size: 23px !important;
+          line-height: 1.08 !important;
+        }
+        .invoice-exporting .invoice-company-name + p,
+        .invoice-exporting .invoice-company-name + p + p {
+          font-size: 11px !important;
+          line-height: 1.2 !important;
+        }
+        .invoice-exporting .invoice-title {
+          margin: 10px 0 8px !important;
+          font-size: 30px !important;
+        }
+        .invoice-exporting .invoice-customer {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+          padding: 7px 10px !important;
+          gap: 2px 16px !important;
+        }
+        .invoice-exporting .invoice-customer p {
+          font-size: 11px !important;
+          line-height: 1.25 !important;
+        }
+        .invoice-exporting .invoice-table-wrap {
+          margin-top: 10px !important;
+          padding: 0 !important;
+          overflow: visible !important;
+          border-radius: 0 !important;
+        }
+        .invoice-exporting .invoice-door-table thead { display: table-header-group !important; }
+        .invoice-exporting .invoice-door-table tbody > tr:not(.invoice-mobile-card-row) {
+          display: table-row !important;
+        }
+        .invoice-exporting .invoice-door-table tbody > tr.invoice-mobile-card-row { display: none !important; }
+        .invoice-exporting .invoice-table-wrap th,
+        .invoice-exporting .invoice-table-wrap td {
+          padding: 5px 3px !important;
+          font-size: 9px !important;
+          line-height: 1.18 !important;
+        }
+        .invoice-exporting .invoice-table-wrap .invoice-door-row > td:first-child {
+          padding-top: 6px !important;
+          padding-bottom: 6px !important;
+          font-size: 10px !important;
+        }
+        .invoice-exporting .invoice-summary { margin-top: 10px !important; }
+        .invoice-exporting .invoice-total-card { padding: 7px 10px !important; }
+        .invoice-exporting .invoice-total-card td {
+          padding: 4px !important;
+          font-size: 10px !important;
+        }
+        .invoice-exporting .invoice-footer {
+          margin-top: 9px !important;
+          padding: 9px 6px 0 !important;
+          font-size: 10px !important;
+        }
+        .invoice-exporting .invoice-footer .grid { margin-top: 12px !important; }
+        .invoice-exporting .invoice-footer .grid > div > div { height: 36px !important; }
+        .invoice-exporting .invoice-footer .grid p { font-size: 10px !important; }
+        .invoice-exporting--landscape .invoice-header {
+          display: grid;
+          grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+          align-items: end;
+          gap: 6px 28px;
+        }
+        .invoice-exporting--landscape .invoice-title {
+          align-self: center;
+          margin: 0 !important;
+          font-size: 28px !important;
+          text-align: right;
+        }
+        .invoice-exporting--landscape .invoice-customer { grid-column: 1 / -1; }
+
         @media print {
+          html,
+          body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #ffffff !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+
           .invoice-screen {
+            width: 100% !important;
+            max-width: none !important;
             padding: 0;
             background: #ffffff;
           }
 
           .invoice-paper {
+            width: 100% !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            padding: 0 !important;
             border: 0 !important;
             border-radius: 0;
             background: #ffffff !important;
@@ -1392,6 +1751,50 @@ const conPhaiThanhToan =
           .invoice-door-table td:nth-child(5),
           .invoice-door-table th:nth-child(6),
           .invoice-door-table td:nth-child(6) { display: table-cell !important; }
+
+          .invoice-header { padding-bottom: 3mm !important; break-inside: avoid; }
+          .invoice-brand-row > img { width: 18mm !important; height: 18mm !important; }
+          .invoice-company-name { font-size: 14pt !important; line-height: 1.08 !important; }
+          .invoice-company-name + p,
+          .invoice-company-name + p + p { font-size: 8pt !important; line-height: 1.2 !important; }
+          .invoice-title { margin: 2.5mm 0 2mm !important; font-size: 20pt !important; }
+          .invoice-customer { padding: 2mm 2.5mm; gap: 1mm 5mm; border-color: #cbd5e1; }
+          .invoice-customer p { font-size: 8.5pt !important; line-height: 1.25 !important; }
+          .invoice-table-wrap { margin-top: 3mm; padding: 0; border: 0; border-radius: 0; }
+          .invoice-table-wrap th,
+          .invoice-table-wrap td {
+            padding: 1.25mm 0.8mm !important;
+            font-size: 7.2pt !important;
+            line-height: 1.18 !important;
+          }
+          .invoice-door-table tr,
+          .invoice-summary,
+          .invoice-total-card,
+          .invoice-footer .grid { break-inside: avoid; page-break-inside: avoid; }
+          .invoice-summary { margin-top: 3mm !important; }
+          .invoice-total-card { padding: 2mm 3mm !important; }
+          .invoice-total-card td { padding: 1.2mm 1mm !important; font-size: 8pt !important; }
+          .invoice-footer {
+            margin-top: 3mm;
+            padding: 2.5mm 2mm 0 !important;
+            font-size: 8pt;
+          }
+          .invoice-footer .grid { margin-top: 4mm !important; }
+          .invoice-footer .grid > div > div { height: 12mm !important; }
+          .invoice-footer .grid p { font-size: 8pt !important; }
+          .invoice-paper--landscape .invoice-header {
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+            align-items: end;
+            gap: 2mm 8mm;
+          }
+          .invoice-paper--landscape .invoice-title {
+            align-self: center;
+            margin: 0 !important;
+            font-size: 18pt !important;
+            text-align: right;
+          }
+          .invoice-paper--landscape .invoice-customer { grid-column: 1 / -1; }
         }
       `}</style>
 
@@ -1411,11 +1814,11 @@ const conPhaiThanhToan =
       >
 
         <div
-  className="border invoice-paper"
+  className={`border invoice-paper invoice-paper--${huongGiay}`}
   ref={hoaDonRef}
   style={{
     width: "100%",
-    maxWidth: "210mm",
+    maxWidth: huongGiay === "landscape" ? "297mm" : "210mm",
     minHeight: "auto",
     margin: "0 auto",
     backgroundColor: "#ffffff",
@@ -3182,8 +3585,77 @@ Number(cua.caoVom || 0)
     gap: "12px",
     marginTop: "40px",
     flexWrap: "wrap",
+    maxWidth: huongGiay === "landscape" ? "297mm" : "210mm",
   }}
 >
+
+              <button
+                type="button"
+                onClick={() => {
+                  sessionStorage.setItem(
+                    "draft_invoice",
+                    JSON.stringify({
+                      danhSachCua,
+                      nhanVien,
+                      tenKhach,
+                      diaChiKhach,
+                      tienCoc,
+                      cuocVanChuyen,
+                      loaiDon,
+                    })
+                  );
+                  setXemHoaDon(false);
+                }}
+                className="px-5 py-3 rounded-xl invoice-back-button"
+                style={{ backgroundColor: "#e5e7eb" }}
+              >
+                Quay lại
+              </button>
+
+              <div
+                role="group"
+                aria-label="Chọn hướng giấy A4"
+                className="invoice-orientation-picker"
+                style={{
+                  display: "flex",
+                  gap: "6px",
+                  padding: "5px",
+                  borderRadius: "12px",
+                  backgroundColor: "#e2e8f0",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setHuongGiay("portrait")}
+                  aria-pressed={huongGiay === "portrait"}
+                  className="px-4 py-2 rounded-lg"
+                  style={{
+                    backgroundColor: huongGiay === "portrait" ? "#0f172a" : "#64748b",
+                  }}
+                >
+                  A4 dọc
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setHuongGiay("landscape")}
+                  aria-pressed={huongGiay === "landscape"}
+                  className="px-4 py-2 rounded-lg"
+                  style={{
+                    backgroundColor: huongGiay === "landscape" ? "#0f172a" : "#64748b",
+                  }}
+                >
+                  A4 ngang
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="px-5 py-3 rounded-xl"
+                style={{ backgroundColor: "#0f766e", color: "#ffffff" }}
+              >
+                In hóa đơn
+              </button>
 
               {editingOrderId && (
                 <button
@@ -3196,34 +3668,6 @@ Number(cua.caoVom || 0)
                 </button>
               )}
 
-              <button
-                onClick={() => {
-
-  sessionStorage.setItem(
-    "draft_invoice",
-    JSON.stringify({
-      danhSachCua,
-      nhanVien,
-      tenKhach,
-      diaChiKhach,
-      tienCoc,
-      cuocVanChuyen,
-      loaiDon,
-    })
-  );
-
-  setXemHoaDon(false);
-
-}}
-                className="px-5 py-3 rounded-xl"
-style={{
-  backgroundColor: "#e5e7eb"
-}}
-              >
-
-                Quay lại
-
-              </button>
               <button
   onClick={() => {
 
@@ -3265,55 +3709,17 @@ setLoaiDon("");
 
             <button
   onClick={taiPDF}
-  disabled={dangLuuAnh}
+  disabled={dangXuatPDF}
   className="px-5 py-3 rounded-xl"
   style={{
     color: "#ffffff",
-    backgroundColor: dangLuuAnh ? "#a16207" : "#ca8a04",
+    backgroundColor: dangXuatPDF ? "#a16207" : "#ca8a04",
   }}
 >
 
-              {dangLuuAnh ? "Đang tạo ảnh..." : "Lưu ảnh"}
+              {dangXuatPDF ? "Đang tạo PDF..." : "Lưu PDF nhiều trang"}
 
               </button>
-
-              {anhHoaDon && (
-                <div
-                   className="no-print invoice-preview"
-                  style={{
-                    flexBasis: "100%",
-                    marginTop: "8px",
-                    padding: "12px",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "16px",
-                    backgroundColor: "#f8fafc",
-                  }}
-                >
-                  <p style={{ margin: "0 0 8px", fontWeight: 600 }}>
-                    Ảnh đã tạo - chọn cách lưu:
-                  </p>
-                  <img
-                    src={anhHoaDon}
-                    alt="Xem trước hóa đơn cửa thép"
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      maxHeight: "420px",
-                      objectFit: "contain",
-                      borderRadius: "12px",
-                      backgroundColor: "#ffffff",
-                    }}
-                  />
-                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "12px" }}>
-                    <button type="button" onClick={chiaSeAnhHoaDon} className="px-4 py-2 rounded-xl text-white" style={{ backgroundColor: "#2563eb" }}>
-                      Chia sẻ / Tải ảnh
-                    </button>
-                    <button type="button" onClick={() => setAnhHoaDon("")} className="px-4 py-2 rounded-xl" style={{ backgroundColor: "#e5e7eb" }}>
-                      Đóng xem trước
-                    </button>
-                  </div>
-                </div>
-              )}
 
                         </div>
 
@@ -4014,13 +4420,12 @@ style={{
       cua.loaiPhao ===
       "Phào phụ"
     }
-    onChange={() =>
-      capNhatCua(
-        cua.id,
-        "loaiPhao",
-        "Phào phụ"
-      )
-    }
+    onChange={() => {
+      capNhatCua(cua.id, "loaiPhao", "Phào phụ");
+      if (!cua.donGiaPhao) {
+        capNhatCua(cua.id, "donGiaPhao", loaiDon === "daily" ? "70000" : "100000");
+      }
+    }}
   />
 
   Phào phụ
@@ -4316,7 +4721,7 @@ style={{
 )}
 
             
-{loaiDon === "daily" && (
+{["khachle", "daily"].includes(loaiDon) && (
               <label className="flex items-center gap-2">
 
                 <input
