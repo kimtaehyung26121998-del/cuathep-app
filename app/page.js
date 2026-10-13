@@ -1580,76 +1580,14 @@ const conPhaiThanhToan =
           }
         }
 
-        /* Dùng thẻ chi tiết cho bản xem trên mọi kích thước; PDF/in vẫn dùng bảng. */
+        /* Bản xem hóa đơn phải dùng cùng bố cục bảng với PDF trên mọi màn hình. */
         @media screen {
-          .invoice-door-table thead { display: none !important; }
+          .invoice-door-table thead { display: table-header-group !important; }
           .invoice-door-table tbody > tr:not(.invoice-mobile-card-row) {
-            display: none !important;
+            display: table-row !important;
           }
           .invoice-door-table tbody > tr.invoice-mobile-card-row {
-            display: table-row !important;
-            visibility: visible !important;
-          }
-          .invoice-door-table .invoice-mobile-card-row > td {
-            display: table-cell !important;
-            visibility: visible !important;
-          }
-          .invoice-mobile-door-card {
-            display: block !important;
-            visibility: visible !important;
-          }
-
-          .invoice-paper:not(.invoice-exporting) .invoice-table-wrap {
-            margin-top: 7px !important;
-            padding: 2px !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-card {
-            margin-bottom: 6px !important;
-            padding: 9px 11px !important;
-            border-radius: 9px !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-title {
-            margin-bottom: 5px !important;
-            font-size: 14px !important;
-            line-height: 1.25 !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-details {
-            gap: 3px 7px !important;
-            font-size: 12px !important;
-            line-height: 1.3 !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-accessories {
-            margin-top: 6px !important;
-            padding-top: 5px !important;
-            font-size: 11px !important;
-            line-height: 1.3 !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-accessories > strong {
-            font-size: 12px !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-accessories ul {
-            gap: 1px 12px !important;
-            margin-top: 2px !important;
-            padding-left: 15px !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-accessories li {
-            padding: 0 !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-note {
-            margin-top: 6px !important;
-            padding: 4px 6px !important;
-            font-size: 11px !important;
-            line-height: 1.3 !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-total {
-            gap: 8px !important;
-            margin-top: 6px !important;
-            padding-top: 5px !important;
-            font-size: 12px !important;
-            line-height: 1.25 !important;
-          }
-          .invoice-paper:not(.invoice-exporting) .invoice-mobile-door-total strong:last-child {
-            font-size: 13px !important;
+            display: none !important;
           }
         }
 
