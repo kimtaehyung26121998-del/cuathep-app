@@ -1589,6 +1589,32 @@ const conPhaiThanhToan =
           .invoice-door-table tbody > tr.invoice-mobile-card-row {
             display: none !important;
           }
+
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table col:nth-child(1) { width: 22% !important; }
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table col:nth-child(2) { width: 7% !important; }
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table col:nth-child(3),
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table col:nth-child(4),
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table col:nth-child(7) { width: 8% !important; }
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table col:nth-child(5) { width: 7% !important; }
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table col:nth-child(6) { width: 10% !important; }
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table col:nth-child(8) { width: 13% !important; }
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table col:nth-child(9) { width: 17% !important; }
+
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table th,
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table td {
+            font-size: clamp(6px, 1.6vw, 9px) !important;
+            padding: 5px 2px !important;
+            line-height: 1.2 !important;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table .invoice-door-row > td:first-child {
+            font-size: clamp(7px, 1.8vw, 10px) !important;
+            padding: 6px 3px !important;
+          }
+          .invoice-paper:not(.invoice-exporting) .invoice-door-table .invoice-door-row > td:nth-child(n+2):nth-child(-n+7) {
+            white-space: nowrap !important;
+          }
         }
 
         .invoice-exporting {
