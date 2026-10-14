@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { toPng } from "html-to-image";
 import { createOrderCode, getOrderCode } from "./orderCode";
+import { savePaintInvoicePdf } from "./paintInvoicePdf";
 
 const employees = [
   {
@@ -67,8 +67,8 @@ const products = [
   {
     vn: "Sơn lót chống kiềm ngoại thất",
     en: "MYKOLOR PASSION ALKALI PRIMER FOR EXTERIOR",
-    size: "18L",
-    basePrice: 5260000,
+    size: "15L",
+    basePrice: 4385000,
     canMixColor: false,
   },
 
@@ -1058,9 +1058,8 @@ const [customerDeposit, setCustomerDeposit] =
   const [brand, setBrand] = useState(initialBrand);
 
   const [orderItems, setOrderItems] = useState([]);
-  const [invoiceImage, setInvoiceImage] = useState("");
-  const [invoiceFileName, setInvoiceFileName] = useState("");
-  const [isCreatingImage, setIsCreatingImage] = useState(false);
+  const [showInvoice, setShowInvoice] = useState(false);
+  const [isCreatingPdf, setIsCreatingPdf] = useState(false);
   const [savedOrders, setSavedOrders] = useState([]);
   const [showSavedOrders, setShowSavedOrders] = useState(false);
   const [editingOrderId, setEditingOrderId] = useState("");
@@ -1491,134 +1490,28 @@ const getSunproColorPrice = (
 
   return 0;
 };
-const saveInvoiceImage = async () => {
-
-  if (!invoiceRef.current) return;
-
-  const imageWindow = null;
-
-  // Mở tab ngay trong thao tác click để trình duyệt không chặn sau khi
-  // html2canvas hoàn tất bất đồng bộ.
-
-  try {
-    if (document.fonts?.ready) await document.fonts.ready;
-
-    const dataUrl = await toPng(invoiceRef.current, {
-      cacheBust: true,
-      pixelRatio: Math.min(window.devicePixelRatio * 2, 3),
-      backgroundColor: "#ffffff",
-      skipFonts: false,
-    });
-const today = new Date();
-
-const yyyy =
-  today.getFullYear();
-
-const mm =
-  String(
-    today.getMonth() + 1
-  ).padStart(2, "0");
-
-const dd =
-  String(
-    today.getDate()
-  ).padStart(2, "0");
-
-const dateKey =
-  `${yyyy}${mm}${dd}`;
-
-const savedCount =
-  Number(
-    localStorage.getItem(dateKey) || "0"
-  ) + 1;
-
-localStorage.setItem(
-  dateKey,
-  String(savedCount)
-);
-
-const fileName =
-  `${dateKey}-${savedCount}.png`;
-
-    setInvoiceImage(dataUrl);
-    setInvoiceFileName(fileName);
-    setIsCreatingImage(false);
-    return;
-
-    const file = new File([blob], fileName, { type: "image/png" });
-    const canShareFile =
-      typeof navigator.share === "function" &&
-      (!navigator.canShare || navigator.canShare({ files: [file] }));
-
-    // iPhone/Android: bảng Chia sẻ cho phép chọn Lưu hình ảnh hoặc gửi ảnh.
-    if (canShareFile) {
-      try {
-        await navigator.share({
-          files: [file],
-          title: "Hóa đơn",
-        });
-        if (imageWindow && !imageWindow.closed) imageWindow.close();
-        return;
-      } catch (shareError) {
-        if (shareError?.name === "AbortError") {
-          if (imageWindow && !imageWindow.closed) imageWindow.close();
-          return;
-        }
-      }
-    }
-
-    if (imageWindow && !imageWindow.closed) {
-      imageWindow.document.title = `Hóa đơn ${fileName}`;
-      imageWindow.location.href = blobUrl;
-    } else if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
-      // iOS thường chặn download="" và popup sau thao tác bất đồng bộ.
-      // Mở ảnh ngay trên tab hiện tại để người dùng nhấn giữ và lưu ảnh.
-      window.location.href = blobUrl;
-    } else {
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = fileName;
-      link.rel = "noopener";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    }
-
-    // Không thu hồi ngay vì Chrome/Edge có thể chưa bắt đầu tải Blob.
-    setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
-
-  } catch (error) {
-
-    console.error("Save invoice image failed:", error);
-    setIsCreatingImage(false);
-
-    alert("Không thể lưu ảnh");
-
-  }
-
+const startNewPaintOrder = () => {
+  setOrderItems([]);
+  setCustomerName("");
+  setCustomerAddress("");
+  setDiscountPercent(0);
+  setCustomerDeposit(0);
+  setKeyword("");
+  setEditingOrderId("");
+  setShowSavedOrders(false);
+  setShowInvoice(false);
+  window.scrollTo({ top: 0, behavior: "instant" });
 };
-const downloadInvoiceImage = () => {
-  if (!invoiceImage) return;
-  const link = document.createElement("a");
-  link.href = invoiceImage;
-  link.download = invoiceFileName || "hoa-don.png";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-};
-
-const shareInvoiceImage = async () => {
-  if (!invoiceImage) return;
+const saveInvoicePdf = async () => {
+  if (!invoiceRef.current || isCreatingPdf) return;
+  setIsCreatingPdf(true);
   try {
-    const blob = await (await fetch(invoiceImage)).blob();
-    const file = new File([blob], invoiceFileName || "hoa-don.png", { type: "image/png" });
-    if (!navigator.share || (navigator.canShare && !navigator.canShare({ files: [file] }))) {
-      alert("Thiết bị không hỗ trợ chia sẻ trực tiếp. Hãy nhấn giữ ảnh để lưu.");
-      return;
-    }
-    await navigator.share({ files: [file], title: "Hóa đơn" });
+    await savePaintInvoicePdf(invoiceRef.current, "portrait", brand);
   } catch (error) {
-    if (error?.name !== "AbortError") console.error("Share invoice image failed:", error);
+    console.error("Không thể tạo PDF hóa đơn sơn:", error);
+    alert("Không thể tạo PDF hóa đơn sơn. Vui lòng thử lại.");
+  } finally {
+    setIsCreatingPdf(false);
   }
 };
 if (brand === "select") {
@@ -1664,11 +1557,11 @@ if (brand === "select") {
   return (
     <main className="min-h-screen paint-order-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-3">
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-2 gap-4">
+      <div className={`mx-auto grid grid-cols-1 gap-4 ${showInvoice ? "max-w-5xl" : "max-w-7xl"}`}>
 
         {/* FORM */}
 
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-[30px] shadow-2xl p-4 text-white paint-panel">
+        <div hidden={showInvoice} className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-[30px] shadow-2xl p-4 text-white paint-panel">
         <button
   onClick={() => onBack ? onBack() : setBrand("select")}
   className="mb-3 bg-white/10 px-4 py-2 rounded-2xl text-sm"
@@ -2075,50 +1968,47 @@ updateItem(
             <strong className="mobile-total-value">{finalAfterDiscount.toLocaleString("vi-VN")} đ</strong>
           </div>
 
+          <button type="button" onClick={() => {
+
+            setShowInvoice(true);
+            window.scrollTo({ top: 0, behavior: "instant" });
+          }} className="mt-4 w-full rounded-2xl bg-blue-600 px-4 py-3 font-bold text-white">
+            Xem hóa đơn
+          </button>
+
         </div>
 
         {/* HÓA ĐƠN */}
         
         {/* HÓA ĐƠN */}
 
-<div>
+<div hidden={!showInvoice}>
 
-  <div className="flex justify-end mb-3">
+  <div className="flex flex-wrap items-center gap-2 mb-3">
 
-    <button
-      onClick={saveInvoiceImage}
-      disabled={isCreatingImage}
-      className={`
-  text-white px-4 py-2 rounded-2xl text-sm
-  ${
-    brand === "forich"
-      ? "bg-orange-500"
-      : "bg-slate-900"
-  }
-`}
-    >
-      Lưu ảnh
+    <button type="button" onClick={() => setShowInvoice(false)} disabled={isCreatingPdf} className="rounded-2xl bg-slate-200 px-4 py-2 text-sm text-slate-900">
+      ← Quay lại chỉnh đơn
     </button>
+    <button type="button" onClick={startNewPaintOrder} disabled={isCreatingPdf} className="rounded-2xl bg-blue-600 px-4 py-2 text-sm text-white">
+      Lên đơn mới
+    </button>
+
+    <button type="button" onClick={saveInvoicePdf} disabled={isCreatingPdf} className="rounded-2xl bg-yellow-600 px-4 py-2 text-sm text-white disabled:opacity-60">
+      {isCreatingPdf ? "Đang tạo PDF..." : "Lưu PDF nhiều trang"}
+    </button>
+
+
     <button type="button" onClick={savePaintOrder} className="rounded-2xl bg-amber-500 px-4 py-2 text-sm text-white">
       Lưu đơn vào kho nhân viên
     </button>
 
   </div>
 
-  {invoiceImage && (
-    <div className="mb-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-      <p className="mb-2 text-sm font-semibold text-slate-700">Ảnh đã tạo - chọn cách lưu:</p>
-      <img src={invoiceImage} alt="Xem trước hóa đơn" className="max-h-64 w-full rounded-xl bg-white object-contain" />
-      <div className="mt-3 flex flex-wrap gap-2">
-        <button type="button" onClick={shareInvoiceImage} className="rounded-xl bg-blue-600 px-4 py-2 text-sm text-white">Chia sẻ / Lưu ảnh</button>
-        <button type="button" onClick={() => setInvoiceImage("")} className="rounded-xl bg-slate-200 px-4 py-2 text-sm text-slate-700">Đóng xem trước</button>
-      </div>
-    </div>
-  )}
+
 
  <div
   ref={invoiceRef}
-  className="bg-white rounded-[30px] p-4 paint-invoice"
+  className="bg-white rounded-[30px] p-4 paint-invoice paint-invoice-preview"
 >
 
           

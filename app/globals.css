@@ -2296,3 +2296,121 @@ button.is-releasing {
   .imported-invoice-screen { padding: 0; background: #fff; }
   .imported-invoice { box-shadow: none; }
 }
+
+/* Paint preview and PDF use the same table, including on phones. */
+.paint-invoice.paint-invoice-preview {
+  width: 100%;
+  max-width: 210mm;
+  padding: 16px 12px !important;
+  overflow: visible;
+}
+.paint-invoice.paint-invoice-preview--landscape { max-width: 297mm; }
+.paint-invoice-preview .paint-invoice-table,
+.paint-invoice-exporting .paint-invoice-table { display: table !important; }
+.paint-invoice-preview .paint-invoice-mobile-cards,
+.paint-invoice-exporting .paint-invoice-mobile-cards { display: none !important; }
+.paint-invoice-preview .paint-invoice-table th,
+.paint-invoice-preview .paint-invoice-table td,
+.paint-invoice-exporting .paint-invoice-table th,
+.paint-invoice-exporting .paint-invoice-table td {
+  width: auto !important;
+  padding: 6px 3px !important;
+  font-size: clamp(6px, 1.35vw, 9px) !important;
+  line-height: 1.35 !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.paint-invoice-preview .paint-invoice-product-name,
+.paint-invoice-exporting .paint-invoice-product-name {
+  font-size: clamp(7px, 1.5vw, 10px) !important;
+}
+.paint-invoice-preview .paint-invoice-product-en,
+.paint-invoice-exporting .paint-invoice-product-en {
+  font-size: clamp(6px, 1.2vw, 8px) !important;
+}
+.paint-invoice-preview .paint-invoice-table td:nth-child(n+4),
+.paint-invoice-exporting .paint-invoice-table td:nth-child(n+4) {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+.paint-invoice-preview .paint-invoice-summary-new {
+  width: 100%;
+  max-width: 340px;
+}
+.paint-invoice-preview .has-color-columns .invoice-col-product,
+.paint-invoice-exporting .has-color-columns .invoice-col-product { width: 28%; }
+.paint-invoice-preview .has-color-columns .invoice-col-color,
+.paint-invoice-exporting .has-color-columns .invoice-col-color { width: 8%; }
+.paint-invoice-preview .has-color-columns td:nth-child(3),
+.paint-invoice-exporting .has-color-columns td:nth-child(3) {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+.paint-invoice-preview .has-color-columns .invoice-col-qty,
+.paint-invoice-exporting .has-color-columns .invoice-col-qty { width: 5%; }
+.paint-invoice-preview .has-color-columns .invoice-col-money,
+.paint-invoice-exporting .has-color-columns .invoice-col-money { width: 10%; }
+.paint-invoice-preview .has-color-columns .invoice-col-total,
+.paint-invoice-exporting .has-color-columns .invoice-col-total { width: 14%; }
+.paint-invoice.paint-invoice-exporting {
+  margin: 0;
+  padding: 24px !important;
+  border: 0;
+  border-radius: 0 !important;
+  box-shadow: none;
+  overflow: visible;
+}
+.paint-invoice-exporting .paint-invoice-header {
+  display: flex !important;
+  align-items: center;
+  gap: 14px !important;
+}
+.paint-invoice-exporting .paint-invoice-company img { width: 72px !important; max-height: 52px; }
+.paint-invoice-exporting .paint-invoice-company-name { font-size: 13px !important; }
+.paint-invoice-exporting .paint-invoice-company-detail { font-size: 10px !important; }
+.paint-invoice-exporting .paint-invoice-title { font-size: 24px !important; white-space: nowrap; }
+.paint-invoice-exporting .paint-invoice-customer {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  font-size: 12px !important;
+}
+.paint-invoice-exporting .paint-invoice-table-wrap { margin-top: 12px !important; }
+.paint-invoice-exporting .paint-invoice-table th,
+.paint-invoice-exporting .paint-invoice-table td { font-size: 9px !important; }
+.paint-invoice-exporting .paint-invoice-table .paint-invoice-product-name { font-size: 10px !important; }
+.paint-invoice-exporting .paint-invoice-product-en { font-size: 8px !important; }
+.paint-invoice-exporting .paint-invoice-summary-new { max-width: 340px; font-size: 12px; }
+.paint-invoice-exporting .paint-invoice-summary-new .paint-summary-row,
+.paint-invoice-exporting .paint-invoice-summary-new .paint-summary-row strong { font-size: 12px; }
+.paint-invoice-preview .paint-invoice-summary-new,
+.paint-invoice-exporting .paint-invoice-summary-new {
+  padding: 7px 10px;
+}
+.paint-invoice-preview .paint-invoice-summary-new .paint-summary-row,
+.paint-invoice-exporting .paint-invoice-summary-new .paint-summary-row {
+  min-height: 22px;
+  padding: 3px 0;
+  gap: 10px;
+  font-size: 11px !important;
+  font-weight: 400;
+}
+.paint-invoice-preview .paint-invoice-summary-new .paint-summary-row strong,
+.paint-invoice-exporting .paint-invoice-summary-new .paint-summary-row strong {
+  font-size: 11px !important;
+  font-weight: 400;
+}
+.paint-invoice-preview .paint-invoice-summary-new .paint-summary-remaining,
+.paint-invoice-exporting .paint-invoice-summary-new .paint-summary-remaining {
+  margin-top: 4px;
+  padding: 5px 0;
+}
+.paint-invoice-exporting .paint-invoice-date,
+.paint-invoice-exporting .paint-invoice-signature-grid { font-size: 11px !important; }
+.paint-invoice-exporting .paint-invoice-signature-space { height: 34px; }
+
+@media print {
+  .paint-invoice-preview .paint-invoice-table thead { display: table-header-group; }
+  .paint-invoice-preview .paint-invoice-table { break-inside: auto; page-break-inside: auto; }
+  .paint-invoice-preview .paint-invoice-product-row,
+  .paint-invoice-preview .paint-invoice-summary-new,
+  .paint-invoice-preview .paint-invoice-signature { break-inside: avoid; }
+}
